@@ -25,6 +25,7 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/search_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -33,6 +34,7 @@
             android:textSize="@dimen/medium_text_size"
             android:textColor="@color/black"
             android:textAllCaps="false"
+            android:foreground="?attr/selectableItemBackground"
             app:cornerRadius="@dimen/standard_corner_radius"
             app:icon="@drawable/search"
             app:iconGravity="textStart"
@@ -42,6 +44,7 @@
             />
 
         <Button
+            android:id="@+id/library_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -52,12 +55,14 @@
             android:textSize="@dimen/medium_text_size"
             android:textColor="@color/black"
             android:textAllCaps="false"
+            android:foreground="?attr/selectableItemBackground"
             app:cornerRadius="@dimen/standard_corner_radius"
             app:icon="@drawable/library"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/icon_padding"
             app:iconTint="@color/black"/>
         <Button
+            android:id="@+id/settings_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -66,6 +71,7 @@
             android:textSize="@dimen/medium_text_size"
             android:textColor="@color/black"
             android:textAllCaps="false"
+            android:foreground="?attr/selectableItemBackground"
             app:cornerRadius="@dimen/standard_corner_radius"
             app:icon="@drawable/settings"
             app:iconGravity="textStart"
