@@ -6,6 +6,6 @@
     <dimen name="icon_padding">10dp</dimen>
     <dimen name="max_margin">61dp</dimen>
     <dimen name="medium_margin">42dp</dimen>
-    <dimen name="min_margin">10dp</dimen>
+    <dimen name="min_margin">12dp</dimen>
     <dimen name="standard_corner_radius">16dp</dimen>
 </resources>
