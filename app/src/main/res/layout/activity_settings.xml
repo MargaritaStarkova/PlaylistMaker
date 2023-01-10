@@ -46,11 +46,16 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin">
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
+
             style="@style/YSRegular16"
             android:text="@string/share"/>
 
@@ -64,9 +69,13 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/support"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin">
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
             style="@style/YSRegular16"
@@ -81,9 +90,13 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/terms_of_use"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin">
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
             style="@style/YSRegular16"
