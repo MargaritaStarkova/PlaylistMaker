@@ -4,11 +4,11 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/settings_screen_text_color</item>
+        <item name="colorOnPrimary">@color/secondary_screen_text_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/switch_color</item>
         <item name="colorSecondaryVariant">@color/switch_color</item>
-        <item name="colorOnSecondary">@color/settings_screen_text_color</item>
+        <item name="colorOnSecondary">@color/secondary_screen_text_color</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/main_screen_color</item>
         <!-- Customize your theme here. -->

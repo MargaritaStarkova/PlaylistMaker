@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_on_settings_screen"
-    android:padding="@dimen/standard_padding">
+    android:background="@color/secondary_screen_background"
+    android:padding="@dimen/padding_16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/max_margin">
+        android:layout_marginBottom="@dimen/margin_42dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -22,15 +22,14 @@
         <TextView
             style="@style/YSMedium22"
             android:text="@string/settings"
-            android:textColor="@color/settings_screen_text_color"
-            android:layout_marginStart="28dp"/>
+            android:textColor="@color/secondary_screen_text_color"
+            android:layout_marginStart="@dimen/margin_24dp"/>
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin">
+        android:layout_height="@dimen/margin_61dp">
 
         <TextView
             style="@style/YSRegular16"
@@ -40,7 +39,7 @@
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="end|center_vertical"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </FrameLayout>
@@ -48,22 +47,22 @@
     <FrameLayout
         android:id="@+id/share"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_height="@dimen/margin_61dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground">
 
         <TextView
 
             style="@style/YSRegular16"
+            android:layout_gravity="center_vertical"
             android:text="@string/share"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/min_margin"
+            android:layout_marginEnd="@dimen/margin_12dp"
             android:src="@drawable/share" />
 
     </FrameLayout>
@@ -71,35 +70,36 @@
     <FrameLayout
         android:id="@+id/support"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_height="@dimen/margin_61dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground">
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_gravity="center_vertical"
             android:text="@string/support"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/min_margin"
+            android:layout_marginEnd="@dimen/margin_12dp"
             android:src="@drawable/support"/>
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/terms_of_use"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_height="@dimen/margin_61dp"
+        android:layout_marginBottom="@dimen/margin_42dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground">
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_gravity="center_vertical"
             android:text="@string/terms_of_use"/>
 
         <ImageView
@@ -109,5 +109,4 @@
             android:layout_marginEnd="18dp"
             android:src="@drawable/arrow_forward"/>
     </FrameLayout>
-
 </LinearLayout>
