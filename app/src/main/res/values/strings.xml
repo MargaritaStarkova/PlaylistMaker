@@ -12,5 +12,6 @@
     <string name="support_title">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="chooser_title">Выберите приложение:</string>
     <string name="offer_url">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="email">margo.ivi@yandex.ru</string>
 
 </resources>
