@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SEARCH_QUERY = "SEARCH_QUERY"
+        private const val SEARCH_QUERY = "SEARCH_QUERY"
     }
 }
 
