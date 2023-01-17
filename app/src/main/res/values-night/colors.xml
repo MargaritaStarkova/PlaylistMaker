@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_screen_color">#1A1B22</color>
+    <color name="secondary_screen_text_color">#FFFFFF</color>
+    <color name="secondary_screen_background">#1A1B22</color>
+    <color name="secondary_screen_icon_color">#FFFFFF</color>
+    <color name="background_hint_color">#FFFFFF</color>
+    <color name="hint_icon_text_color">#1A1B22</color>
+</resources>
