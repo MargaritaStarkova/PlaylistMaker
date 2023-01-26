@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/secondary_screen_background"
+    android:background="?attr/secondary_screen_background_color"
     android:padding="@dimen/padding_16dp">
 
     <LinearLayout
@@ -25,7 +25,7 @@
         <TextView
             style="@style/YSMedium22"
             android:text="@string/search"
-            android:textColor="@color/secondary_screen_text_color"
+            android:textColor="?attr/toolbar_color"
             android:layout_marginStart="@dimen/margin_24dp"/>
 
     </LinearLayout>
@@ -35,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_on_search_screen"
+        android:layout_marginBottom="@dimen/margin_24dp"
         tools:context=".SearchActivity">
 
         <ImageView
@@ -43,7 +44,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/padding_16dp"
             android:src="@drawable/search"
-            app:tint="@color/hint_icon_text_color"/>
+            app:tint="?attr/hint_icon_text_color"/>
 
         <EditText
             style="@style/YSRegular16"
@@ -56,8 +57,8 @@
             android:hint="@string/search"
             android:inputType="textNoSuggestions"
             android:maxLines="1"
-            android:textColor="@color/main_screen_text_color_black"
-            android:textColorHint="@color/hint_icon_text_color"/>
+            android:textColor="?attr/main_screen_button_text_color"
+            android:textColorHint="?attr/hint_icon_text_color"/>
 
         <ImageView
             android:id="@+id/clearIcon"
@@ -70,4 +71,11 @@
             android:visibility="gone"
             />
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
 </LinearLayout>
