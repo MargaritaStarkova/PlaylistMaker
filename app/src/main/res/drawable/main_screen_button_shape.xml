@@ -4,5 +4,5 @@
 
     <solid android:color="?attr/main_screen_button_color"/>
     <!-- rounded corners -->
-    <corners android:radius="@dimen/standard_corner_radius" />
+    <corners android:radius="@dimen/corner_radius_16dp" />
 </shape>

@@ -18,11 +18,13 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     private val trackTime = itemView.findViewById<TextView>(R.id.track_time)
 
     fun bind(model: Track) {
+        val cornerRadius = itemView.resources.getDimensionPixelSize(R.dimen.corner_radius_2dp)
+
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = model.trackTime
 
         Glide.with(itemView).load(model.artworkUrl100).placeholder(R.drawable.placeholder)
-            .centerCrop().transform(RoundedCorners(2)).into(cover)
+            .centerCrop().transform(RoundedCorners(cornerRadius)).into(cover)
     }
 }

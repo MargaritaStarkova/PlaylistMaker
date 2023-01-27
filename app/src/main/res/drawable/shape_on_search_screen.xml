@@ -4,5 +4,5 @@
 
     <solid android:color="?attr/background_hint_color"/>
     <!-- rounded corners -->
-    <corners android:radius="@dimen/min_corner_radius" />
+    <corners android:radius="@dimen/corner_radius_8dp" />
 </shape>

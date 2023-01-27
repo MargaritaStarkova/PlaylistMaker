@@ -25,26 +25,15 @@ class SettingsActivity : AppCompatActivity() {
 
         themeMode.setOnClickListener {
             switch.isChecked = !switch.isChecked
-
-            if (switch.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+            setDarkTheme(switch.isChecked)
         }
 
         switch.setOnCheckedChangeListener { button, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-
+            setDarkTheme(isChecked)
         }
 
         backButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
         share.setOnClickListener {
@@ -71,6 +60,14 @@ class SettingsActivity : AppCompatActivity() {
                 data = Uri.parse(getString(R.string.offer_url))
             }
             startActivity(intent)
+        }
+    }
+
+    private fun setDarkTheme(isChecked: Boolean) {
+        if (isChecked) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 }
