@@ -24,7 +24,11 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
         artistName.text = model.artistName
         trackTime.text = model.trackTime
 
-        Glide.with(itemView).load(model.artworkUrl100).placeholder(R.drawable.placeholder)
-            .centerCrop().transform(RoundedCorners(cornerRadius)).into(cover)
+        Glide.with(itemView)
+            .load(model.artworkUrl100)
+            .placeholder(R.drawable.placeholder)
+            .centerCrop()
+            .transform(RoundedCorners(cornerRadius))
+            .into(cover)
     }
 }
