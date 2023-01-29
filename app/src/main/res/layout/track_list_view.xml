@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/margin_8dp">
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="@dimen/image_size_45dp"
+        android:layout_height="@dimen/image_size_45dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:src="@drawable/placeholder"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/YSRegular16"
+            android:id="@+id/track_name"
+            android:layout_marginTop="@dimen/margin_6dp"
+            android:layout_marginBottom="@dimen/margin_1dp"
+            tools:text="Smells Like Teen Spirit" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/YSRegular11"
+                android:id="@+id/artist_name"
+                android:layout_marginEnd="@dimen/margin_5dp"
+                android:drawablePadding="@dimen/margin_5dp"
+                app:drawableEndCompat="@drawable/ellipse"
+                tools:text="Nirvana" />
+
+            <TextView
+                style="@style/YSRegular11"
+                android:id="@+id/track_time"
+                tools:text="5:01"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/margin_4dp"
+        android:src="@drawable/arrow_forward" />
+
+</LinearLayout>

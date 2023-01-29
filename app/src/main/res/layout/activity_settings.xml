@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/secondary_screen_background"
+    android:background="?attr/secondary_screen_background_color"
     android:padding="@dimen/padding_16dp">
 
     <LinearLayout
@@ -24,14 +24,18 @@
         <TextView
             style="@style/YSMedium22"
             android:text="@string/settings"
-            android:textColor="@color/secondary_screen_text_color"
+            android:textColor="?attr/toolbar_color"
             android:layout_marginStart="@dimen/margin_24dp"/>
 
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/theme_mode"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/margin_61dp">
+        android:layout_height="@dimen/margin_61dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:focusable="true">
 
         <TextView
             style="@style/YSRegular16"
@@ -39,8 +43,9 @@
             android:text="@string/theme"/>
 
         <Switch
+            android:id="@+id/switch_theme_mode"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 

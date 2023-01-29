@@ -5,7 +5,7 @@
     <size android:height="40dp"
         android:width="40dp"/>
 
-    <solid android:color="@color/main_screen_text_color_white"/>
+    <solid android:color="?attr/main_screen_text_color"/>
     <!-- rounded corners -->
     />
 </shape>
