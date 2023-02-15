@@ -23,6 +23,8 @@
 
         <TextView
             style="@style/YSMedium22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/settings"
             android:textColor="?attr/toolbar_color"
             android:layout_marginStart="@dimen/margin_24dp"/>
@@ -39,6 +41,8 @@
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/theme"/>
 
@@ -62,6 +66,8 @@
         <TextView
 
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/share"/>
 
@@ -84,6 +90,8 @@
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/support"/>
 
@@ -106,6 +114,8 @@
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/terms_of_use"/>
 

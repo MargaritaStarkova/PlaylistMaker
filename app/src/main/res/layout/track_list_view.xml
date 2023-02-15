@@ -23,26 +23,37 @@
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/track_name"
             android:layout_marginTop="@dimen/margin_6dp"
             android:layout_marginBottom="@dimen/margin_1dp"
-            tools:text="Smells Like Teen Spirit" />
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Smells Like Teen Sirit" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
                 style="@style/YSRegular11"
                 android:id="@+id/artist_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginEnd="@dimen/margin_5dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:drawablePadding="@dimen/margin_5dp"
                 app:drawableEndCompat="@drawable/ellipse"
-                tools:text="Nirvana" />
+                tools:text="wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww" />
 
             <TextView
                 style="@style/YSRegular11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/track_time"
                 tools:text="5:01"/>
 
@@ -52,6 +63,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/padding_16dp"
         android:layout_marginEnd="@dimen/margin_4dp"
         android:src="@drawable/arrow_forward" />
 

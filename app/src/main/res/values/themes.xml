@@ -19,33 +19,11 @@
         <item name="toolbar_color">@color/black</item>
         <item name="secondary_screen_text_color">@color/deep_black</item>
         <item name="secondary_screen_background_color">@color/white</item>
+        <item name="update_text_color">@color/deep_white</item>
         <item name="secondary_screen_icon_color">@color/deep_gray</item>
         <item name="background_hint_color">@color/grey</item>
         <item name="hint_icon_text_color">@color/deep_gray</item>
-    </style>
-
-    <style name="Theme.PlaylistMakerDarkMode" parent="Theme.PlaylistMaker">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue</item>
-        <item name="colorSecondaryVariant">@color/blue</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/black</item>
-        <!-- Customize your theme here. -->
-        <item name="main_screen_background_color">@color/black</item>
-        <item name="main_screen_text_color">@color/deep_white</item>
-        <item name="main_screen_button_color">@color/deep_white</item>
-        <item name="main_screen_button_text_color">@color/black</item>
-        <item name="toolbar_color">@color/deep_white</item>
-        <item name="secondary_screen_text_color">@color/deep_white</item>
-        <item name="secondary_screen_background_color">@color/black</item>
-        <item name="secondary_screen_icon_color">@color/deep_white</item>
-        <item name="background_hint_color">@color/deep_white</item>
-        <item name="hint_icon_text_color">@color/black</item>
+        <item name="ripple">"@color/ripple_light"</item>
     </style>
 
 </resources>

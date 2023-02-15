@@ -24,9 +24,11 @@
 
         <TextView
             style="@style/YSMedium22"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_24dp"
             android:text="@string/search"
-            android:textColor="?attr/toolbar_color"
-            android:layout_marginStart="@dimen/margin_24dp"/>
+            android:textColor="?attr/toolbar_color" />
 
     </LinearLayout>
 
@@ -52,6 +54,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:layout_marginStart="@dimen/margin_5dp"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/search"
@@ -68,14 +72,49 @@
             android:layout_marginEnd="@dimen/margin_12dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/clear"
-            android:visibility="gone"
-            />
+            android:visibility="gone"/>
+
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <ImageView
+            android:id="@+id/placeholderImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="86dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            tools:src="@drawable/internet_error"/>
+
+        <TextView
+            style="@style/YSMedium19"
+            android:id="@+id/placeholderMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="222dp"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:visibility="gone"
+            tools:text="@string/internet_error"/>
+
+        <Button
+            style="@style/ButtonUpdate"
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="334dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:text="@string/update"/>
+
+    </FrameLayout>
 </LinearLayout>

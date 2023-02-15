@@ -13,5 +13,9 @@
     <string name="chooser_title">Выберите приложение:</string>
     <string name="offer_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="email">margo.ivi@yandex.ru</string>
+    <string name="update">Обновить</string>
+    <string name="internet_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="search_error">Ничего не нашлось</string>
+
 
 </resources>
