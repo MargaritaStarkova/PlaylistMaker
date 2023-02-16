@@ -49,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
 
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        val backButton = findViewById<ImageView>(R.id.backIcon)
+        val backButton = findViewById<androidx.appcompat.widget.Toolbar>(R.id.backIcon)
         placeholderImage = findViewById(R.id.placeholderImage)
         placeholderMessage = findViewById(R.id.placeholderMessage)
         updateButton = findViewById(R.id.updateButton)
@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
 
-        backButton.setOnClickListener {
+        backButton.setNavigationOnClickListener {
             finish()
         }
 
@@ -151,6 +151,7 @@ class SearchActivity : AppCompatActivity() {
             trackDataList.clear()
             recyclerView.adapter?.notifyDataSetChanged()
 
+            updateButton.visibility = View.GONE
             placeholderMessage.visibility = View.VISIBLE
             placeholderImage.visibility = View.VISIBLE
 
