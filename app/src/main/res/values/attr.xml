@@ -7,7 +7,9 @@
     <attr name="secondary_screen_text_color" format="reference"/>
     <attr name="secondary_screen_background_color" format="reference"/>
     <attr name="secondary_screen_icon_color" format="reference"/>
+    <attr name="update_text_color" format="reference"/>
     <attr name="background_hint_color" format="reference"/>
     <attr name="hint_icon_text_color" format="reference"/>
     <attr name="toolbar_color" format="reference"/>
+    <attr name="ripple" format="reference"/>
 </resources>

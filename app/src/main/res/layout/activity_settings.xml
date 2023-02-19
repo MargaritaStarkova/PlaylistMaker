@@ -1,44 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="?attr/secondary_screen_background_color"
-    android:padding="@dimen/padding_16dp">
+    android:background="?attr/secondary_screen_background_color">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/backIcon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_42dp">
-
-        <ImageView
-            android:id="@+id/backIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:src="@drawable/arrow_back"
-            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+        app:navigationIcon="@drawable/arrow_back"
+        android:layout_marginBottom="@dimen/margin_24dp">
 
         <TextView
             style="@style/YSMedium22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:textColor="?attr/toolbar_color"
-            android:layout_marginStart="@dimen/margin_24dp"/>
+            android:textColor="?attr/toolbar_color"/>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/theme_mode"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_61dp"
+        android:paddingHorizontal="@dimen/padding_16dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:focusable="true">
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/theme"/>
 
@@ -55,6 +52,7 @@
         android:id="@+id/share"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_61dp"
+        android:paddingHorizontal="@dimen/padding_16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground">
@@ -62,6 +60,8 @@
         <TextView
 
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/share"/>
 
@@ -78,12 +78,15 @@
         android:id="@+id/support"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_61dp"
+        android:paddingHorizontal="@dimen/padding_16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground">
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/support"/>
 
@@ -100,12 +103,15 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_61dp"
         android:layout_marginBottom="@dimen/margin_42dp"
+        android:paddingHorizontal="@dimen/padding_16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground">
 
         <TextView
             style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/terms_of_use"/>
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Switch
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
@@ -15,8 +16,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val backButton = findViewById<ImageView>(R.id.backIcon)
-
+        val backButton = findViewById<androidx.appcompat.widget.Toolbar>(R.id.backIcon)
         val share = findViewById<FrameLayout>(R.id.share)
         val support = findViewById<FrameLayout>(R.id.support)
         val termsOfUse = findViewById<FrameLayout>(R.id.terms_of_use)
@@ -32,9 +32,10 @@ class SettingsActivity : AppCompatActivity() {
             setDarkTheme(isChecked)
         }
 
-        backButton.setOnClickListener {
+        backButton.setNavigationOnClickListener {
             finish()
         }
+
 
         share.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND).apply {
