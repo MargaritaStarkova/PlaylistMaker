@@ -17,7 +17,6 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val backButton = findViewById<androidx.appcompat.widget.Toolbar>(R.id.backIcon)
-
         val share = findViewById<FrameLayout>(R.id.share)
         val support = findViewById<FrameLayout>(R.id.support)
         val termsOfUse = findViewById<FrameLayout>(R.id.terms_of_use)

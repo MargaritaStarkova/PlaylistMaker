@@ -1,7 +1,8 @@
-package com.practicum.playlistmaker
+package recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import api.TrackData
 
 class TrackAdapter(private val trackData: List<TrackData>) : RecyclerView.Adapter<TrackViewHolder>() {
 
