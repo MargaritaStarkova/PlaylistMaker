@@ -1,4 +1,4 @@
-package api
+package com.practicum.api
 
 import retrofit2.*
 import retrofit2.http.*

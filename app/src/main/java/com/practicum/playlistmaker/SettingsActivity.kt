@@ -4,11 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.Switch
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,20 +13,18 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val backButton = findViewById<androidx.appcompat.widget.Toolbar>(R.id.backIcon)
+        val backButton = findViewById<androidx.appcompat.widget.Toolbar>(R.id.back_icon)
         val share = findViewById<FrameLayout>(R.id.share)
         val support = findViewById<FrameLayout>(R.id.support)
         val termsOfUse = findViewById<FrameLayout>(R.id.terms_of_use)
-        val themeMode = findViewById<FrameLayout>(R.id.theme_mode)
-        val switch = findViewById<Switch>(R.id.switch_theme_mode)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
 
-        themeMode.setOnClickListener {
-            switch.isChecked = !switch.isChecked
-            setDarkTheme(switch.isChecked)
-        }
+        themeSwitcher.isChecked = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+            .getBoolean(SWITCH_THEME_KEY, false)
 
-        switch.setOnCheckedChangeListener { button, isChecked ->
-            setDarkTheme(isChecked)
+        themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+            (applicationContext as App).saveTheme(isChecked)
         }
 
         backButton.setNavigationOnClickListener {
@@ -61,14 +56,6 @@ class SettingsActivity : AppCompatActivity() {
                 data = Uri.parse(getString(R.string.offer_url))
             }
             startActivity(intent)
-        }
-    }
-
-    private fun setDarkTheme(isChecked: Boolean) {
-        if (isChecked) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 }

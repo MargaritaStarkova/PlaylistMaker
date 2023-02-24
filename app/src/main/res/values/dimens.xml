@@ -8,12 +8,12 @@
     <dimen name="image_size_45dp">45dp</dimen>
     <dimen name="padding_16dp">16dp</dimen>
     <dimen name="padding_10dp">10dp</dimen>
-    <dimen name="margin_334dp">334dp</dimen>
-    <dimen name="margin_222dp">222dp</dimen>
-    <dimen name="margin_86dp">86dp</dimen>
-    <dimen name="margin_61dp">61dp</dimen>
+    <dimen name="margin_333dp">333dp</dimen>
+    <dimen name="margin_221dp">221dp</dimen>
+    <dimen name="margin_85dp">85dp</dimen>
+    <dimen name="margin_60dp">60dp</dimen>
     <dimen name="margin_42dp">42dp</dimen>
-    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_25dp">25dp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_6dp">6dp</dimen>
