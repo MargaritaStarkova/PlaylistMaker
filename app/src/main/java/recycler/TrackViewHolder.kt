@@ -10,7 +10,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.api.TrackData
 import com.practicum.playlistmaker.R
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parentView.context).inflate(R.layout.track_list_view, parentView, false)
