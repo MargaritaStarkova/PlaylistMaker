@@ -12,7 +12,7 @@
         <item name="iconTint">?attr/main_screen_button_text_color</item>
     </style>
 
-    <style name="ButtonUpdate" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+    <style name="button_update" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:background">@drawable/update_button_ripple</item>
         <item name="android:textSize">@dimen/text_size_14sp</item>
         <item name="android:textColor">?attr/update_text_color</item>

@@ -2,16 +2,25 @@ package recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import api.TrackData
+import com.practicum.api.TrackData
 
-class TrackAdapter(private val trackData: List<TrackData>) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(private val clickListener: TrackClickListener) :
+    RecyclerView.Adapter<TrackViewHolder>() {
+
+    var trackDataList = ArrayList<TrackData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TrackViewHolder(parent)
 
-    override fun getItemCount() = trackData.size
+    override fun getItemCount() = trackDataList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackData[position])
+        holder.bind(trackDataList[position])
+        holder.itemView.setOnClickListener { clickListener.onTrackClick(trackDataList[position]) }
+
+    }
+
+    fun interface TrackClickListener {
+        fun onTrackClick(track: TrackData)
     }
 
 }

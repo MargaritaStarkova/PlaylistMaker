@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?attr/secondary_screen_background_color">
+    android:background="?attr/secondary_screen_background_color"
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/backIcon"
+        android:id="@+id/back_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_12dp"
@@ -29,8 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/padding_16dp"
+        android:layout_marginBottom="@dimen/margin_25dp"
         android:background="@drawable/shape_on_search_screen"
-        android:layout_marginBottom="@dimen/margin_24dp"
         tools:context=".SearchActivity">
 
         <ImageView
@@ -39,33 +38,33 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/padding_16dp"
             android:src="@drawable/search"
-            app:tint="?attr/hint_icon_text_color"/>
+            app:tint="?attr/hint_icon_text_color" />
 
         <EditText
+            android:id="@+id/input_edit_text"
             style="@style/YSRegular16"
-            android:id="@+id/inputEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             android:layout_marginStart="@dimen/margin_5dp"
+            android:layout_weight="1"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="textNoSuggestions"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="?attr/main_screen_button_text_color"
-            android:textColorHint="?attr/hint_icon_text_color"/>
+            android:textColorHint="?attr/hint_icon_text_color" />
 
         <ImageView
-            android:id="@+id/clearIcon"
+            android:id="@+id/clear_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/margin_12dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/clear"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -75,40 +74,78 @@
         android:layout_marginHorizontal="@dimen/padding_16dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/search_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <ImageView
-            android:id="@+id/placeholderImage"
+            android:id="@+id/placeholder_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_86dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_85dp"
             android:visibility="gone"
-            tools:src="@drawable/internet_error"/>
+            tools:src="@drawable/internet_error" />
 
         <TextView
+            android:id="@+id/placeholder_message"
             style="@style/YSMedium19"
-            android:id="@+id/placeholderMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_222dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_221dp"
             android:textAlignment="center"
-            android:visibility="gone"
-            tools:text="@string/internet_error"/>
+            android:visibility="gone" />
 
         <Button
-            style="@style/ButtonUpdate"
-            android:id="@+id/updateButton"
+            android:id="@+id/update_button"
+            style="@style/button_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="334dp"
             android:layout_gravity="center_horizontal"
-            android:visibility="gone"
-            android:text="@string/update"/>
+            android:layout_marginTop="334dp"
+            android:text="@string/update"
+            android:visibility="gone" />
 
+        <LinearLayout
+            android:id="@+id/search_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_25dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/you_searched"
+                style="@style/YSMedium19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/you_searched" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/history_search_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <Button
+                    android:id="@+id/clear_history"
+                    style="@style/button_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_25dp"
+                    android:text="@string/clear_history" />
+
+            </FrameLayout>
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>
