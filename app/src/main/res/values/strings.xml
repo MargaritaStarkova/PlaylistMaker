@@ -18,6 +18,12 @@
     <string name="search_error">Ничего не нашлось</string>
     <string name="you_searched">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="duration">Длительность</string>
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
+    <string name="excerpt_duration">0:30</string>
 
 
 </resources>
