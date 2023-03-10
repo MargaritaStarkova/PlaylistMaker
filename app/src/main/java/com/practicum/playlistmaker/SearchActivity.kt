@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,16 +18,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.practicum.api.SearchApi
 import com.practicum.api.SearchResponse
 import com.practicum.api.TrackData
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import recycler.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class SearchActivity : AppCompatActivity() {
 
@@ -42,12 +45,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearHistory: Button
     private lateinit var searchHistory: SearchHistory
 
-
+    private val logging = HttpLoggingInterceptor().apply {
+        setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+    private val okHttpClient = OkHttpClient.Builder().addInterceptor(logging).build()
     private val retrofit =
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient).build()
 
     private val trackService = retrofit.create(SearchApi::class.java)
     private val trackDataList = ArrayList<TrackData>()
@@ -69,6 +73,16 @@ class SearchActivity : AppCompatActivity() {
         searchHistory.saveHistory(historyList)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_QUERY, countValue)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        countValue = savedInstanceState.getString(SEARCH_QUERY, "")
+    }
+
     private fun viewSetting() {
 
         inputEditText = findViewById(R.id.input_edit_text)
@@ -88,17 +102,17 @@ class SearchActivity : AppCompatActivity() {
 
         searchHistory = SearchHistory(getSharedPreferences(PREFERENCES, MODE_PRIVATE))
 
-
         val trackSearchAdapter = TrackAdapter {
             addTrackToSearchHistory(it)
-
+            transitionToAudioPlayer(it)
         }
 
         trackSearchAdapter.trackDataList = trackDataList
         searchList.adapter = trackSearchAdapter
 
         val trackHistoryAdapter = TrackAdapter {
-            Toast.makeText(this@SearchActivity, "НАЖАЛИ НА ТРЕК", Toast.LENGTH_SHORT).show()
+            addTrackToSearchHistory(it)
+            transitionToAudioPlayer(it)
         }
 
         trackHistoryAdapter.trackDataList = historyList
@@ -107,30 +121,23 @@ class SearchActivity : AppCompatActivity() {
 
     private fun settingListeners() {
 
-        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
             historyListVisibility(hasFocus && inputEditText.text.isEmpty() && historyList.isNotEmpty())
         }
 
         val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //empty
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { //empty
             }
 
             override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
                 clearIcon.visibility = clearButtonVisibility(p0)
                 countValue = p0.toString()
 
-                searchHistoryViewGroup.visibility =
-                    if (inputEditText.text.isEmpty()) View.VISIBLE
-                    else View.GONE
-
-                clearHistory.visibility =
-                    if (historyList.isEmpty()) View.GONE
-                    else View.VISIBLE
+                searchHistoryViewGroup.visibility = if (inputEditText.text.isEmpty()) View.VISIBLE
+                else View.GONE
             }
 
-            override fun afterTextChanged(p0: Editable?) {
-                //empty
+            override fun afterTextChanged(p0: Editable?) { //empty
             }
         }
 
@@ -157,7 +164,6 @@ class SearchActivity : AppCompatActivity() {
             placeholderMessage.visibility = View.GONE
             placeholderImage.visibility = View.GONE
             updateButton.visibility = View.GONE
-
         }
 
         clearHistory.setOnClickListener {
@@ -205,6 +211,7 @@ class SearchActivity : AppCompatActivity() {
             placeholderImage.visibility = View.GONE
             updateButton.visibility = View.GONE
         }
+
         is SearchError -> {
             trackDataList.clear()
             searchList.adapter?.notifyDataSetChanged()
@@ -220,6 +227,7 @@ class SearchActivity : AppCompatActivity() {
                 )
             )
         }
+
         is ConnectionError -> {
 
             trackDataList.clear()
@@ -272,14 +280,11 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_QUERY, countValue)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        countValue = savedInstanceState.getString(SEARCH_QUERY, "")
+    private fun transitionToAudioPlayer(track: TrackData) {
+        val intent = Intent(this, AudioPlayerActivity::class.java).apply {
+            putExtra(AudioPlayerActivity.TRACK_DATA, Gson().toJson(track))
+        }
+        startActivity(intent)
     }
 
     private fun historyListVisibility(b: Boolean) {
@@ -295,7 +300,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_QUERY = "SEARCH_QUERY"
         private const val BASE_URL = "https://itunes.apple.com/"
-
     }
 }
 

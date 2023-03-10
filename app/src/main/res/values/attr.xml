@@ -12,4 +12,7 @@
     <attr name="hint_icon_text_color" format="reference"/>
     <attr name="toolbar_color" format="reference"/>
     <attr name="ripple" format="reference"/>
+    <attr name="fab_color" format="reference"/>
+    <attr name="media_player_description_text_color" format="reference"/>
+
 </resources>

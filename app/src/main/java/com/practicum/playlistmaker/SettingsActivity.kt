@@ -22,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.isChecked = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
             .getBoolean(SWITCH_THEME_KEY, false)
 
-        themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
+        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
             (applicationContext as App).saveTheme(isChecked)
         }
