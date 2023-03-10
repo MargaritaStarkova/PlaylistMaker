@@ -29,35 +29,12 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var track: TrackData
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.audio_player_activity)
 
         viewSetting()
         settingListeners()
-        track = Gson().fromJson((intent.getStringExtra("KEY")), TrackData::class.java)
-
-
-        val cornerRadius = this.resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
-
-        Glide.with(this)
-            .load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
-            .placeholder(R.drawable.placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(cornerRadius))
-            .into(coverImage)
-
-        trackName.text = track.trackName
-        artistName.text = track.artistName
-        duration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-        albumName.text = track.collectionName
-
-        year.text = track.releaseDate.substring(0, 4)
-        genre.text = track.primaryGenreName
-        country.text = track.country
-
     }
 
     private fun viewSetting() {
@@ -73,6 +50,24 @@ class AudioPlayerActivity : AppCompatActivity() {
         addButton = findViewById(R.id.add_button)
         playButton = findViewById(R.id.play_button)
         likeButton = findViewById(R.id.like_button)
+
+        track = Gson().fromJson((intent.getStringExtra(TRACK_DATA)), TrackData::class.java)
+
+        val cornerRadius = this.resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
+
+        Glide.with(this).load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
+            .placeholder(R.drawable.placeholder).centerCrop()
+            .transform(RoundedCorners(cornerRadius)).into(coverImage)
+
+        trackName.text = track.trackName
+        artistName.text = track.artistName
+        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        albumName.text = track.collectionName
+
+        year.text = track.releaseDate.substring(0, 4)
+        genre.text = track.primaryGenreName
+        country.text = track.country
+
     }
 
     private fun settingListeners() {
@@ -80,7 +75,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         backButton.setNavigationOnClickListener {
             finish()
         }
+    }
 
-
+    companion object {
+        const val TRACK_DATA = "track_data"
     }
 }

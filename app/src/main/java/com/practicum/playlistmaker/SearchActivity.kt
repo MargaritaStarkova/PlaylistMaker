@@ -282,7 +282,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun transitionToAudioPlayer(track: TrackData) {
         val intent = Intent(this, AudioPlayerActivity::class.java).apply {
-            putExtra("KEY", Gson().toJson(track))
+            putExtra(AudioPlayerActivity.TRACK_DATA, Gson().toJson(track))
         }
         startActivity(intent)
     }
@@ -300,7 +300,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_QUERY = "SEARCH_QUERY"
         private const val BASE_URL = "https://itunes.apple.com/"
-
     }
 }
 
