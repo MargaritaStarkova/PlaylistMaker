@@ -132,9 +132,8 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
                 clearIcon.visibility = clearButtonVisibility(p0)
                 countValue = p0.toString()
-
-                searchHistoryViewGroup.visibility = if (inputEditText.text.isEmpty()) View.VISIBLE
-                else View.GONE
+                historyListVisibility(inputEditText.text.isEmpty())
+                if (inputEditText.text.isEmpty()) showMessage(Success)
             }
 
             override fun afterTextChanged(p0: Editable?) { //empty
@@ -160,10 +159,7 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.setText("")
             trackDataList.clear()
             searchList.adapter?.notifyDataSetChanged()
-
-            placeholderMessage.visibility = View.GONE
-            placeholderImage.visibility = View.GONE
-            updateButton.visibility = View.GONE
+            showMessage(Success)
         }
 
         clearHistory.setOnClickListener {
