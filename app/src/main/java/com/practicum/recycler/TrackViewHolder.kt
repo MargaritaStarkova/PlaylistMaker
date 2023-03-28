@@ -1,4 +1,4 @@
-package recycler
+package com.practicum.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
