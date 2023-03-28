@@ -24,7 +24,7 @@ import com.practicum.api.SearchResponse
 import com.practicum.api.TrackData
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import recycler.TrackAdapter
+import com.practicum.recycler.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
