@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/main_screen_background_color"
     android:orientation="vertical"
-    android:padding="@dimen/padding_16dp">
+    android:padding="@dimen/margin_16dp">
 
     <TextView
         style="@style/YSMedium22"
@@ -25,7 +25,7 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/padding_16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:layout_weight="1"
             android:text="@string/search"
             app:icon="@drawable/search" />
@@ -35,7 +35,7 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/padding_16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:layout_weight="1"
             android:text="@string/library"
             app:icon="@drawable/library" />
@@ -45,7 +45,7 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/padding_16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:layout_weight="1"
             android:text="@string/settings"
             app:icon="@drawable/settings" />

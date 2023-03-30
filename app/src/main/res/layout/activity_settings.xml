@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/back_icon"
+        android:id="@+id/navigation_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_25dp"
@@ -29,7 +29,7 @@
         android:layout_height="@dimen/margin_60dp"
         android:layout_gravity="start"
         android:foreground="?android:attr/selectableItemBackground"
-        android:paddingStart="@dimen/padding_16dp"
+        android:paddingStart="@dimen/margin_16dp"
         android:paddingEnd="@dimen/margin_25dp"
         android:text="@string/theme" />
 
@@ -40,7 +40,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:paddingHorizontal="@dimen/padding_16dp">
+        android:paddingHorizontal="@dimen/margin_16dp">
 
         <TextView
             style="@style/YSRegular16"
@@ -65,7 +65,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:paddingHorizontal="@dimen/padding_16dp">
+        android:paddingHorizontal="@dimen/margin_16dp">
 
         <TextView
             style="@style/YSRegular16"
@@ -90,7 +90,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:paddingHorizontal="@dimen/padding_16dp">
+        android:paddingHorizontal="@dimen/margin_16dp">
 
         <TextView
             style="@style/YSRegular16"

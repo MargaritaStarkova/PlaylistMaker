@@ -7,15 +7,15 @@ import com.practicum.api.TrackData
 class TrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
-    var trackDataList = ArrayList<TrackData>()
+    var trackList = ArrayList<TrackData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TrackViewHolder(parent)
 
-    override fun getItemCount() = trackDataList.size
+    override fun getItemCount() = trackList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackDataList[position])
-        holder.itemView.setOnClickListener { clickListener.onTrackClick(trackDataList[position]) }
+        holder.bind(trackList[position])
+        holder.itemView.setOnClickListener { clickListener.onTrackClick(trackList[position]) }
 
     }
 
