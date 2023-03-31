@@ -29,11 +29,7 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
         trackTime.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
 
-        Glide.with(itemView)
-            .load(model.artworkUrl100)
-            .placeholder(R.drawable.placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(cornerRadius))
-            .into(cover)
+        Glide.with(itemView).load(model.artworkUrl100).placeholder(R.drawable.placeholder)
+            .centerCrop().transform(RoundedCorners(cornerRadius)).into(cover)
     }
 }

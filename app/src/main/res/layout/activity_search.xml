@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,10 +8,13 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/back_icon"
+        android:id="@+id/navigation_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/arrow_back">
 
         <TextView
@@ -27,16 +30,19 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/padding_16dp"
-        android:layout_marginBottom="@dimen/margin_25dp"
+        android:layout_marginHorizontal="@dimen/margin_16dp"
+        android:layout_marginTop="@dimen/margin_10dp"
         android:background="@drawable/shape_on_search_screen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_toolbar"
         tools:context=".SearchActivity">
 
         <ImageView
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="@dimen/dimen_14dp"
+            android:layout_height="@dimen/dimen_14dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/padding_16dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:src="@drawable/search"
             app:tint="?attr/hint_icon_text_color" />
 
@@ -63,89 +69,118 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/margin_12dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/clear"
-            android:visibility="gone" />
-
+            android:src="@drawable/clear" />
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/padding_16dp">
+    <TextView
+        android:id="@+id/you_searched"
+        style="@style/YSMedium19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_50dp"
+        android:text="@string/you_searched"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:layout_marginStart="@dimen/margin_13dp"
+        android:layout_marginEnd="@dimen/margin_24dp"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/clear_history"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/you_searched"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_goneMarginTop="@dimen/margin_24dp"
+        tools:listitem="@layout/track_list_view"
+        tools:itemCount="20"/>
 
-        <ImageView
-            android:id="@+id/placeholder_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_85dp"
-            android:visibility="gone"
-            tools:src="@drawable/internet_error" />
+    <Button
+        android:id="@+id/clear_history"
+        style="@style/button_update"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_36dp"
+        android:layout_marginTop="@dimen/margin_10dp"
+        android:layout_marginBottom="@dimen/margin_15dp"
+        android:text="@string/clear_history"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_list" />
 
-        <TextView
-            android:id="@+id/placeholder_message"
-            style="@style/YSMedium19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_221dp"
-            android:textAlignment="center"
-            android:visibility="gone" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.26" />
 
-        <Button
-            android:id="@+id/update_button"
-            style="@style/button_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="334dp"
-            android:text="@string/update"
-            android:visibility="gone" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_148dp"
+        android:indeterminate="true"
+        android:indeterminateTint="?attr/progressbar_color"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container"
 
-        <LinearLayout
-            android:id="@+id/search_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_25dp"
-            android:orientation="vertical"
-            android:visibility="gone">
+        />
 
-            <TextView
-                android:id="@+id/you_searched"
-                style="@style/YSMedium19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/you_searched" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/placeholder_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_113dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/placeholder_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container"
+        tools:src="@drawable/internet_error" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/history_search_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <TextView
+        android:id="@+id/placeholder_message"
+        style="@style/YSMedium19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/update_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeholder_image"
+        tools:text="@string/internet_error" />
 
-                <Button
-                    android:id="@+id/clear_history"
-                    style="@style/button_update"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="@dimen/margin_25dp"
-                    android:text="@string/clear_history" />
+    <Button
+        android:id="@+id/update_button"
+        style="@style/button_update"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_36dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_24dp"
+        android:text="@string/update"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeholder_message" />
 
-            </FrameLayout>
-        </LinearLayout>
-    </FrameLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@
         <item name="ripple">@color/ripple_dark</item>
         <item name="fab_color">@color/fab_color_grey_dark</item>
         <item name="media_player_description_text_color">@color/deep_gray</item>
+        <item name="progressbar_color">@color/blue</item>
     </style>
 
 
