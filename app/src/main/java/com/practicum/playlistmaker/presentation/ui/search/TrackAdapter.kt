@@ -1,13 +1,13 @@
-package com.practicum.recycler
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.api.TrackData
+import com.practicum.playlistmaker.domain.models.TrackModel
 
 class TrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
-    var trackList = ArrayList<TrackData>()
+    val trackList = ArrayList<TrackModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TrackViewHolder(parent)
 
@@ -20,7 +20,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     }
 
     fun interface TrackClickListener {
-        fun onTrackClick(track: TrackData)
+        fun onTrackClick(track: TrackModel)
     }
 
 }
