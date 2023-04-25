@@ -24,6 +24,27 @@ class AudioPlayerPresenter(
         view.drawTrack(trackModel = track, startPosition = START_POSITION)
     }
 
+    fun onViewPaused() {
+        pausePlaying()
+    }
+
+    fun onViewDestroyed() {
+        mediaInteractor.stopPlaying()
+        handlerRouter.stopRunnable()
+    }
+
+    fun backButtonClicked() {
+        navigationRouter.goBack()
+    }
+
+    fun playButtonClicked() {
+
+        when (mediaInteractor.getPlayerState()) {
+            PlayerState.PLAYING -> pausePlaying()
+            else -> startPlaying()
+        }
+    }
+
     private fun startPlaying() {
 
         view.updatePlayButton(imageResource = R.drawable.pause_button)
@@ -48,24 +69,5 @@ class AudioPlayerPresenter(
         handlerRouter.stopRunnable()
     }
 
-    fun onViewPaused() {
-        pausePlaying()
-    }
 
-    fun onViewDestroyed() {
-        mediaInteractor.stopPlaying()
-        handlerRouter.stopRunnable()
-    }
-
-    fun backButtonClicked() {
-        navigationRouter.goBack()
-    }
-
-    fun playButtonClicked() {
-
-        when (mediaInteractor.getPlayerState()) {
-            PlayerState.PLAYING -> pausePlaying()
-            else -> startPlaying()
-        }
-    }
 }
