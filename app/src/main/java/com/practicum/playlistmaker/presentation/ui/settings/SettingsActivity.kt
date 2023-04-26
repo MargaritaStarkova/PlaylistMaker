@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.presentation.ui.App
+import com.practicum.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +21,8 @@ class SettingsActivity : AppCompatActivity() {
         val termsOfUse = findViewById<FrameLayout>(R.id.terms_of_use)
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
 
-        themeSwitcher.isChecked = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-            .getBoolean(SWITCH_THEME_KEY, false)
+        themeSwitcher.isChecked = getSharedPreferences(App.PREFERENCES, MODE_PRIVATE)
+            .getBoolean(App.SWITCH_THEME_KEY, false)
 
         themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)

@@ -1,6 +1,7 @@
-package com.practicum.api
+package com.practicum.playlistmaker.data.storage.models
 
-data class TrackData(
+data class TrackModelDto(
+
     val trackId: String,
     val trackName: String,
     val artistName: String,
@@ -10,5 +11,6 @@ data class TrackData(
     val country: String,
     val primaryGenreName: String,
     val releaseDate: String,
-    val previewUrl: String,
+    val previewUrl: String?,
 )
+

@@ -1,4 +1,4 @@
-package com.practicum.api
+package com.practicum.playlistmaker.data.network
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -9,5 +9,3 @@ interface SearchApi {
     @GET("search?entity=song")
     fun search(@Query("term") text: String): Call<SearchResponse>
 }
-
-class SearchResponse(val results: ArrayList<TrackData>)

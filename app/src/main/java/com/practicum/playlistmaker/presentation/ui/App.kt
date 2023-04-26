@@ -1,17 +1,17 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 
-const val PREFERENCES = "app_preferences"
-const val SWITCH_THEME_KEY = "theme_preferences"
-const val HISTORY_LIST_KEY = "history_preferences"
-
 class App : Application() {
 
+    companion object {
+        const val PREFERENCES = "app_preferences"
+        const val SWITCH_THEME_KEY = "theme_preferences"
+        const val HISTORY_LIST_KEY = "history_preferences"
+    }
 
-    var darkTheme = false
-
+    private var darkTheme = false
 
     override fun onCreate() {
         super.onCreate()
