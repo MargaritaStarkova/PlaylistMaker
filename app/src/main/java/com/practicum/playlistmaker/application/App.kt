@@ -9,12 +9,15 @@ class App : Application() {
         const val PREFERENCES = "app_preferences"
         const val SWITCH_THEME_KEY = "theme_preferences"
         const val HISTORY_LIST_KEY = "history_preferences"
+        lateinit var instance : App
     }
 
     private var darkTheme = false
 
     override fun onCreate() {
         super.onCreate()
+
+        instance = this
 
         darkTheme =
             getSharedPreferences(PREFERENCES, MODE_PRIVATE).getBoolean(SWITCH_THEME_KEY, false)

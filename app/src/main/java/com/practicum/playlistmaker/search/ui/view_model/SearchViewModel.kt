@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -17,18 +18,16 @@ import com.practicum.playlistmaker.search.ui.models.SearchContentState
 import com.practicum.playlistmaker.utils.router.HandlerRouter
 
 class SearchViewModel(
-    application: App,
+
     private val searchInteractor: SearchInteractor,
     private val handlerRouter: HandlerRouter,
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[APPLICATION_KEY] as App
                 SearchViewModel(
-                    application = application,
-                    searchInteractor = Creator.provideSearchInteractor(context = application),
+                    searchInteractor = Creator.provideSearchInteractor(context = App.instance),
                     handlerRouter = HandlerRouter()
                 )
             }
@@ -91,7 +90,7 @@ class SearchViewModel(
         if (handlerRouter.clickDebounce()) {
             addTrackToHistoryList(track)
             //navigationRouter.openAudioPlayer(track)
-            Toast.makeText(getApplication(), "КЛИКНУЛИ НА ТРЕК", Toast.LENGTH_SHORT).show()
+            Toast.makeText(App.instance, "КЛИКНУЛИ НА ТРЕК", Toast.LENGTH_SHORT).show()
         }
     }
 
