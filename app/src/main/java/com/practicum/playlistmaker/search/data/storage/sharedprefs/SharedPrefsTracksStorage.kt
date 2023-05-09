@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.search.data.storage.models.TrackModelDto
 import com.practicum.playlistmaker.application.App
 
-class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences) : TracksStorage {
+class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences) : ITracksStorage {
 
     override fun saveHistory(historyList: List<TrackModelDto>) {
 

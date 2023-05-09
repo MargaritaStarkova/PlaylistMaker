@@ -2,10 +2,10 @@ package com.practicum.playlistmaker.search.domain.impl
 
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
-import com.practicum.playlistmaker.search.domain.api.SearchInteractor
-import com.practicum.playlistmaker.search.domain.api.TrackRepository
+import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
+import com.practicum.playlistmaker.search.domain.api.ITrackRepository
 
-class SearchInteractorImpl(private val repository: TrackRepository) : SearchInteractor {
+class SearchInteractor(private val repository: ITrackRepository) : ISearchInteractor {
 
     override fun getTracksOnQuery(
         query: String,

@@ -11,7 +11,8 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerPresenter
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerView
-import com.practicum.playlistmaker.utils.router.ToolsRouter
+import com.practicum.playlistmaker.utils.tools.millisConverter
+import com.practicum.playlistmaker.utils.tools.setImage
 
 class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
 
@@ -29,8 +30,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var genre: TextView
     private lateinit var country: TextView
     private lateinit var presenter: AudioPlayerPresenter
-
-    private val router = ToolsRouter()
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,19 +54,18 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     override fun drawTrack(trackModel: TrackModel, startPosition: Int) {
 
         val cornerRadius = this.resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
-
-        router.glideProvider(
+    
+        coverImage.setImage(
             context = this,
             url = trackModel.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"),
             placeholder = R.drawable.placeholder,
             cornerRadius = cornerRadius,
-            view = coverImage
-        )
-
-        excerptDuration.text = router.millisConverter(millis = startPosition)
+            )
+        
+        excerptDuration.text = startPosition.millisConverter()
         trackName.text = trackModel.trackName
         artistName.text = trackModel.artistName
-        duration.text = router.millisConverter(millis = trackModel.trackTimeMillis)
+        duration.text = trackModel.trackTimeMillis.millisConverter()
         albumName.text = trackModel.collectionName
         year.text = trackModel.releaseDate.substring(0, 4)
         genre.text = trackModel.primaryGenreName
@@ -79,7 +78,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
 
     override fun updateTrackDuration(currentPositionMediaPlayer: Int) {
         excerptDuration.text =
-            router.millisConverter(millis = currentPositionMediaPlayer)
+            currentPositionMediaPlayer.millisConverter()
     }
 
     private fun initViews() {

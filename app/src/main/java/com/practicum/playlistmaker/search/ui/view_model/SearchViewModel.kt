@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker.search.ui.view_model
 
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,37 +9,41 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.application.App
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.search.domain.api.SearchInteractor
+import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
+import com.practicum.playlistmaker.search.ui.models.HistoryListState
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
 import com.practicum.playlistmaker.utils.router.HandlerRouter
 
 class SearchViewModel(
-
-    private val searchInteractor: SearchInteractor,
+    private val searchInteractor: ISearchInteractor,
     private val handlerRouter: HandlerRouter,
 ) : ViewModel() {
 
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
+                val application = this[APPLICATION_KEY] as App
                 SearchViewModel(
-                    searchInteractor = Creator.provideSearchInteractor(context = App.instance),
-                    handlerRouter = HandlerRouter()
+                    searchInteractor = Creator.provideSearchInteractor(context = application),
+                    handlerRouter = HandlerRouter(),
                 )
             }
         }
     }
-
     private val historyList = ArrayList<TrackModel>()
+    
     private val contentStateLiveData = MutableLiveData<SearchContentState>()
     private val clearIconStateLiveData = MutableLiveData<String>()
     private val searchTextClearClickedLiveData = MutableLiveData(false)
+    
+    private var latestStateLiveData = contentStateLiveData.value
 
     init {
         historyList.addAll(searchInteractor.getTracksFromHistory())
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
+        latestStateLiveData = contentStateLiveData.value
     }
 
     override fun onCleared() {
@@ -52,15 +54,21 @@ class SearchViewModel(
     fun observeContentState(): LiveData<SearchContentState> = contentStateLiveData
     fun observeClearIconState(): LiveData<String> = clearIconStateLiveData
     fun observeSearchTextClearClicked(): LiveData<Boolean> = searchTextClearClickedLiveData
+    
+    fun onViewResume() {
+        contentStateLiveData.value = latestStateLiveData
+    }
 
     fun onHistoryClearedClicked() {
         historyList.clear()
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
+        latestStateLiveData = contentStateLiveData.value
     }
 
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
         if (hasFocus && text.isEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
+            latestStateLiveData = contentStateLiveData.value
         }
     }
 
@@ -69,12 +77,15 @@ class SearchViewModel(
             return
         }
         contentStateLiveData.value = SearchContentState.Loading
-        searchInteractor.getTracksOnQuery(query = query,
+        searchInteractor.getTracksOnQuery(
+            query = query,
             onSuccess = { trackList ->
                 if (trackList.isEmpty()) {
                     contentStateLiveData.value = SearchContentState.Error(NetworkError.SEARCH_ERROR)
+                    latestStateLiveData = contentStateLiveData.value
                 } else {
                     contentStateLiveData.value = SearchContentState.SearchContent(trackList)
+                    latestStateLiveData = contentStateLiveData.value
                 }
             }, onError = { error ->
                 SearchContentState.Error(error)
@@ -83,19 +94,8 @@ class SearchViewModel(
 
     fun searchTextClearClicked() {
         searchTextClearClickedLiveData.value = true
-        SearchContentState.HistoryContent(historyList)
-    }
-
-    fun onTrackClicked(track: TrackModel) {
-        if (handlerRouter.clickDebounce()) {
-            addTrackToHistoryList(track)
-            //navigationRouter.openAudioPlayer(track)
-            Toast.makeText(App.instance, "КЛИКНУЛИ НА ТРЕК", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun onViewStopped() {
-        searchInteractor.saveSearchHistory(historyList)
+        contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
+        latestStateLiveData = contentStateLiveData.value
     }
 
     fun onSearchTextChanged(query: String?) {
@@ -104,16 +104,18 @@ class SearchViewModel(
 
         if (query.isNullOrEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
+            latestStateLiveData = contentStateLiveData.value
         } else {
             handlerRouter.searchDebounce(r = { loadTrackList(query) })
         }
     }
 
-    private fun addTrackToHistoryList(track: TrackModel) {
+    fun addTrackToHistoryList(track: TrackModel) {
         when {
             historyList.contains(track) -> {
                 historyList.remove(track)
                 historyList.add(0, track)
+
             }
 
             historyList.size < 10 -> {
@@ -125,6 +127,6 @@ class SearchViewModel(
                 historyList.add(0, track)
             }
         }
+        searchInteractor.saveSearchHistory(historyList)
     }
-
 }

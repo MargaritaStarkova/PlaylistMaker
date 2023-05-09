@@ -1,20 +1,19 @@
 package com.practicum.playlistmaker.creator
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.application.App
 import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayerImpl
 import com.practicum.playlistmaker.player.domain.impl.MediaInteractorImpl
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerPresenter
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerView
-import com.practicum.playlistmaker.search.data.network.NetworkClientImpl
-import com.practicum.playlistmaker.search.data.network.SearchApi
-import com.practicum.playlistmaker.search.data.repository.TrackRepositoryImpl
+import com.practicum.playlistmaker.search.data.network.NetworkClient
+import com.practicum.playlistmaker.search.data.network.ISearchApi
+import com.practicum.playlistmaker.search.data.repository.TrackRepository
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.SharedPrefsTracksStorage
-import com.practicum.playlistmaker.search.domain.api.SearchInteractor
-import com.practicum.playlistmaker.search.domain.api.TrackRepository
-import com.practicum.playlistmaker.search.domain.impl.SearchInteractorImpl
+import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
+import com.practicum.playlistmaker.search.domain.api.ITrackRepository
+import com.practicum.playlistmaker.search.domain.impl.SearchInteractor
 import com.practicum.playlistmaker.utils.router.NavigationRouter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object Creator {
 
-    private const val BASE_URL = "https://itunes.apple.com/"
+    private const val BASE_URL = "http://itunes.apple.com/"
 
     private val logging = HttpLoggingInterceptor().apply {
         setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -32,7 +31,7 @@ object Creator {
     private val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create()).client(okHttpClient).build()
 
-    private val api = retrofit.create(SearchApi::class.java)
+    private val api = retrofit.create(ISearchApi::class.java)
 
 
 
@@ -48,15 +47,15 @@ object Creator {
         )
     }
 
-    fun provideSearchInteractor(context: Context): SearchInteractor {
-        return SearchInteractorImpl(
+    fun provideSearchInteractor(context: Context): ISearchInteractor {
+        return SearchInteractor(
             repository = provideTrackRepository(context)
         )
     }
 
-    private fun provideTrackRepository(context: Context): TrackRepository {
-        return TrackRepositoryImpl(
-            networkClient = NetworkClientImpl(api),
+    private fun provideTrackRepository(context: Context): ITrackRepository {
+        return TrackRepository(
+            networkClient = NetworkClient(api),
             tracksStorage = provideTracksStorage(context),
             )
     }

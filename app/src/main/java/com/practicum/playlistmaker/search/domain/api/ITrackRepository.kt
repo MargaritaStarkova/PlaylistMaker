@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.search.domain.api
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 
-interface TrackRepository {
+interface ITrackRepository {
     fun loadTracks(
         query: String,
         onSuccess: (List<TrackModel>) -> Unit,
