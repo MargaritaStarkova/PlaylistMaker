@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.application.App
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
-import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
-import com.practicum.playlistmaker.search.ui.models.HistoryListState
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
 import com.practicum.playlistmaker.utils.router.HandlerRouter
 
@@ -56,11 +54,13 @@ class SearchViewModel(
     fun observeSearchTextClearClicked(): LiveData<Boolean> = searchTextClearClickedLiveData
     
     fun onViewResume() {
-        contentStateLiveData.value = latestStateLiveData
+        contentStateLiveData.value =
+            latestStateLiveData
     }
 
     fun onHistoryClearedClicked() {
         historyList.clear()
+        searchInteractor.saveSearchHistory(historyList)
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
         latestStateLiveData = contentStateLiveData.value
     }
@@ -80,15 +80,11 @@ class SearchViewModel(
         searchInteractor.getTracksOnQuery(
             query = query,
             onSuccess = { trackList ->
-                if (trackList.isEmpty()) {
-                    contentStateLiveData.value = SearchContentState.Error(NetworkError.SEARCH_ERROR)
-                    latestStateLiveData = contentStateLiveData.value
-                } else {
-                    contentStateLiveData.value = SearchContentState.SearchContent(trackList)
-                    latestStateLiveData = contentStateLiveData.value
-                }
+                contentStateLiveData.postValue(SearchContentState.SearchContent(trackList))
+                latestStateLiveData = SearchContentState.SearchContent(trackList)
+    
             }, onError = { error ->
-                SearchContentState.Error(error)
+                contentStateLiveData.postValue(SearchContentState.Error(error))
             })
     }
 
@@ -99,7 +95,7 @@ class SearchViewModel(
     }
 
     fun onSearchTextChanged(query: String?) {
-
+        
         clearIconStateLiveData.value = query
 
         if (query.isNullOrEmpty()) {

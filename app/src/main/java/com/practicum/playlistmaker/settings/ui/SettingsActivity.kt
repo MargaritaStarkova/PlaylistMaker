@@ -1,63 +1,49 @@
 package com.practicum.playlistmaker.settings.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.switchmaterial.SwitchMaterial
-import com.practicum.playlistmaker.application.App
-import com.practicum.playlistmaker.R
+import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import com.practicum.playlistmaker.settings.view_model.SettingsViewModel
+import com.practicum.playlistmaker.utils.router.NavigationRouter
 
 class SettingsActivity : AppCompatActivity() {
+    
+    private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+    
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this, SettingsViewModel.getViewModelFactory()
+        )[SettingsViewModel::class.java]
+    }
+    private val navigationRouter by lazy { NavigationRouter(this) }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
-        val backButton = findViewById<androidx.appcompat.widget.Toolbar>(R.id.navigation_toolbar)
-        val share = findViewById<FrameLayout>(R.id.share)
-        val support = findViewById<FrameLayout>(R.id.support)
-        val termsOfUse = findViewById<FrameLayout>(R.id.terms_of_use)
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-
-        themeSwitcher.isChecked = getSharedPreferences(App.PREFERENCES, MODE_PRIVATE)
-            .getBoolean(App.SWITCH_THEME_KEY, false)
-
-        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
-            (applicationContext as App).saveTheme(isChecked)
+        setContentView(binding.root)
+        
+        viewModel.observeThemeSwitcherState().observe(this) { isChecked ->
+            binding.themeSwitcher.isChecked = isChecked
         }
-
-        backButton.setNavigationOnClickListener {
-            finish()
+        
+        binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.onThemeSwitcherClicked(isChecked)
         }
-
-
-        share.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_url))
-                type = "text/plain"
-            }
-            startActivity(Intent.createChooser(intent, getString(R.string.chooser_title)))
+    
+        binding.navigationToolbar.setNavigationOnClickListener {
+            navigationRouter.goBack()
         }
-
-        support.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(R.string.email))
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_title))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_message))
-            }
-
-            startActivity(Intent.createChooser(intent, getString(R.string.chooser_title)))
+        
+        binding.share.setOnClickListener {
+            viewModel.onShareAppClicked()
         }
-
-        termsOfUse.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(getString(R.string.offer_url))
-            }
-            startActivity(intent)
+    
+        binding.support.setOnClickListener {
+            viewModel.onWriteSupportClicked()
+        }
+    
+        binding.termsOfUse.setOnClickListener {
+            viewModel.termsOfUseClicked()
         }
     }
 }

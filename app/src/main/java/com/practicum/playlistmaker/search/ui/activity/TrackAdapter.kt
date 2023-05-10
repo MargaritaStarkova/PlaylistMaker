@@ -26,5 +26,4 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     fun interface TrackClickListener {
         fun onTrackClick(track: TrackModel)
     }
-
 }

@@ -21,10 +21,15 @@ import com.practicum.playlistmaker.utils.router.NavigationRouter
 class SearchActivity : AppCompatActivity() {
     
     private lateinit var trackAdapter: TrackAdapter
-    private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
-    private lateinit var navigationRouter: NavigationRouter
-    private lateinit var handlerRouter: HandlerRouter
+    
+    private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this, SearchViewModel.getViewModelFactory()
+        )[SearchViewModel::class.java]
+    }
+    private val navigationRouter by lazy { NavigationRouter(activity = this@SearchActivity) }
+    private val handlerRouter by lazy { HandlerRouter() }
     
     override fun onResume() {
         super.onResume()
@@ -33,12 +38,7 @@ class SearchActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        viewModel = ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
         
         viewModel.observeContentState().observe(this) { searchScreenState ->
             render(searchScreenState)
@@ -52,13 +52,8 @@ class SearchActivity : AppCompatActivity() {
                 hideKeyboard()
             }
         }
-        
-        navigationRouter = NavigationRouter(activity = this@SearchActivity)
-        handlerRouter = HandlerRouter()
-        
         initListeners()
         initAdapter()
-        
     }
     
     override fun onDestroy() {
@@ -67,7 +62,6 @@ class SearchActivity : AppCompatActivity() {
     }
     
     private fun initListeners() {
-        
         binding.inputEditText.setOnFocusChangeListener { _, hasFocus ->
             viewModel.searchFocusChanged(hasFocus, binding.inputEditText.text.toString())
         }

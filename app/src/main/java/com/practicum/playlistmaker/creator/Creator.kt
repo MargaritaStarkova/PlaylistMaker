@@ -1,67 +1,90 @@
 package com.practicum.playlistmaker.creator
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.application.App
 import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayerImpl
+import com.practicum.playlistmaker.player.domain.api.AudioPlayer
+import com.practicum.playlistmaker.player.domain.api.MediaInteractor
 import com.practicum.playlistmaker.player.domain.impl.MediaInteractorImpl
-import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerPresenter
-import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerView
-import com.practicum.playlistmaker.search.data.network.NetworkClient
-import com.practicum.playlistmaker.search.data.network.ISearchApi
+import com.practicum.playlistmaker.search.data.network.INetworkClient
+import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.repository.TrackRepository
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.SharedPrefsTracksStorage
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.api.ITrackRepository
 import com.practicum.playlistmaker.search.domain.impl.SearchInteractor
-import com.practicum.playlistmaker.utils.router.NavigationRouter
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmaker.settings.data.repository.SettingsRepository
+import com.practicum.playlistmaker.settings.data.storage.sharedprefs.ISettingsStorage
+import com.practicum.playlistmaker.settings.data.storage.sharedprefs.SharedPrefsSettingsStorage
+import com.practicum.playlistmaker.settings.domain.api.ISettingsInteractor
+import com.practicum.playlistmaker.settings.domain.api.ISettingsReporitory
+import com.practicum.playlistmaker.settings.domain.impl.SettingsInteractor
+import com.practicum.playlistmaker.sharing.data.ExternalNavigator
+import com.practicum.playlistmaker.sharing.domain.api.IExternalNavigator
+import com.practicum.playlistmaker.sharing.domain.api.ISharingInteractor
+import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractor
 
 object Creator {
-
-    private const val BASE_URL = "http://itunes.apple.com/"
-
-    private val logging = HttpLoggingInterceptor().apply {
-        setLevel(HttpLoggingInterceptor.Level.BODY)
+    
+    fun provideSettingsInteractor(context: Context): ISettingsInteractor {
+        return SettingsInteractor(repository = getSettingsRepository(context))
+        
     }
-    private val okHttpClient = OkHttpClient.Builder().addInterceptor(logging).build()
-    private val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create()).client(okHttpClient).build()
-
-    private val api = retrofit.create(ISearchApi::class.java)
-
-
-
-    fun provideAudioPlayerPresenter(
-        view: AudioPlayerView, activity: AppCompatActivity
-    ): AudioPlayerPresenter {
-        val router = NavigationRouter(activity)
-        val url = router.getTrackInfo().previewUrl
-        return AudioPlayerPresenter(
-            view = view,
-            navigationRouter = router,
-            mediaInteractor = MediaInteractorImpl(AudioPlayerImpl(url)),
+    
+    fun provideSharingInteractor(context: Context): ISharingInteractor {
+        return SharingInteractor(
+            externalNavigator = getExternalNavigator(context)
         )
     }
-
+    
+    fun provideMediaInteractor(trackUrl: String): MediaInteractor {
+        return MediaInteractorImpl(
+            player = getAudioPlayer(trackUrl)
+        )
+    }
+    
     fun provideSearchInteractor(context: Context): ISearchInteractor {
         return SearchInteractor(
-            repository = provideTrackRepository(context)
+            repository = getTrackRepository(context)
         )
     }
-
-    private fun provideTrackRepository(context: Context): ITrackRepository {
+    
+    private fun getSettingsRepository(context: Context): ISettingsReporitory {
+        return SettingsRepository(storage = getSettingsStorage(context))
+    }
+    
+    private fun getSettingsStorage(context: Context): ISettingsStorage {
+        return SharedPrefsSettingsStorage(
+            sharedPreferences = getSharedPreferences(context)
+        )
+    }
+    
+    private fun getExternalNavigator(context: Context): IExternalNavigator {
+        return ExternalNavigator(context = context)
+    }
+    
+    private fun getAudioPlayer(trackUrl: String): AudioPlayer {
+        return AudioPlayerImpl(url = trackUrl)
+    }
+    
+    private fun getTrackRepository(context: Context): ITrackRepository {
         return TrackRepository(
-            networkClient = NetworkClient(api),
-            tracksStorage = provideTracksStorage(context),
-            )
+            networkClient = getNetworkClient(context),
+            tracksStorage = getTracksStorage(context),
+        )
     }
-
-    private fun provideTracksStorage(context: Context): SharedPrefsTracksStorage {
-        return SharedPrefsTracksStorage(context.getSharedPreferences(App.PREFERENCES, AppCompatActivity.MODE_PRIVATE))
+    
+    private fun getNetworkClient(context: Context): INetworkClient {
+        return RetrofitNetworkClient(context = context)
     }
-
+    
+    private fun getTracksStorage(context: Context): SharedPrefsTracksStorage {
+        return SharedPrefsTracksStorage(getSharedPreferences(context))
+    }
+    
+    private fun getSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(App.PREFERENCES, AppCompatActivity.MODE_PRIVATE)
+    }
 }
