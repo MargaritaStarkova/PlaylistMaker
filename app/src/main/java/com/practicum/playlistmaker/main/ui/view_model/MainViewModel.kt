@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
         }
     }
     
-    private val contentStateLiveData = MutableLiveData<ContentState>()
+    private val contentStateLiveData = SingleLiveEvent<ContentState>()
     
     fun observeContentStateLiveData(): LiveData<ContentState> = contentStateLiveData
     
