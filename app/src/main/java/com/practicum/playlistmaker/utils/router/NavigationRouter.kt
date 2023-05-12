@@ -9,11 +9,7 @@ import com.practicum.playlistmaker.player.ui.activity.AudioPlayerActivity
 class NavigationRouter(
     var activity: Activity?
 ) {
-
-    companion object {
-        private const val TRACK_MODEL = "track_model"
-    }
-
+    
     fun openAudioPlayer(track: TrackModel) {
         val intent = Intent(activity, AudioPlayerActivity::class.java)
         intent.putExtra(TRACK_MODEL, Gson().toJson(track))
@@ -26,5 +22,9 @@ class NavigationRouter(
 
     fun goBack() {
         activity?.finish()
+    }
+    
+    companion object {
+        private const val TRACK_MODEL = "track_model"
     }
 }

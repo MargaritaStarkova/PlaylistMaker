@@ -19,29 +19,19 @@ class SearchViewModel(
     private val handlerRouter: HandlerRouter,
 ) : ViewModel() {
 
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as App
-                SearchViewModel(
-                    searchInteractor = Creator.provideSearchInteractor(context = application),
-                    handlerRouter = HandlerRouter(),
-                )
-            }
-        }
-    }
+    
     private val historyList = ArrayList<TrackModel>()
     
     private val contentStateLiveData = MutableLiveData<SearchContentState>()
     private val clearIconStateLiveData = MutableLiveData<String>()
     private val searchTextClearClickedLiveData = MutableLiveData(false)
     
-    private var latestStateLiveData = contentStateLiveData.value
+    private var latestStateContent = contentStateLiveData.value
 
     init {
         historyList.addAll(searchInteractor.getTracksFromHistory())
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
-        latestStateLiveData = contentStateLiveData.value
+        latestStateContent = contentStateLiveData.value
     }
 
     override fun onCleared() {
@@ -55,20 +45,20 @@ class SearchViewModel(
     
     fun onViewResume() {
         contentStateLiveData.value =
-            latestStateLiveData
+            latestStateContent
     }
 
     fun onHistoryClearedClicked() {
         historyList.clear()
         searchInteractor.saveSearchHistory(historyList)
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
-        latestStateLiveData = contentStateLiveData.value
+        latestStateContent = contentStateLiveData.value
     }
 
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
         if (hasFocus && text.isEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
-            latestStateLiveData = contentStateLiveData.value
+            latestStateContent = contentStateLiveData.value
         }
     }
 
@@ -81,7 +71,7 @@ class SearchViewModel(
             query = query,
             onSuccess = { trackList ->
                 contentStateLiveData.postValue(SearchContentState.SearchContent(trackList))
-                latestStateLiveData = SearchContentState.SearchContent(trackList)
+                latestStateContent = SearchContentState.SearchContent(trackList)
     
             }, onError = { error ->
                 contentStateLiveData.postValue(SearchContentState.Error(error))
@@ -91,7 +81,7 @@ class SearchViewModel(
     fun searchTextClearClicked() {
         searchTextClearClickedLiveData.value = true
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
-        latestStateLiveData = contentStateLiveData.value
+        latestStateContent = contentStateLiveData.value
     }
 
     fun onSearchTextChanged(query: String?) {
@@ -100,7 +90,7 @@ class SearchViewModel(
 
         if (query.isNullOrEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
-            latestStateLiveData = contentStateLiveData.value
+            latestStateContent = contentStateLiveData.value
         } else {
             handlerRouter.searchDebounce(r = { loadTrackList(query) })
         }
@@ -110,19 +100,34 @@ class SearchViewModel(
         when {
             historyList.contains(track) -> {
                 historyList.remove(track)
-                historyList.add(0, track)
+                historyList.add(FIRST_INDEX_HISTORY_LIST, track)
 
             }
 
             historyList.size < 10 -> {
-                historyList.add(0, track)
+                historyList.add(FIRST_INDEX_HISTORY_LIST, track)
             }
 
             else -> {
-                historyList.removeAt(9)
-                historyList.add(0, track)
+                historyList.removeAt(LAST_INDEX_HISTORY_LIST)
+                historyList.add(FIRST_INDEX_HISTORY_LIST, track)
             }
         }
         searchInteractor.saveSearchHistory(historyList)
+    }
+    
+    companion object {
+        private const val FIRST_INDEX_HISTORY_LIST = 0
+        private const val LAST_INDEX_HISTORY_LIST = 9
+        
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = this[APPLICATION_KEY] as App
+                SearchViewModel(
+                    searchInteractor = Creator.provideSearchInteractor(context = application),
+                    handlerRouter = HandlerRouter(),
+                )
+            }
+        }
     }
 }

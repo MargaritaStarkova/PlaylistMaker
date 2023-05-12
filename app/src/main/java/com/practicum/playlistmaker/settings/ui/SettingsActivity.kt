@@ -26,24 +26,26 @@ class SettingsActivity : AppCompatActivity() {
             binding.themeSwitcher.isChecked = isChecked
         }
         
-        binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.onThemeSwitcherClicked(isChecked)
-        }
+        binding.apply {
+            themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.onThemeSwitcherClicked(isChecked)
+            }
     
-        binding.navigationToolbar.setNavigationOnClickListener {
-            navigationRouter.goBack()
-        }
-        
-        binding.share.setOnClickListener {
-            viewModel.onShareAppClicked()
-        }
+            navigationToolbar.setNavigationOnClickListener {
+                navigationRouter.goBack()
+            }
     
-        binding.support.setOnClickListener {
-            viewModel.onWriteSupportClicked()
-        }
+            share.setOnClickListener {
+                viewModel.onShareAppClicked()
+            }
     
-        binding.termsOfUse.setOnClickListener {
-            viewModel.termsOfUseClicked()
+            support.setOnClickListener {
+                viewModel.onWriteSupportClicked()
+            }
+    
+            termsOfUse.setOnClickListener {
+                viewModel.termsOfUseClicked()
+            }
         }
     }
 }

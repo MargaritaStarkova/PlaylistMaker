@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
 import com.practicum.playlistmaker.library.ui.activity.LibraryActivity
-import com.practicum.playlistmaker.main.ui.models.ContentState
+import com.practicum.playlistmaker.main.ui.models.NavigationState
 import com.practicum.playlistmaker.main.ui.view_model.MainViewModel
 import com.practicum.playlistmaker.search.ui.activity.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         
-        viewModel.observeContentStateLiveData().observe(this) { contentState ->
-            navigation(contentState)
+        viewModel.observeContentStateLiveData().observe(this) { navigationState ->
+            navigation(navigationState)
         }
         
         initListeners()
@@ -44,15 +44,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    private fun navigation(state: ContentState) {
+    private fun navigation(state: NavigationState) {
         when (state) {
-            ContentState.Search -> {
+            NavigationState.Search -> {
                 startActivity(Intent(this, SearchActivity::class.java))
             }
-            ContentState.Library -> {
+            NavigationState.Library -> {
                 startActivity(Intent(this, LibraryActivity::class.java))
             }
-            ContentState.Settings -> {
+            NavigationState.Settings -> {
              startActivity(Intent(this, SettingsActivity::class.java))
             }
         }

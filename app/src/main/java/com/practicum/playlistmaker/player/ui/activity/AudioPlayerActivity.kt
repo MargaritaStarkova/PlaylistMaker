@@ -26,12 +26,14 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        
-        viewModel.observePlayStatus().observe(this) { playingStatus ->
-            updatePlayButton(playingStatus.imageResource)
-        }
-        viewModel.observePlayProgress().observe(this) { currentPosition ->
-            updateTrackDuration(currentPosition)
+    
+        viewModel.apply {
+            observePlayStatus().observe(this@AudioPlayerActivity) { playingStatus ->
+                updatePlayButton(playingStatus.imageResource)
+            }
+            observePlayProgress().observe(this@AudioPlayerActivity) { currentPosition ->
+                updateTrackDuration(currentPosition)
+            }
         }
         
         drawTrack(trackModel, AudioPlayerViewModel.START_POSITION)
@@ -47,20 +49,23 @@ class AudioPlayerActivity : AppCompatActivity() {
         
         val cornerRadius = this.resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
         
-        binding.cover.setImage(
-            context = this,
-            url = trackModel.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"),
-            placeholder = R.drawable.placeholder,
-            cornerRadius = cornerRadius,
-        )
-        binding.excerptDuration.text = startPosition.millisConverter()
-        binding.trackName.text = trackModel.trackName
-        binding.artistName.text = trackModel.artistName
-        binding.changeableDuration.text = trackModel.trackTimeMillis.millisConverter()
-        binding.changeableAlbum.text = trackModel.collectionName
-        binding.changeableYear.text = trackModel.releaseDate.substring(0, 4)
-        binding.changeableGenre.text = trackModel.primaryGenreName
-        binding.changeableCountry.text = trackModel.country
+        binding.apply {
+            
+                cover.setImage(
+                    context = this@AudioPlayerActivity,
+                    url = trackModel.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"),
+                    placeholder = R.drawable.placeholder,
+                    cornerRadius = cornerRadius,
+                )
+                excerptDuration.text = startPosition.millisConverter()
+                trackName.text = trackModel.trackName
+                artistName.text = trackModel.artistName
+                changeableDuration.text = trackModel.trackTimeMillis.millisConverter()
+                changeableAlbum.text = trackModel.collectionName
+                changeableYear.text = trackModel.releaseDate.substring(0, 4)
+                changeableGenre.text = trackModel.primaryGenreName
+                changeableCountry.text = trackModel.country
+        }
     }
     
     private fun updatePlayButton(imageResource: Int) {
@@ -72,13 +77,16 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
     
     private fun initListeners() {
-        binding.navigationToolbar.setNavigationOnClickListener {
-            navigationRouter.goBack()
-        }
         
-        binding.playButton.setOnClickListener {
-            binding.playButton.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale))
-            viewModel.playButtonClicked()
+        binding.apply {
+            navigationToolbar.setNavigationOnClickListener {
+                navigationRouter.goBack()
+            }
+    
+            playButton.setOnClickListener {
+                binding.playButton.startAnimation(AnimationUtils.loadAnimation(this@AudioPlayerActivity, R.anim.scale))
+                viewModel.playButtonClicked()
+            }
         }
     }
 }

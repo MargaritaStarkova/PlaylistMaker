@@ -5,11 +5,6 @@ import android.os.Looper
 
 class HandlerRouter {
 
-    companion object {
-        private const val DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
@@ -33,5 +28,10 @@ class HandlerRouter {
 
     fun stopRunnable() {
         handler.removeCallbacksAndMessages(null)
+    }
+    
+    companion object {
+        private const val DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

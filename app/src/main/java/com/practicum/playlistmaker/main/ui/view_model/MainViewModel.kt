@@ -1,14 +1,29 @@
 package com.practicum.playlistmaker.main.ui.view_model
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.main.ui.models.ContentState
+import com.practicum.playlistmaker.main.ui.models.NavigationState
 
 class MainViewModel : ViewModel() {
+    
+    private val navigatinStateLiveData = SingleLiveEvent<NavigationState>()
+    
+    fun observeContentStateLiveData(): LiveData<NavigationState> = navigatinStateLiveData
+    
+    fun onSearchButtonClicked() {
+        navigatinStateLiveData.value = NavigationState.Search
+    }
+    
+    fun onLibraryButtonClicked() {
+        navigatinStateLiveData.value = NavigationState.Library
+    }
+    
+    fun onSettingsButtonClicked() {
+        navigatinStateLiveData.value = NavigationState.Settings
+    }
     
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
@@ -16,19 +31,5 @@ class MainViewModel : ViewModel() {
                 MainViewModel()
             }
         }
-    }
-    
-    private val contentStateLiveData = SingleLiveEvent<ContentState>()
-    
-    fun observeContentStateLiveData(): LiveData<ContentState> = contentStateLiveData
-    
-    fun onSearchButtonClicked() {
-        contentStateLiveData.value = ContentState.Search
-    }
-    fun onLibraryButtonClicked() {
-        contentStateLiveData.value = ContentState.Library
-    }
-    fun onSettingsButtonClicked() {
-        contentStateLiveData.value = ContentState.Settings
     }
 }

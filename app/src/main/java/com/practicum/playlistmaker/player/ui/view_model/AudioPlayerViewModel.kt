@@ -17,19 +17,6 @@ class AudioPlayerViewModel(
     private val handlerRouter: HandlerRouter
 ) : ViewModel() {
     
-    companion object {
-        const val START_POSITION = 0
-        
-        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                AudioPlayerViewModel(
-                    mediaInteractor = Creator.provideMediaInteractor(trackUrl),
-                    handlerRouter = HandlerRouter(),
-                )
-            }
-        }
-    }
-    
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
     private val playProgressLiveData = MutableLiveData<Int>()
     
@@ -77,5 +64,18 @@ class AudioPlayerViewModel(
         mediaInteractor.pausePlaying()
         playStatusLiveData.value = PlayStatus.Paused
         handlerRouter.stopRunnable()
+    }
+    
+    companion object {
+        const val START_POSITION = 0
+        
+        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                AudioPlayerViewModel(
+                    mediaInteractor = Creator.provideMediaInteractor(trackUrl),
+                    handlerRouter = HandlerRouter(),
+                )
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.player.domain.api.AudioPlayer
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 
 class AudioPlayerImpl(url: String) : AudioPlayer {
-
+    
     override var playerState = PlayerState.NOT_PREPARED
     private val player = MediaPlayer()
 

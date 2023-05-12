@@ -20,19 +20,6 @@ class SettingsViewModel(
     private val application: App,
 ) : AndroidViewModel(application) {
     
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as App
-                SettingsViewModel(
-                    settingsInteractor = Creator.provideSettingsInteractor(application),
-                    sharingInteractor = Creator.provideSharingInteractor(application),
-                    application = application,
-                )
-            }
-        }
-    }
-    
     private var darkTheme = false
     private val themeSwitcherStateLiveData = MutableLiveData(darkTheme)
     
@@ -72,5 +59,18 @@ class SettingsViewModel(
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+    
+    companion object {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = this[APPLICATION_KEY] as App
+                SettingsViewModel(
+                    settingsInteractor = Creator.provideSettingsInteractor(application),
+                    sharingInteractor = Creator.provideSharingInteractor(application),
+                    application = application,
+                )
+            }
+        }
     }
 }

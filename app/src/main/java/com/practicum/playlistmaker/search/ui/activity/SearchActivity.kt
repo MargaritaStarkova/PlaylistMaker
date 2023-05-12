@@ -39,17 +39,19 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        
-        viewModel.observeContentState().observe(this) { searchScreenState ->
-            render(searchScreenState)
-        }
-        viewModel.observeClearIconState().observe(this) { query ->
-            clearIconVisibility(query)
-        }
-        viewModel.observeSearchTextClearClicked().observe(this) { isClicked ->
-            if (isClicked) {
-                clearSearchText()
-                hideKeyboard()
+    
+        viewModel.apply {
+            observeContentState().observe(this@SearchActivity) { searchScreenState ->
+                render(searchScreenState)
+            }
+            observeClearIconState().observe(this@SearchActivity) { query ->
+                clearIconVisibility(query)
+            }
+            observeSearchTextClearClicked().observe(this@SearchActivity) { isClicked ->
+                if (isClicked) {
+                    clearSearchText()
+                    hideKeyboard()
+                }
             }
         }
         initListeners()
@@ -62,31 +64,31 @@ class SearchActivity : AppCompatActivity() {
     }
     
     private fun initListeners() {
-        binding.inputEditText.setOnFocusChangeListener { _, hasFocus ->
-            viewModel.searchFocusChanged(hasFocus, binding.inputEditText.text.toString())
-        }
-        binding.inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {} //empty
-            override fun afterTextChanged(s: Editable?) {} //empty
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onSearchTextChanged(s.toString())
+    
+        binding.apply {
+            inputEditText.setOnFocusChangeListener { _, hasFocus ->
+                viewModel.searchFocusChanged(hasFocus, binding.inputEditText.text.toString())
             }
-        })
         
-        binding.clearIcon.setOnClickListener {
-            viewModel.searchTextClearClicked()
-        }
-        
-        binding.clearHistory.setOnClickListener {
-            viewModel.onHistoryClearedClicked()
-        }
-        
-        binding.updateButton.setOnClickListener {
-            viewModel.loadTrackList(binding.inputEditText.text.toString())
-        }
-        
-        binding.navigationToolbar.setNavigationOnClickListener {
-            navigationRouter.goBack()
+            inputEditText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int,) {} //empty
+                override fun afterTextChanged(s: Editable?) {} //empty
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    viewModel.onSearchTextChanged(s.toString())
+                }
+            })
+            clearIcon.setOnClickListener {
+                viewModel.searchTextClearClicked()
+            }
+            clearHistory.setOnClickListener {
+                viewModel.onHistoryClearedClicked()
+            }
+            updateButton.setOnClickListener {
+                viewModel.loadTrackList(binding.inputEditText.text.toString())
+            }
+            navigationToolbar.setNavigationOnClickListener {
+                navigationRouter.goBack()
+            }
         }
     }
     
@@ -115,80 +117,95 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showSearchList(list: List<TrackModel>) {
-        binding.placeholderImage.visibility = View.GONE
-        binding.placeholderMessage.visibility = View.GONE
-        binding.updateButton.visibility = View.GONE
-        binding.youSearched.visibility = View.GONE
-        binding.clearHistory.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
     
-        trackAdapter.trackList.clear()
-        trackAdapter.trackList.addAll(list)
-        trackAdapter.notifyDataSetChanged()
+        binding.apply {
+            placeholderImage.visibility = View.GONE
+            placeholderMessage.visibility = View.GONE
+            updateButton.visibility = View.GONE
+            youSearched.visibility = View.GONE
+            clearHistory.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
     
+        trackAdapter.apply {
+            trackList.clear()
+            trackList.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 
     private fun showHistoryList(list: List<TrackModel>) {
     
-        binding.placeholderImage.visibility = View.GONE
-        binding.placeholderMessage.visibility = View.GONE
-        binding.updateButton.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
+        binding.apply {
+            placeholderImage.visibility = View.GONE
+            placeholderMessage.visibility = View.GONE
+            updateButton.visibility = View.GONE
+            progressBar.visibility = View.GONE
         
-        if (list.isNotEmpty()) {
-            binding.youSearched.visibility = View.VISIBLE
-            binding.clearHistory.visibility = View.VISIBLE
-        } else {
-            binding.youSearched.visibility = View.GONE
-            binding.clearHistory.visibility = View.GONE
+            if (list.isNotEmpty()) {
+                youSearched.visibility = View.VISIBLE
+                clearHistory.visibility = View.VISIBLE
+            } else {
+                youSearched.visibility = View.GONE
+                clearHistory.visibility = View.GONE
+            }
         }
-
-        trackAdapter.trackList.clear()
-        trackAdapter.trackList.addAll(list)
-        trackAdapter.notifyDataSetChanged()
-
+        trackAdapter.apply {
+            trackList.clear()
+            trackList.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 
     private fun showMessage(error: NetworkError) {
         when (error) {
             NetworkError.SEARCH_ERROR -> {
-                trackAdapter.trackList.clear()
-                trackAdapter.notifyDataSetChanged()
-    
-                binding.placeholderImage.visibility = View.VISIBLE
-                binding.placeholderMessage.visibility = View.VISIBLE
-                binding.updateButton.visibility = View.GONE
-                binding.youSearched.visibility = View.GONE
-                binding.clearHistory.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-    
-                binding.placeholderMessage.text = getString(R.string.search_error)
-                binding.placeholderImage.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this, R.drawable.search_error
+            
+                trackAdapter.apply {
+                    trackList.clear()
+                    notifyDataSetChanged()
+                }
+            
+                binding.apply {
+                    placeholderImage.visibility = View.VISIBLE
+                    placeholderMessage.visibility = View.VISIBLE
+                    updateButton.visibility = View.GONE
+                    youSearched.visibility = View.GONE
+                    clearHistory.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                
+                    placeholderMessage.text = getString(R.string.search_error)
+                    placeholderImage.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this@SearchActivity, R.drawable.search_error
+                        )
                     )
-                )
+                }
             }
-
+        
             NetworkError.CONNECTION_ERROR -> {
                 hideKeyboard()
-    
-                trackAdapter.trackList.clear()
-                trackAdapter.notifyDataSetChanged()
-    
-                binding.placeholderImage.visibility = View.VISIBLE
-                binding.placeholderMessage.visibility = View.VISIBLE
-                binding.updateButton.visibility = View.VISIBLE
-                binding.youSearched.visibility = View.GONE
-                binding.clearHistory.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-    
-                binding.placeholderMessage.text = getString(R.string.internet_error)
-                binding.placeholderImage.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this, R.drawable.internet_error
+            
+                trackAdapter.apply {
+                    trackList.clear()
+                    notifyDataSetChanged()
+                }
+            
+                binding.apply {
+                    placeholderImage.visibility = View.VISIBLE
+                    placeholderMessage.visibility = View.VISIBLE
+                    updateButton.visibility = View.VISIBLE
+                    youSearched.visibility = View.GONE
+                    clearHistory.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                
+                    placeholderMessage.text = getString(R.string.internet_error)
+                    placeholderImage.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this@SearchActivity, R.drawable.internet_error
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -209,15 +226,18 @@ class SearchActivity : AppCompatActivity() {
     }
     
     private fun showLoading() {
-        trackAdapter.trackList.clear()
-        trackAdapter.notifyDataSetChanged()
-        
-        binding.placeholderImage.visibility = View.GONE
-        binding.placeholderMessage.visibility = View.GONE
-        binding.updateButton.visibility = View.GONE
-        binding.youSearched.visibility = View.GONE
-        binding.clearHistory.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
+        trackAdapter.apply {
+            trackList.clear()
+            notifyDataSetChanged()
+        }
+        binding.apply {
+            placeholderImage.visibility = View.GONE
+            placeholderMessage.visibility = View.GONE
+            updateButton.visibility = View.GONE
+            youSearched.visibility = View.GONE
+            clearHistory.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 }
 

@@ -20,14 +20,20 @@ class SharingInteractor(
     }
     
     private fun getShareAppLink(): String {
-        return "https://practicum.yandex.ru/android-developer/"
+        return APP_LINK
     }
     
     private fun getSupportEmailData(): EmailData {
-        return EmailData(mail = "margo.ivi@yandex.ru")
+        return EmailData(mail = SUPPORT_EMAIL)
     }
     
     private fun getTermsLink(): String {
-        return "https://yandex.ru/legal/practicum_offer/"
+        return TERMS_LINK
+    }
+    
+    companion object {
+        private const val APP_LINK = "https://practicum.yandex.ru/android-developer/"
+        private const val SUPPORT_EMAIL = "margo.ivi@yandex.ru"
+        private const val TERMS_LINK = "https://yandex.ru/legal/practicum_offer/"
     }
 }
