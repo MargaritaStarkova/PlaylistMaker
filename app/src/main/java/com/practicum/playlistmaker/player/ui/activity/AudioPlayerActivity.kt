@@ -11,14 +11,12 @@ import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.utils.router.NavigationRouter
 import com.practicum.playlistmaker.utils.tools.millisConverter
 import com.practicum.playlistmaker.utils.tools.setImage
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
     
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this, AudioPlayerViewModel.getViewModelFactory(trackModel.previewUrl)
-        )[AudioPlayerViewModel::class.java]
-    }
+    private val viewModel: AudioPlayerViewModel  by viewModel()
+    
     private val binding by lazy { AudioPlayerActivityBinding.inflate(layoutInflater) }
     private val navigationRouter by lazy { NavigationRouter(this) }
     private val trackModel by lazy { navigationRouter.getTrackInfo() }

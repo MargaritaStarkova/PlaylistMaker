@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.application.App
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.di.Creator
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
@@ -119,15 +119,5 @@ class SearchViewModel(
     companion object {
         private const val FIRST_INDEX_HISTORY_LIST = 0
         private const val LAST_INDEX_HISTORY_LIST = 9
-        
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as App
-                SearchViewModel(
-                    searchInteractor = Creator.provideSearchInteractor(context = application),
-                    handlerRouter = HandlerRouter(),
-                )
-            }
-        }
     }
 }

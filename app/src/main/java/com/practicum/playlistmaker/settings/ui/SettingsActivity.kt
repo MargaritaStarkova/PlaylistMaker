@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.settings.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
@@ -24,6 +25,8 @@ class SettingsActivity : AppCompatActivity() {
         
         viewModel.observeThemeSwitcherState().observe(this) { isChecked ->
             binding.themeSwitcher.isChecked = isChecked
+            Log.d("TEST", "+++ observe = $isChecked +++")
+            
         }
         
         binding.apply {

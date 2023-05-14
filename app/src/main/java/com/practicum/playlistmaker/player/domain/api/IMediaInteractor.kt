@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.player.domain.api
 
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 
-interface MediaInteractor {
+interface IMediaInteractor {
     fun startPlaying()
     fun pausePlaying()
     fun stopPlaying()

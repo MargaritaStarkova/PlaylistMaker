@@ -6,10 +6,6 @@ import com.practicum.playlistmaker.search.data.storage.models.TrackModelDto
 
 class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences) : ITracksStorage {
     
-    companion object {
-        private const val HISTORY_LIST_KEY = "history_preferences"
-    }
-
     override fun saveHistory(historyList: List<TrackModelDto>) {
         val json = Gson().toJson(historyList)
 
@@ -23,5 +19,9 @@ class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences)
 
         val json = sharedPreferences.getString(HISTORY_LIST_KEY, null) ?: return emptyArray()
         return Gson().fromJson(json, Array<TrackModelDto>::class.java)
+    }
+    
+    companion object {
+        private const val HISTORY_LIST_KEY = "history_preferences"
     }
 }

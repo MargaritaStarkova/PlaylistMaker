@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.player.domain.api.MediaInteractor
+import com.practicum.playlistmaker.di.Creator
+import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.utils.router.HandlerRouter
 
 class AudioPlayerViewModel(
-    private val mediaInteractor: MediaInteractor,
+    private val mediaInteractor: IMediaInteractor,
     private val handlerRouter: HandlerRouter
 ) : ViewModel() {
     
@@ -68,14 +68,5 @@ class AudioPlayerViewModel(
     
     companion object {
         const val START_POSITION = 0
-        
-        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                AudioPlayerViewModel(
-                    mediaInteractor = Creator.provideMediaInteractor(trackUrl),
-                    handlerRouter = HandlerRouter(),
-                )
-            }
-        }
     }
 }

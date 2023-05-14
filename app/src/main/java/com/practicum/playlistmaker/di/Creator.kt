@@ -1,13 +1,13 @@
-package com.practicum.playlistmaker.creator
+package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.application.App
-import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayerImpl
-import com.practicum.playlistmaker.player.domain.api.AudioPlayer
-import com.practicum.playlistmaker.player.domain.api.MediaInteractor
-import com.practicum.playlistmaker.player.domain.impl.MediaInteractorImpl
+import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayer
+import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
+import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
+import com.practicum.playlistmaker.player.domain.impl.MediaInteractor
 import com.practicum.playlistmaker.search.data.network.INetworkClient
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.repository.TrackRepository
@@ -39,8 +39,8 @@ object Creator {
         )
     }
     
-    fun provideMediaInteractor(trackUrl: String): MediaInteractor {
-        return MediaInteractorImpl(
+    fun provideMediaInteractor(trackUrl: String): IMediaInteractor {
+        return MediaInteractor(
             player = getAudioPlayer(trackUrl)
         )
     }
@@ -65,8 +65,8 @@ object Creator {
         return ExternalNavigator(context = context)
     }
     
-    private fun getAudioPlayer(trackUrl: String): AudioPlayer {
-        return AudioPlayerImpl(url = trackUrl)
+    private fun getAudioPlayer(trackUrl: String): IAudioPlayer {
+        return AudioPlayer(url = trackUrl)
     }
     
     private fun getTrackRepository(context: Context): ITrackRepository {

@@ -24,12 +24,4 @@ class MainViewModel : ViewModel() {
     fun onSettingsButtonClicked() {
         navigatinStateLiveData.value = NavigationState.Settings
     }
-    
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MainViewModel()
-            }
-        }
-    }
 }

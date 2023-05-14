@@ -1,10 +1,10 @@
 package com.practicum.playlistmaker.player.data.audioplayer
 
 import android.media.MediaPlayer
-import com.practicum.playlistmaker.player.domain.api.AudioPlayer
+import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 
-class AudioPlayerImpl(url: String) : AudioPlayer {
+class AudioPlayer(url: String) : IAudioPlayer {
     
     override var playerState = PlayerState.NOT_PREPARED
     private val player = MediaPlayer()
