@@ -3,8 +3,8 @@ package com.practicum.playlistmaker.utils.router
 import android.app.Activity
 import android.content.Intent
 import com.google.gson.Gson
-import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.player.ui.activity.AudioPlayerActivity
+import com.practicum.playlistmaker.search.domain.models.TrackModel
 
 class NavigationRouter(
     var activity: Activity?

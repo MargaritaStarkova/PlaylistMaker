@@ -2,9 +2,6 @@ package com.practicum.playlistmaker.main.ui.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.main.ui.models.NavigationState
 
 class MainViewModel : ViewModel() {

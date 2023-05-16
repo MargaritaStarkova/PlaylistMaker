@@ -5,19 +5,20 @@ import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 
 class MediaInteractor(
-    private val player: IAudioPlayer
+    
+    private val player: IAudioPlayer,
 ) : IMediaInteractor {
-
-    override fun startPlaying() {
-        player.startPlayer()
+    
+    override fun startPlaying(trackUrl: String) {
+        player.startPlayer(trackUrl)
     }
-
+    
     override fun pausePlaying() {
         player.pausePlayer()
     }
-
+    
     override fun stopPlaying() {
-        player.release()
+        player.stopPlayer()
     }
 
     override fun getPlayerPosition(): Int {

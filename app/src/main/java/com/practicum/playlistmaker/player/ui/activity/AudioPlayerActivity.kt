@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.player.ui.activity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.AudioPlayerActivityBinding
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
@@ -16,7 +15,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class AudioPlayerActivity : AppCompatActivity() {
     
     private val viewModel: AudioPlayerViewModel  by viewModel()
-    
     private val binding by lazy { AudioPlayerActivityBinding.inflate(layoutInflater) }
     private val navigationRouter by lazy { NavigationRouter(this) }
     private val trackModel by lazy { navigationRouter.getTrackInfo() }
@@ -66,25 +64,30 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
     
-    private fun updatePlayButton(imageResource: Int) {
-        binding.playButton.setImageResource(imageResource)
-    }
-    
-    private fun updateTrackDuration(currentPositionMediaPlayer: Int) {
-        binding.excerptDuration.text = currentPositionMediaPlayer.millisConverter()
-    }
-    
     private fun initListeners() {
         
         binding.apply {
             navigationToolbar.setNavigationOnClickListener {
                 navigationRouter.goBack()
             }
-    
+            
             playButton.setOnClickListener {
-                binding.playButton.startAnimation(AnimationUtils.loadAnimation(this@AudioPlayerActivity, R.anim.scale))
-                viewModel.playButtonClicked()
+                binding.playButton.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        this@AudioPlayerActivity,
+                        R.anim.scale
+                    )
+                )
+                viewModel.playButtonClicked(trackModel.previewUrl)
             }
         }
+    }
+    
+    private fun updatePlayButton(imageResource: Int) {
+        binding.playButton.setImageResource(imageResource)
+    }
+    
+    private fun updateTrackDuration(currentPositionMediaPlayer: Int) {
+        binding.excerptDuration.text = currentPositionMediaPlayer.millisConverter()
     }
 }

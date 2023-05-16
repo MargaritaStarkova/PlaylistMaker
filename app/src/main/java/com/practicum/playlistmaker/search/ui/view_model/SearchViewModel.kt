@@ -3,12 +3,6 @@ package com.practicum.playlistmaker.search.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.application.App
-import com.practicum.playlistmaker.di.Creator
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
@@ -18,7 +12,6 @@ class SearchViewModel(
     private val searchInteractor: ISearchInteractor,
     private val handlerRouter: HandlerRouter,
 ) : ViewModel() {
-
     
     private val historyList = ArrayList<TrackModel>()
     
@@ -45,7 +38,7 @@ class SearchViewModel(
     
     fun onViewResume() {
         contentStateLiveData.value =
-            latestStateContent
+            latestStateContent!!
     }
 
     fun onHistoryClearedClicked() {
@@ -85,8 +78,8 @@ class SearchViewModel(
     }
 
     fun onSearchTextChanged(query: String?) {
-        
-        clearIconStateLiveData.value = query
+    
+        clearIconStateLiveData.value = query ?: ""
 
         if (query.isNullOrEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)

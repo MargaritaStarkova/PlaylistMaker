@@ -3,10 +3,6 @@ package com.practicum.playlistmaker.player.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.di.Creator
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
@@ -22,7 +18,6 @@ class AudioPlayerViewModel(
     
     override fun onCleared() {
         super.onCleared()
-        mediaInteractor.pausePlaying()
         mediaInteractor.stopPlaying()
         handlerRouter.stopRunnable()
     }
@@ -34,17 +29,17 @@ class AudioPlayerViewModel(
         pausePlaying()
     }
     
-    fun playButtonClicked() {
+    fun playButtonClicked(trackUrl: String) {
         when (mediaInteractor.getPlayerState()) {
             PlayerState.PLAYING -> pausePlaying()
-            else -> startPlaying()
+            else -> startPlaying(trackUrl)
         }
     }
     
-    private fun startPlaying() {
+    private fun startPlaying(trackUrl: String) {
         
         playStatusLiveData.value = PlayStatus.Playing
-        mediaInteractor.startPlaying()
+        mediaInteractor.startPlaying(trackUrl)
         
         handlerRouter.startPlaying(object : Runnable {
             override fun run() {

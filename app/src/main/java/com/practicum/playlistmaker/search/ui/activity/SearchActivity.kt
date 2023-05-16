@@ -8,7 +8,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.search.domain.models.NetworkError
@@ -17,17 +16,14 @@ import com.practicum.playlistmaker.search.ui.models.SearchContentState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.utils.router.HandlerRouter
 import com.practicum.playlistmaker.utils.router.NavigationRouter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     
     private lateinit var trackAdapter: TrackAdapter
     
+    private val viewModel: SearchViewModel by viewModel()
     private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-    }
     private val navigationRouter by lazy { NavigationRouter(activity = this@SearchActivity) }
     private val handlerRouter by lazy { HandlerRouter() }
     

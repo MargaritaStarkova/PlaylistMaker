@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.search.domain.api
 
-import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.domain.models.NetworkError
+import com.practicum.playlistmaker.search.domain.models.TrackModel
 
 interface ITrackRepository {
     fun loadTracks(

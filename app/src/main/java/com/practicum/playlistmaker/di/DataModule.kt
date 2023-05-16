@@ -29,11 +29,18 @@ val dataModule = module {
         val logging = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
-        val okHttpClient = OkHttpClient.Builder().addInterceptor(logging).build()
+        val okHttpClient = OkHttpClient
+            .Builder()
+            .addInterceptor(logging)
+            .build()
     
-    
-        Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient).build().create(ITunesApi::class.java)
+        Retrofit
+            .Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(ITunesApi::class.java)
     }
     
     single {
@@ -52,8 +59,8 @@ val dataModule = module {
         SharedPrefsSettingsStorage(get())
     }
     
-    single<IAudioPlayer> { (url: String) ->
-        AudioPlayer(url)
+    single<IAudioPlayer> {
+        AudioPlayer()
     }
     
     single<IExternalNavigator> {

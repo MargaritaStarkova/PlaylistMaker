@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.di
 
-import android.icu.text.SearchIterator
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.impl.MediaInteractor
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
@@ -13,15 +12,15 @@ import org.koin.dsl.module
 
 val interactorModule = module {
     
-    single<IMediaInteractor> { (url: String) ->
-        MediaInteractor(get(url))
+    single<IMediaInteractor> {
+        MediaInteractor(get())
     }
     
     single<ISearchInteractor> {
         SearchInteractor(get())
     }
     
-    single<ISettingsInteractor> {
+    factory<ISettingsInteractor> {
         SettingsInteractor(get())
     }
     

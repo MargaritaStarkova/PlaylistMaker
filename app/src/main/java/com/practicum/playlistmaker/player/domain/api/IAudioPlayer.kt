@@ -6,7 +6,7 @@ interface IAudioPlayer {
 
     var playerState: PlayerState
     fun getCurrentPosition(): Int
-    fun startPlayer()
+    fun startPlayer(url: String)
     fun pausePlayer()
-    fun release()
+    fun stopPlayer()
 }

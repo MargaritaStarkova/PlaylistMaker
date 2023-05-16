@@ -3,20 +3,15 @@ package com.practicum.playlistmaker.settings.ui
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.view_model.SettingsViewModel
 import com.practicum.playlistmaker.utils.router.NavigationRouter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     
+    private val viewModel: SettingsViewModel by viewModel()
     private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
-    
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this, SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
-    }
     private val navigationRouter by lazy { NavigationRouter(this) }
     
     override fun onCreate(savedInstanceState: Bundle?) {

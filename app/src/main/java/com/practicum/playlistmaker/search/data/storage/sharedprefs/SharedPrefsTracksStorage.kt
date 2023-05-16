@@ -8,15 +8,15 @@ class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences)
     
     override fun saveHistory(historyList: List<TrackModelDto>) {
         val json = Gson().toJson(historyList)
-
+        
         sharedPreferences
             .edit()
             .putString(HISTORY_LIST_KEY, json)
             .apply()
     }
-
+    
     override fun readHistory(): Array<TrackModelDto> {
-
+        
         val json = sharedPreferences.getString(HISTORY_LIST_KEY, null) ?: return emptyArray()
         return Gson().fromJson(json, Array<TrackModelDto>::class.java)
     }

@@ -4,40 +4,46 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 
-class AudioPlayer(url: String) : IAudioPlayer {
+class AudioPlayer : IAudioPlayer {
     
     override var playerState = PlayerState.NOT_PREPARED
-    private val player = MediaPlayer()
-
-    init {
-        player.apply {
-            setDataSource(url)
-            setOnCompletionListener {
-                playerState = PlayerState.READY
-            }
-        }
-    }
-
+    private var player: MediaPlayer? = null
+    
     override fun getCurrentPosition(): Int {
-        return player.currentPosition
+        return player?.currentPosition ?: 0
     }
-
-    override fun startPlayer() {
-        if (playerState == PlayerState.NOT_PREPARED){
-            player.prepare()
-            playerState = PlayerState.READY
+    
+    override fun startPlayer(url: String) {
+        if (playerState == PlayerState.NOT_PREPARED) {
+            preparePlayer(url)
+            
         }
-        player.start()
+        player?.start()
         playerState = PlayerState.PLAYING
-
+        
     }
-
+    
     override fun pausePlayer() {
-        player.pause()
+        player?.pause()
         playerState = PlayerState.PAUSED
     }
-
-    override fun release() {
-        player.release()
+    
+    override fun stopPlayer() {
+        player?.apply {
+            stop()
+            reset()
+            release()
+        }
+        player = null
+        playerState = PlayerState.NOT_PREPARED
+    }
+    
+    private fun preparePlayer(url: String) {
+        player = MediaPlayer()
+        player?.apply {
+            setDataSource(url)
+            prepare()
+        }
+        playerState = PlayerState.READY
     }
 }
