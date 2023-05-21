@@ -8,23 +8,15 @@ import com.practicum.playlistmaker.settings.domain.api.ISettingsInteractor
 import com.practicum.playlistmaker.settings.domain.impl.SettingsInteractor
 import com.practicum.playlistmaker.sharing.domain.api.ISharingInteractor
 import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractor
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val interactorModule = module {
     
-    single<IMediaInteractor> {
-        MediaInteractor(get())
-    }
+    singleOf(::MediaInteractor).bind<IMediaInteractor>()
+    singleOf(::SearchInteractor).bind<ISearchInteractor>()
+    singleOf(::SettingsInteractor).bind<ISettingsInteractor>()
+    singleOf(::SharingInteractor).bind<ISharingInteractor>()
     
-    single<ISearchInteractor> {
-        SearchInteractor(get())
-    }
-    
-    factory<ISettingsInteractor> {
-        SettingsInteractor(get())
-    }
-    
-    single<ISharingInteractor> {
-        SharingInteractor(get())
-    }
 }

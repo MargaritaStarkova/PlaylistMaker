@@ -91,13 +91,8 @@ class SearchViewModel(
 
     fun addTrackToHistoryList(track: TrackModel) {
         when {
-            historyList.contains(track) -> {
-                historyList.remove(track)
-                historyList.add(FIRST_INDEX_HISTORY_LIST, track)
-
-            }
-
             historyList.size < 10 -> {
+                historyList.remove(track)
                 historyList.add(FIRST_INDEX_HISTORY_LIST, track)
             }
 

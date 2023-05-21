@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.search.ui.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -93,6 +95,10 @@ class SearchActivity : AppCompatActivity() {
             if (handlerRouter.clickDebounce()) {
                 viewModel.addTrackToHistoryList(track)
                 navigationRouter.openAudioPlayer(track)
+                
+               /*  val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({}, 800) */
+                
             }
         }
         binding.searchList.adapter = trackAdapter

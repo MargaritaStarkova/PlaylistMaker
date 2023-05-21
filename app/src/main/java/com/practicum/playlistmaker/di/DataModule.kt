@@ -16,6 +16,8 @@ import com.practicum.playlistmaker.sharing.domain.api.IExternalNavigator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -47,23 +49,9 @@ val dataModule = module {
         androidContext().getSharedPreferences(App.PREFERENCES, AppCompatActivity.MODE_PRIVATE)
     }
     
-    single<INetworkClient> {
-        RetrofitNetworkClient(androidContext(), get())
-    }
-    
-    single<ITracksStorage> {
-        SharedPrefsTracksStorage(get())
-    }
-    
-    single<ISettingsStorage> {
-        SharedPrefsSettingsStorage(get())
-    }
-    
-    single<IAudioPlayer> {
-        AudioPlayer()
-    }
-    
-    single<IExternalNavigator> {
-        ExternalNavigator(androidContext())
-    }
+    singleOf(::RetrofitNetworkClient).bind<INetworkClient>()
+    singleOf(::SharedPrefsTracksStorage).bind<ITracksStorage>()
+    singleOf(::SharedPrefsSettingsStorage).bind<ISettingsStorage>()
+    singleOf(::AudioPlayer).bind<IAudioPlayer>()
+    singleOf(::ExternalNavigator).bind<IExternalNavigator>()
 }
