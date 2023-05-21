@@ -55,16 +55,16 @@ class TrackRepository(
     
         return list.map {
             TrackModel(
-                trackId = it.trackId,
-                trackName = it.trackName,
-                artistName = it.artistName,
-                trackTimeMillis = it.trackTimeMillis,
-                artworkUrl100 = it.artworkUrl100,
-                collectionName = it.collectionName,
-                country = it.country,
-                primaryGenreName = it.primaryGenreName,
-                releaseDate = it.releaseDate,
-                previewUrl = it.previewUrl!!,
+                trackId = it.trackId ?: "",
+                trackName = it.trackName ?: "",
+                artistName = it.artistName ?: "",
+                trackTimeMillis = it.trackTimeMillis ?: 0,
+                artworkUrl100 = it.artworkUrl100 ?: "",
+                collectionName = it.collectionName ?: "",
+                country = it.country ?: "",
+                primaryGenreName = it.primaryGenreName ?: "",
+                releaseDate = it.releaseDate ?: "",
+                previewUrl = it.previewUrl ?: "",
             )
         }
     }

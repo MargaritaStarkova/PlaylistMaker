@@ -3,17 +3,13 @@ package com.practicum.playlistmaker.player.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.player.domain.api.MediaInteractor
+import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.utils.router.HandlerRouter
 
 class AudioPlayerViewModel(
-    private val mediaInteractor: MediaInteractor,
+    private val mediaInteractor: IMediaInteractor,
     private val handlerRouter: HandlerRouter
 ) : ViewModel() {
     
@@ -22,7 +18,6 @@ class AudioPlayerViewModel(
     
     override fun onCleared() {
         super.onCleared()
-        mediaInteractor.pausePlaying()
         mediaInteractor.stopPlaying()
         handlerRouter.stopRunnable()
     }
@@ -34,17 +29,17 @@ class AudioPlayerViewModel(
         pausePlaying()
     }
     
-    fun playButtonClicked() {
+    fun playButtonClicked(trackUrl: String) {
         when (mediaInteractor.getPlayerState()) {
             PlayerState.PLAYING -> pausePlaying()
-            else -> startPlaying()
+            else -> startPlaying(trackUrl)
         }
     }
     
-    private fun startPlaying() {
+    private fun startPlaying(trackUrl: String) {
         
         playStatusLiveData.value = PlayStatus.Playing
-        mediaInteractor.startPlaying()
+        mediaInteractor.startPlaying(trackUrl)
         
         handlerRouter.startPlaying(object : Runnable {
             override fun run() {
@@ -68,14 +63,5 @@ class AudioPlayerViewModel(
     
     companion object {
         const val START_POSITION = 0
-        
-        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                AudioPlayerViewModel(
-                    mediaInteractor = Creator.provideMediaInteractor(trackUrl),
-                    handlerRouter = HandlerRouter(),
-                )
-            }
-        }
     }
 }

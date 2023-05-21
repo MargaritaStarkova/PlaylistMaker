@@ -1,15 +1,10 @@
 package com.practicum.playlistmaker.settings.view_model
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.application.App
-import com.practicum.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.settings.domain.api.ISettingsInteractor
 import com.practicum.playlistmaker.settings.domain.models.ThemeSettings
 import com.practicum.playlistmaker.sharing.domain.api.ISharingInteractor
@@ -17,8 +12,7 @@ import com.practicum.playlistmaker.sharing.domain.api.ISharingInteractor
 class SettingsViewModel(
     private val settingsInteractor: ISettingsInteractor,
     private val sharingInteractor: ISharingInteractor,
-    private val application: App,
-) : AndroidViewModel(application) {
+) : ViewModel() {
     
     private var darkTheme = false
     private val themeSwitcherStateLiveData = MutableLiveData(darkTheme)
@@ -33,7 +27,9 @@ class SettingsViewModel(
     fun onThemeSwitcherClicked(isChecked: Boolean) {
         themeSwitcherStateLiveData.value = isChecked
         settingsInteractor.updateThemeSetting(ThemeSettings(darkTheme = isChecked))
+        
         switchTheme(isChecked)
+        Log.d("TEST", "+++ changeTheme = $isChecked +++")
     }
     
     fun onShareAppClicked() {
@@ -59,18 +55,5 @@ class SettingsViewModel(
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-    }
-    
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as App
-                SettingsViewModel(
-                    settingsInteractor = Creator.provideSettingsInteractor(application),
-                    sharingInteractor = Creator.provideSharingInteractor(application),
-                    application = application,
-                )
-            }
-        }
     }
 }

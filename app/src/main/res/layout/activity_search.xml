@@ -55,7 +55,7 @@
             android:layout_weight="1"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/search"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionDone|flagNoExtractUi"
             android:inputType="textNoSuggestions"
             android:maxLines="1"
             android:singleLine="true"

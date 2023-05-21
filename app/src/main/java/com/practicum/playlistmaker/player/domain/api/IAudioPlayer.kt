@@ -2,11 +2,11 @@ package com.practicum.playlistmaker.player.domain.api
 
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 
-interface AudioPlayer {
+interface IAudioPlayer {
 
     var playerState: PlayerState
     fun getCurrentPosition(): Int
-    fun startPlayer()
+    fun startPlayer(url: String)
     fun pausePlayer()
-    fun release()
+    fun stopPlayer()
 }
