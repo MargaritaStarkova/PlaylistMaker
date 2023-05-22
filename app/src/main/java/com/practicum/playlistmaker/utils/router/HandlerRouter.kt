@@ -16,7 +16,7 @@ class HandlerRouter {
         }
         return current
     }
-
+    
     fun searchDebounce(r: Runnable) {
         stopRunnable()
         handler.postDelayed(r, SEARCH_DEBOUNCE_DELAY)
