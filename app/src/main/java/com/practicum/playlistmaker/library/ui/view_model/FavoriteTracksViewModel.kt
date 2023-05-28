@@ -1,4 +1,7 @@
 package com.practicum.playlistmaker.library.ui.view_model
 
-class FavoriteTracksViewModel {
+import androidx.lifecycle.ViewModel
+
+class FavoriteTracksViewModel() : ViewModel() {
+
 }
