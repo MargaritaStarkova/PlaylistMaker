@@ -9,8 +9,10 @@
     <dimen name="image_size_45dp">45dp</dimen>
     <dimen name="margin_148dp">148dp</dimen>
     <dimen name="margin_113dp">113dp</dimen>
+    <dimen name="margin_109dp">109dp</dimen>
     <dimen name="margin_60dp">60dp</dimen>
     <dimen name="margin_50dp">50dp</dimen>
+    <dimen name="margin_49dp">49dp</dimen>
     <dimen name="margin_42dp">42dp</dimen>
     <dimen name="margin_25dp">25dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>

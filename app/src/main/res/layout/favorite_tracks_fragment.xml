@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="109dp"
+        android:layout_marginTop="@dimen/margin_109dp"
         android:src="@drawable/search_error"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/placeholder_message"
