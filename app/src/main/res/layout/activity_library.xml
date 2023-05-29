@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/secondary_screen_background_color"
     android:orientation="vertical">
 
@@ -33,7 +34,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorFullWidth="true"
-            app:tabTextAppearance="@style/TabLayout_library" />
+            app:tabTextAppearance="@style/TabLayout_library"
+            >
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/favorite_tracks"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/playlists"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
