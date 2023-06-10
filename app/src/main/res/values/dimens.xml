@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_size_11sp">11sp</dimen>
+    <dimen name="text_size_12sp">12sp</dimen>
     <dimen name="text_size_13sp">13sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_19sp">19sp</dimen>
-    <dimen name="text_size_22sp">22sp</dimen>
     <dimen name="image_size_45dp">45dp</dimen>
+    <dimen name="icon_size_20dp">20dp</dimen>
     <dimen name="margin_148dp">148dp</dimen>
     <dimen name="margin_113dp">113dp</dimen>
     <dimen name="margin_109dp">109dp</dimen>
@@ -30,7 +31,7 @@
     <dimen name="dimen_36dp">36dp</dimen>
     <dimen name="dimen_14dp">14dp</dimen>
     <dimen name="corner_radius_54dp">54dp</dimen>
-    <dimen name="corner_radius_16dp">16dp</dimen>
     <dimen name="corner_radius_8dp">8dp</dimen>
     <dimen name="corner_radius_2dp">2dp</dimen>
+    <dimen name="text_size_22sp">22sp</dimen>
 </resources>

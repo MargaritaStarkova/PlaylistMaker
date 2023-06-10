@@ -3,10 +3,10 @@ package com.practicum.playlistmaker.search.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.core.utils.router.HandlerRouter
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
-import com.practicum.playlistmaker.utils.router.HandlerRouter
 
 class SearchViewModel(
     private val searchInteractor: ISearchInteractor,
@@ -20,34 +20,34 @@ class SearchViewModel(
     private val searchTextClearClickedLiveData = MutableLiveData(false)
     
     private var latestStateContent = contentStateLiveData.value
-
+    private var latestSearchText: String? = null
+    
     init {
         historyList.addAll(searchInteractor.getTracksFromHistory())
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
         latestStateContent = contentStateLiveData.value
     }
-
+    
     override fun onCleared() {
         super.onCleared()
         handlerRouter.stopRunnable()
     }
-
+    
     fun observeContentState(): LiveData<SearchContentState> = contentStateLiveData
     fun observeClearIconState(): LiveData<String> = clearIconStateLiveData
     fun observeSearchTextClearClicked(): LiveData<Boolean> = searchTextClearClickedLiveData
     
     fun onViewResume() {
-        contentStateLiveData.value =
-            latestStateContent!!
+        contentStateLiveData.value = latestStateContent!!
     }
-
+    
     fun onHistoryClearedClicked() {
         historyList.clear()
         searchInteractor.saveSearchHistory(historyList)
         contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
         latestStateContent = contentStateLiveData.value
     }
-
+    
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
         if (hasFocus && text.isEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
@@ -80,11 +80,15 @@ class SearchViewModel(
     fun onSearchTextChanged(query: String?) {
     
         clearIconStateLiveData.value = query ?: ""
-
+    
+    
+    
         if (query.isNullOrEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(historyList)
             latestStateContent = contentStateLiveData.value
         } else {
+            if (latestSearchText == query) return
+            latestSearchText = query
             handlerRouter.searchDebounce(r = { loadTrackList(query) })
         }
     }

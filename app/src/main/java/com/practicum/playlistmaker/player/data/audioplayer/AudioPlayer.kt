@@ -9,6 +9,7 @@ class AudioPlayer : IAudioPlayer {
     override var playerState = PlayerState.NOT_PREPARED
     private var player: MediaPlayer? = null
     
+ 
     override fun getCurrentPosition(): Int {
         return player?.currentPosition ?: 0
     }
@@ -43,6 +44,9 @@ class AudioPlayer : IAudioPlayer {
         player?.apply {
             setDataSource(url)
             prepare()
+            setOnCompletionListener {
+                playerState = PlayerState.READY
+            }
         }
         playerState = PlayerState.READY
     }
