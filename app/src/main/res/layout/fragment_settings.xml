@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/general_background_color"
+    android:orientation="vertical"
+    tools:context=".settings.ui.SettingsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/navigation_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_25dp">
+
+        <TextView
+            style="@style/YSMedium22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textColor="?attr/toolbar_text_color" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
+        style="@style/YSRegular16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_60dp"
+        android:layout_gravity="start"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingStart="@dimen/margin_16dp"
+        android:paddingEnd="@dimen/margin_25dp"
+        android:text="@string/theme" />
+
+    <FrameLayout
+        android:id="@+id/share"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_60dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingHorizontal="@dimen/margin_16dp">
+
+        <TextView
+            style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/share" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/margin_12dp"
+            android:src="@drawable/ic_share" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/support"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_60dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingHorizontal="@dimen/margin_16dp">
+
+        <TextView
+            style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/support" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/margin_12dp"
+            android:src="@drawable/ic_support" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/terms_of_use"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_60dp"
+        android:layout_marginBottom="@dimen/margin_42dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingHorizontal="@dimen/margin_16dp">
+
+        <TextView
+            style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/terms_of_use" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="18dp"
+            android:src="@drawable/ic_arrow_forward" />
+    </FrameLayout>
+</LinearLayout>

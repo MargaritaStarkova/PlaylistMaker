@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:background">@drawable/main_screen_button_ripple</item>
-        <item name="android:textSize">@dimen/text_size_22sp</item>
-        <item name="android:textColor">?attr/main_screen_button_text_color</item>
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="backgroundTint">@null</item>
-        <item name="iconGravity">textStart</item>
-        <item name="iconPadding">@dimen/margin_10dp</item>
-        <item name="iconTint">?attr/main_screen_button_text_color</item>
-    </style>
 
     <style name="button_update" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:background">@drawable/update_button_ripple</item>
@@ -24,35 +13,47 @@
     <style name="TabLayout_library" parent="Widget.MaterialComponents.TabLayout">
         <item name="textAllCaps">false</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:background">?attr/secondary_screen_background_color</item>
-        <item name="tabIndicatorColor">?attr/toolbar_color</item>
-        <item name="tabTextColor">?attr/toolbar_color</item>
+        <item name="android:background">?attr/general_background_color</item>
+        <item name="tabIndicatorColor">?attr/toolbar_text_color</item>
+        <item name="tabTextColor">?attr/toolbar_text_color</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/text_size_14sp</item>
 
     </style>
 
+    <style name="CustomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">?attr/general_background_color</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_12sp</item>
+        <item name="itemIconTint">@color/menu_color</item>
+        <item name="itemTextColor">@color/menu_color</item>
+
+
+    </style>
+
+
+
     <style name="YSMedium22">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textColor">?attr/main_screen_text_color</item>
+        <item name="android:textColor">?attr/toolbar_text_color</item>
         <item name="android:textSize">@dimen/text_size_22sp</item>
     </style>
 
     <style name="YSMedium19">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textColor">?attr/toolbar_color</item>
+        <item name="android:textColor">?attr/toolbar_text_color</item>
         <item name="android:textSize">@dimen/text_size_19sp</item>
     </style>
 
     <style name="YSMedium14">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textColor">?attr/toolbar_color</item>
+        <item name="android:textColor">?attr/toolbar_text_color</item>
         <item name="android:textSize">@dimen/text_size_14sp</item>
     </style>
 
     <style name="YSRegular16">
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColor">?attr/secondary_screen_text_color</item>
+        <item name="android:textColor">?attr/general_text_color</item>
         <item name="android:textSize">@dimen/text_size_16sp</item>
     </style>
 
@@ -64,7 +65,7 @@
 
     <style name="YSRegular11">
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColor">?attr/secondary_screen_icon_color</item>
+        <item name="android:textColor">?attr/general_icon_color</item>
         <item name="android:textSize">@dimen/text_size_11sp</item>
     </style>
 

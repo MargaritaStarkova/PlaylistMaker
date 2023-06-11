@@ -13,22 +13,19 @@
         <item name="android:statusBarColor">@color/blue</item>
         <!-- Customize your theme here. -->
 
-        <item name="main_screen_background_color">@color/blue</item>
-        <item name="main_screen_text_color">@color/deep_white</item>
-        <item name="main_screen_button_color">@color/deep_white</item>
-        <item name="main_screen_button_text_color">@color/black</item>
-        <item name="toolbar_color">@color/black</item>
-        <item name="secondary_screen_text_color">@color/deep_black</item>
-        <item name="secondary_screen_background_color">@color/deep_white</item>
+        <item name="bottom_navigation_color">@color/blue</item>
+        <item name="expression_text_color">@color/black</item>
+        <item name="toolbar_text_color">@color/black</item>
+        <item name="general_text_color">@color/deep_black</item>
+        <item name="general_background_color">@color/deep_white</item>
         <item name="update_text_color">@color/deep_white</item>
-        <item name="secondary_screen_icon_color">@color/deep_gray</item>
+        <item name="general_icon_color">@color/deep_gray</item>
         <item name="background_hint_color">@color/grey</item>
         <item name="hint_icon_text_color">@color/deep_gray</item>
         <item name="ripple">@color/ripple_light</item>
         <item name="fab_color">@color/fab_color_grey_light</item>
         <item name="media_player_description_text_color">@color/deep_gray</item>
         <item name="progressbar_color">@color/blue</item>
-
 
     </style>
 

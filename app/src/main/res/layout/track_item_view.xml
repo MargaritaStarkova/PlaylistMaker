@@ -47,7 +47,7 @@
                 android:ellipsize="end"
                 android:maxEms="15"
                 android:maxLines="1"
-                app:drawableEndCompat="@drawable/ellipse"
+                app:drawableEndCompat="@drawable/ic_ellipse"
                 tools:text="Nirvana" />
 
             <TextView
@@ -65,6 +65,6 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_16dp"
         android:layout_marginEnd="@dimen/margin_4dp"
-        android:src="@drawable/arrow_forward" />
+        android:src="@drawable/ic_arrow_forward" />
 
 </LinearLayout>

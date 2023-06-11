@@ -4,7 +4,7 @@ import com.practicum.playlistmaker.R
 
 sealed class PlayStatus(val imageResource: Int) {
     
-    object Playing : PlayStatus(R.drawable.pause_button)
-    object Paused : PlayStatus(R.drawable.play_button)
+    object Playing : PlayStatus(R.drawable.button_pause)
+    object Paused : PlayStatus(R.drawable.button_play)
     
 }

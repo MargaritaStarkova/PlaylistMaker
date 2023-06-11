@@ -3,14 +3,17 @@ package com.practicum.playlistmaker.player.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.core.utils.router.HandlerRouter
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
-import com.practicum.playlistmaker.utils.router.HandlerRouter
+import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
+import com.practicum.playlistmaker.search.domain.models.TrackModel
 
 class AudioPlayerViewModel(
     private val mediaInteractor: IMediaInteractor,
-    private val handlerRouter: HandlerRouter
+    private val searchInteractor: ISearchInteractor,
+    private val handlerRouter: HandlerRouter,
 ) : ViewModel() {
     
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
@@ -59,6 +62,12 @@ class AudioPlayerViewModel(
         mediaInteractor.pausePlaying()
         playStatusLiveData.value = PlayStatus.Paused
         handlerRouter.stopRunnable()
+    }
+    
+    fun getTrack(): TrackModel {
+        return searchInteractor
+            .getTracksFromHistory()
+            .first()
     }
     
     companion object {

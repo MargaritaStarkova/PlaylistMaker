@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/secondary_screen_background_color"
-    tools:context=".player.ui.activity.AudioPlayerActivity">
+    android:background="?attr/general_background_color"
+    tools:context=".player.ui.fragment.AudioPlayerFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/navigation_toolbar"
@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/arrow_back" />
+        app:navigationIcon="@drawable/ic_back" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?attr/toolbar_color"
+        android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/artist_name"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
@@ -99,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/add_button"
+        android:src="@drawable/button_add_lib"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toStartOf="@id/play_button"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/play_button"
+        android:src="@drawable/button_play"
         app:circularflow_viewCenter="@id/add_button"
         app:layout_constraintBottom_toBottomOf="@id/excerpt_duration"
         app:layout_constraintEnd_toStartOf="@id/like_button"
@@ -124,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/like_button"
+        android:src="@drawable/button_like"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/play_button"
@@ -160,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_16dp"
-        android:textColor="?attr/toolbar_color"
+        android:textColor="?attr/toolbar_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/duration"
         app:layout_constraintVertical_chainStyle="spread"
@@ -188,7 +188,7 @@
         android:layout_marginEnd="@dimen/margin_16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?attr/toolbar_color"
+        android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/album"
@@ -213,7 +213,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_16dp"
-        android:textColor="?attr/toolbar_color"
+        android:textColor="?attr/toolbar_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/year"
         tools:text="1965" />
@@ -237,7 +237,7 @@
         android:layout_marginEnd="@dimen/margin_16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?attr/toolbar_color"
+        android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/genre"
@@ -262,7 +262,7 @@
         android:layout_marginEnd="@dimen/margin_16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?attr/toolbar_color"
+        android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/country"
