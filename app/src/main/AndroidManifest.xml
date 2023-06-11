@@ -19,9 +19,6 @@
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="33">
         <activity
-            android:name=".player.ui.activity.AudioPlayerFragment"
-            android:exported="false" />
-        <activity
             android:name=".core.root.HostActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
@@ -36,5 +33,4 @@
                 android:value="" />
         </activity>
     </application>
-
 </manifest>

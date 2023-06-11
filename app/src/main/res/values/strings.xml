@@ -29,5 +29,9 @@
     <string name="you_have_not_any_playlist">Вы не создали\nни одного плейлиста</string>
     <string name="favorite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="label_library">LibraryFragment</string>
+    <string name="label_search">SearchFragment</string>
+    <string name="label_settings">SettingsFragment</string>
+    <string name="label_player">audio_player_fragment</string>
 
 </resources>

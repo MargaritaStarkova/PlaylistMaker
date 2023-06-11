@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.ui.activity
+package com.practicum.playlistmaker.player.ui.fragment
 
 import android.os.Bundle
 import android.view.View

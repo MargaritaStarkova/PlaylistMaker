@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/general_background_color"
-    tools:context=".player.ui.activity.AudioPlayerFragment">
+    tools:context=".player.ui.fragment.AudioPlayerFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/navigation_toolbar"
