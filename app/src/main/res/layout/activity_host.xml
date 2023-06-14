@@ -24,9 +24,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         style="@style/CustomNavigationView"
-
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        app:itemTextAppearanceInactive="@style/BottomNavigationText"
+        app:itemTextAppearanceActive="@style/BottomNavigationText"
+
+        app:itemRippleColor="?attr/bottom_navigation_ripple"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
