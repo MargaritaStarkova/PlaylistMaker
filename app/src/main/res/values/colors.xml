@@ -16,15 +16,13 @@
     <color name="grey">#E6E8EB</color>
 
     <color name="blue">#3772E7</color>
+    <color name="bottom_navigation_ripple_light">#FFFFFF</color>
+    <color name="bottom_navigation_ripple_dark">#1A1B22</color>
 
     <color name="ripple_light">#33ffffff</color>
     <color name="ripple_dark">#1f000000</color>
 
     <color name="fab_color_grey_light">#1A1B22</color>
     <color name="fab_color_grey_dark">#FFFFFF</color>
-
-
-
-
 
 </resources>
