@@ -30,6 +30,7 @@
         app:itemTextAppearanceInactive="@style/BottomNavigationText"
         app:itemTextAppearanceActive="@style/BottomNavigationText"
 
+
         app:itemRippleColor="?attr/bottom_navigation_ripple"
 
         app:layout_constraintBottom_toBottomOf="parent"
