@@ -28,16 +28,31 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
         trackModel = viewModel.getTrack()
         
         viewModel.apply {
-            observePlayStatus().observe(viewLifecycleOwner) { playingStatus ->
+  /*           observePlayStatus().observe(viewLifecycleOwner) { playingStatus ->
                 updatePlayButton(playingStatus.imageResource)
-            }
-            observePlayProgress().observe(viewLifecycleOwner) { currentPosition ->
+            } */
+     /*        observePlayProgress().observe(viewLifecycleOwner) { currentPosition ->
                 updateTrackDuration(currentPosition)
+            } */
+            
+            playerStatePractice.observe(viewLifecycleOwner) { state ->
+                binding.playButton.isEnabled = state.isPlayButtonEnabled
+                setButtonImage(state.playButtonText)
+                updateTrackDuration(state.progress)
             }
         }
         
         drawTrack(trackModel, AudioPlayerViewModel.START_POSITION)
         initListeners()
+    }
+    
+    private fun setButtonImage(text: String) {
+        if (text == "PLAY") {
+            binding.playButton.setImageResource(R.drawable.button_play)
+        }
+        else {
+            binding.playButton.setImageResource(R.drawable.button_pause)
+        }
     }
     
     override fun onPause() {
