@@ -16,11 +16,13 @@ class SearchInteractor(private val repository: ITrackRepository) : ISearchIntera
         onError: (NetworkError) -> Unit,
     ) {
         executor.execute {
+    
             repository.loadTracks(
                 query = query, onSuccess = onSuccess, onError = onError
             )
         }
     }
+    
     override fun saveSearchHistory(trackList: ArrayList<TrackModel>) {
         repository.saveHistory(trackList)
     }

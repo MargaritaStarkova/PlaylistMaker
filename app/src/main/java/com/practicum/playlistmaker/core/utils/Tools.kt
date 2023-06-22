@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.core.utils.tools
+package com.practicum.playlistmaker.core.utils
 
 import android.content.Context
 import android.widget.ImageView

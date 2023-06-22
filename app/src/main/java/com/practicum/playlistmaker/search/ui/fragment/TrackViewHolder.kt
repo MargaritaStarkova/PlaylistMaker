@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.TrackItemViewBinding
 import com.practicum.playlistmaker.search.domain.models.TrackModel
-import com.practicum.playlistmaker.core.utils.tools.millisConverter
-import com.practicum.playlistmaker.core.utils.tools.setImage
+import com.practicum.playlistmaker.core.utils.millisConverter
+import com.practicum.playlistmaker.core.utils.setImage
 
 class TrackViewHolder(
     private val binding: TrackItemViewBinding
