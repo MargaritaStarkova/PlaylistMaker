@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.router.HandlerRouter
+import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -22,10 +23,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     private lateinit var trackAdapter: TrackAdapter
     
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding<FragmentSearchBinding>()
+    private val viewModel by viewModel<SearchViewModel>()
     
-    private val viewModel: SearchViewModel by viewModel()
     private val handlerRouter by lazy(LazyThreadSafetyMode.NONE) { HandlerRouter() }
     
     private var textWatcher: TextWatcher? = null
@@ -37,7 +37,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSearchBinding.bind(view)
         
         viewModel.apply {
             observeContentState().observe(viewLifecycleOwner) { searchScreenState ->
@@ -61,7 +60,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onDestroyView() {
         super.onDestroyView()
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
-        _binding = null
     }
     
     private fun initListeners() {
