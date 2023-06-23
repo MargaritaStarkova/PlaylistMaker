@@ -9,14 +9,14 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
-import com.practicum.playlistmaker.databinding.AudioPlayerActivityBinding
+import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
+class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     
-    private val binding by viewBinding<AudioPlayerActivityBinding>()
+    private val binding by viewBinding<FragmentAudioPlayerBinding>()
     private val viewModel by viewModel<AudioPlayerViewModel>()
     
     private lateinit var trackModel: TrackModel
@@ -29,9 +29,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
         viewModel.apply {
             observePlayStatus().observe(viewLifecycleOwner) { playingStatus ->
                 updatePlayButton(playingStatus.imageResource)
-            }
-            observePlayProgress().observe(viewLifecycleOwner) { currentPosition ->
-                updateTrackDuration(currentPosition)
+                updateTrackDuration(playingStatus.playProgress)
             }
         }
         

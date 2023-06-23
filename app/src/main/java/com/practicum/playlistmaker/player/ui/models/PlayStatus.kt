@@ -2,9 +2,9 @@ package com.practicum.playlistmaker.player.ui.models
 
 import com.practicum.playlistmaker.R
 
-sealed class PlayStatus(val imageResource: Int) {
+sealed class PlayStatus(val imageResource: Int, val playProgress: Int) {
     
-    object Playing : PlayStatus(R.drawable.button_pause)
-    object Paused : PlayStatus(R.drawable.button_play)
+    class Playing(playProgress: Int) : PlayStatus(imageResource = R.drawable.button_pause, playProgress = playProgress)
+    class Paused(playProgress: Int) : PlayStatus(imageResource = R.drawable.button_play, playProgress = playProgress)
     
 }

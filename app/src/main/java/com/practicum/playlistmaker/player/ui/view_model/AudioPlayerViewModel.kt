@@ -3,37 +3,40 @@ package com.practicum.playlistmaker.player.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.playlistmaker.core.utils.router.HandlerRouter
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val mediaInteractor: IMediaInteractor,
     private val searchInteractor: ISearchInteractor,
-    private val handlerRouter: HandlerRouter,
 ) : ViewModel() {
     
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
-    private val playProgressLiveData = MutableLiveData<Int>()
+    private val playProgress get() = mediaInteractor.getPlayerPosition()
+    private val playerState get() = mediaInteractor.getPlayerState()
+    
+    private var progressTimer: Job? = null
     
     override fun onCleared() {
         super.onCleared()
         mediaInteractor.stopPlaying()
-        handlerRouter.stopRunnable()
     }
     
     fun observePlayStatus(): LiveData<PlayStatus> = playStatusLiveData
-    fun observePlayProgress(): LiveData<Int> = playProgressLiveData
     
     fun onViewPaused() {
         pausePlaying()
     }
     
     fun playButtonClicked(trackUrl: String) {
-        when (mediaInteractor.getPlayerState()) {
+        when (playerState) {
             PlayerState.PLAYING -> pausePlaying()
             else -> startPlaying(trackUrl)
         }
@@ -41,36 +44,32 @@ class AudioPlayerViewModel(
     
     private fun startPlaying(trackUrl: String) {
         
-        playStatusLiveData.value = PlayStatus.Playing
         mediaInteractor.startPlaying(trackUrl)
         
-        handlerRouter.startPlaying(object : Runnable {
-            override fun run() {
-                if (mediaInteractor.getPlayerState() == PlayerState.READY) {
-                    playProgressLiveData.value = START_POSITION
-                    playStatusLiveData.value = PlayStatus.Paused
-                    handlerRouter.stopRunnable()
-                } else {
-                    playProgressLiveData.value = mediaInteractor.getPlayerPosition()
-                    handlerRouter.startPlaying(this)
-                }
+        progressTimer = viewModelScope.launch {
+            while (playerState == PlayerState.PLAYING) {
+                delay(TIMER_DELAY)
+                playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
             }
-        })
+            
+            if (playerState == PlayerState.READY) {
+                playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
+            }
+        }
     }
     
     private fun pausePlaying() {
         mediaInteractor.pausePlaying()
-        playStatusLiveData.value = PlayStatus.Paused
-        handlerRouter.stopRunnable()
+        playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
+        progressTimer?.cancel()
     }
     
     fun getTrack(): TrackModel {
-        return searchInteractor
-            .getTracksFromHistory()
-            .first()
+        return searchInteractor.historyList.first()
     }
     
     companion object {
         const val START_POSITION = 0
+        private const val TIMER_DELAY = 300L
     }
 }

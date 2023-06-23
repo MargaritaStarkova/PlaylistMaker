@@ -10,6 +10,8 @@ import com.practicum.playlistmaker.R
 
 class HostActivity : AppCompatActivity(R.layout.activity_host) {
     
+    private lateinit var bottomNavigationView: BottomNavigationView
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -17,7 +19,7 @@ class HostActivity : AppCompatActivity(R.layout.activity_host) {
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setupWithNavController(navController)
         
         
@@ -32,5 +34,9 @@ class HostActivity : AppCompatActivity(R.layout.activity_host) {
                 }
             }
         }
+    }
+    
+    fun animateBottomNavigationView() {
+        bottomNavigationView.visibility = View.GONE
     }
 }

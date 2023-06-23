@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.core.di
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.core.application.App
 import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayer
@@ -49,6 +50,7 @@ val dataModule = module {
         androidContext().getSharedPreferences(App.PREFERENCES, AppCompatActivity.MODE_PRIVATE)
     }
     
+    singleOf(::MediaPlayer)
     singleOf(::RetrofitNetworkClient).bind<INetworkClient>()
     singleOf(::SharedPrefsTracksStorage).bind<ITracksStorage>()
     singleOf(::SharedPrefsSettingsStorage).bind<ISettingsStorage>()
