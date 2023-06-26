@@ -7,6 +7,7 @@ import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayer
 import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
 import com.practicum.playlistmaker.search.data.network.INetworkClient
 import com.practicum.playlistmaker.search.data.network.ITunesApi
+import com.practicum.playlistmaker.search.data.network.InternetConnectionValidator
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.ITracksStorage
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.SharedPrefsTracksStorage
@@ -50,6 +51,7 @@ val dataModule = module {
         androidContext().getSharedPreferences(App.PREFERENCES, AppCompatActivity.MODE_PRIVATE)
     }
     
+    singleOf(::InternetConnectionValidator)
     singleOf(::MediaPlayer)
     singleOf(::RetrofitNetworkClient).bind<INetworkClient>()
     singleOf(::SharedPrefsTracksStorage).bind<ITracksStorage>()

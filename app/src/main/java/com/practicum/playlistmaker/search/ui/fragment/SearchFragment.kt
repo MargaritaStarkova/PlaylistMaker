@@ -2,11 +2,10 @@ package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,7 +27,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding<FragmentSearchBinding>()
     private val viewModel by viewModel<SearchViewModel>()
     
-    private var textWatcher: TextWatcher? = null
     private var trackAdapter: TrackAdapter? = null
     
     override fun onResume() {
@@ -70,31 +68,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     override fun onDestroyView() {
         super.onDestroyView()
-        textWatcher = null
         trackAdapter = null
     }
     
     private fun initListeners() {
         
-        textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(
-                p0: CharSequence?, p1: Int, p2: Int, p3: Int,
-            ) {
-            } //empty
-    
-            override fun afterTextChanged(s: Editable?) {} //empty
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onSearchTextChanged(s.toString())
-            }
-        }
-        
         binding.apply {
-            
+    
             inputEditText.setOnFocusChangeListener { _, hasFocus ->
                 viewModel.searchFocusChanged(hasFocus, binding.inputEditText.text.toString())
             }
-            textWatcher?.let { inputEditText.addTextChangedListener(it) }
-            
+            inputEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.onSearchTextChanged(text.toString())
+            }
             clearIcon.setOnClickListener {
                 viewModel.searchTextClearClicked()
             }

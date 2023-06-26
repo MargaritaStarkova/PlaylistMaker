@@ -31,6 +31,10 @@ class AudioPlayerViewModel(
     
     fun observePlayStatus(): LiveData<PlayStatus> = playStatusLiveData
     
+    fun getTrack(): TrackModel {
+        return searchInteractor.historyList.first()
+    }
+    
     fun onViewPaused() {
         pausePlaying()
     }
@@ -43,29 +47,34 @@ class AudioPlayerViewModel(
     }
     
     private fun startPlaying(trackUrl: String) {
-        
+    
         mediaInteractor.startPlaying(trackUrl)
-        
-        progressTimer = viewModelScope.launch {
-            while (playerState == PlayerState.PLAYING) {
-                delay(TIMER_DELAY)
-                playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
-            }
+    
+        if (playerState == PlayerState.NOT_CONNECTED) {
+            playStatusLiveData.value = PlayStatus.NotConnected(playProgress = playProgress)
+        } else {
+            progressTimer = viewModelScope.launch {
+                do {
+                    playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
+                    delay(TIMER_DELAY)
+                }
+                while (playerState == PlayerState.PLAYING)
             
-            if (playerState == PlayerState.READY) {
-                playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
+                if (playerState == PlayerState.READY) {
+                    playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
+                }
             }
         }
     }
     
     private fun pausePlaying() {
-        mediaInteractor.pausePlaying()
-        playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
+        if (playerState == PlayerState.READY) {
+            playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
+        } else {
+            mediaInteractor.pausePlaying()
+            playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
+        }
         progressTimer?.cancel()
-    }
-    
-    fun getTrack(): TrackModel {
-        return searchInteractor.historyList.first()
     }
     
     companion object {

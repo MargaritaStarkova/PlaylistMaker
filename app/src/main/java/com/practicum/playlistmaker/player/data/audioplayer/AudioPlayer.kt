@@ -3,8 +3,12 @@ package com.practicum.playlistmaker.player.data.audioplayer
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
 import com.practicum.playlistmaker.player.domain.models.PlayerState
+import com.practicum.playlistmaker.search.data.network.InternetConnectionValidator
 
-class AudioPlayer(private val player: MediaPlayer) : IAudioPlayer {
+class AudioPlayer(
+    private val player: MediaPlayer,
+    private val validator: InternetConnectionValidator,
+) : IAudioPlayer {
     
     override var playerState = PlayerState.NOT_PREPARED
     
@@ -13,24 +17,35 @@ class AudioPlayer(private val player: MediaPlayer) : IAudioPlayer {
     }
     
     override fun startPlayer(url: String) {
-        if (playerState == PlayerState.NOT_PREPARED) {
-            preparePlayer(url)
+        when (playerState) {
+            PlayerState.NOT_PREPARED, PlayerState.NOT_CONNECTED -> {
+                if (validator.isConnected()) {
+                    preparePlayer(url)
+                    playerState = PlayerState.PLAYING
+                    player.start()
+                    
+                } else playerState = PlayerState.NOT_CONNECTED
+            }
             
+            else -> {
+                player.start()
+                playerState = PlayerState.PLAYING
+            }
         }
-        player.start()
-        playerState = PlayerState.PLAYING
-        
     }
     
     override fun pausePlayer() {
-        player.pause()
-        playerState = PlayerState.PAUSED
+        if (playerState == PlayerState.PLAYING) {
+            player.pause()
+            playerState = PlayerState.PAUSED
+        }
     }
     
     override fun stopPlayer() {
         player.apply {
             stop()
             reset()
+            setOnCompletionListener(null)
         }
         playerState = PlayerState.NOT_PREPARED
     }
@@ -44,6 +59,6 @@ class AudioPlayer(private val player: MediaPlayer) : IAudioPlayer {
                 playerState = PlayerState.READY
             }
         }
-        playerState = PlayerState.READY
+       playerState = PlayerState.READY
     }
 }
