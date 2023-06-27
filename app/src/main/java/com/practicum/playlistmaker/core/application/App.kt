@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.core.di.dataModule
 import com.practicum.playlistmaker.core.di.interactorModule
 import com.practicum.playlistmaker.core.di.repositoryModule
-import com.practicum.playlistmaker.core.di.routerModule
 import com.practicum.playlistmaker.core.di.viewModelModule
 import com.practicum.playlistmaker.settings.domain.api.ISettingsInteractor
 import org.koin.android.ext.android.getKoin
@@ -21,7 +20,7 @@ class App : Application() {
         
         startKoin {
             androidContext(this@App)
-            modules(dataModule, repositoryModule, interactorModule, routerModule, viewModelModule)
+            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
     
         darkTheme = getKoin()

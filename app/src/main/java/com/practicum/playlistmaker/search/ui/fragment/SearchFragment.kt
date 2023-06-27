@@ -2,15 +2,16 @@ package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.core.utils.router.HandlerRouter
+import com.practicum.playlistmaker.core.root.HostActivity
+import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.domain.models.NetworkError
@@ -21,14 +22,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     
-    private lateinit var trackAdapter: TrackAdapter
+    private lateinit var onClickDebounce: (TrackModel) -> Unit
     
     private val binding by viewBinding<FragmentSearchBinding>()
     private val viewModel by viewModel<SearchViewModel>()
     
-    private val handlerRouter by lazy(LazyThreadSafetyMode.NONE) { HandlerRouter() }
-    
-    private var textWatcher: TextWatcher? = null
+    private var trackAdapter: TrackAdapter? = null
     
     override fun onResume() {
         super.onResume()
@@ -37,7 +36,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+    
+        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false,
+            action = {
+                viewModel.addTrackToHistoryList(it)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_audioPlayerFragment,
+                )
+            })
+    
         viewModel.apply {
             observeContentState().observe(viewLifecycleOwner) { searchScreenState ->
                 render(searchScreenState)
@@ -59,30 +68,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     override fun onDestroyView() {
         super.onDestroyView()
-        textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
+        trackAdapter = null
     }
     
     private fun initListeners() {
         
-        textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(
-                p0: CharSequence?, p1: Int, p2: Int, p3: Int,
-            ) {
-            } //empty
-            
-            override fun afterTextChanged(s: Editable?) {} //empty
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onSearchTextChanged(s.toString())
-            }
-        }
-        
         binding.apply {
-            
+    
             inputEditText.setOnFocusChangeListener { _, hasFocus ->
                 viewModel.searchFocusChanged(hasFocus, binding.inputEditText.text.toString())
             }
-            textWatcher?.let { inputEditText.addTextChangedListener(it) }
-            
+            inputEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.onSearchTextChanged(text.toString())
+            }
             clearIcon.setOnClickListener {
                 viewModel.searchTextClearClicked()
             }
@@ -97,13 +95,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     private fun initAdapter() {
         trackAdapter = TrackAdapter { track ->
-            if (handlerRouter.clickDebounce()) {
-                viewModel.addTrackToHistoryList(track)
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_audioPlayerFragment,
-                )
-    
-            }
+            (activity as HostActivity).animateBottomNavigationView()
+            onClickDebounce(track)
         }
         binding.searchList.adapter = trackAdapter
     }
@@ -133,7 +126,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             progressBar.visibility = View.GONE
         }
     
-        trackAdapter.apply {
+        trackAdapter?.apply {
             trackList.clear()
             trackList.addAll(list)
             notifyDataSetChanged()
@@ -156,7 +149,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 clearHistory.visibility = View.GONE
             }
         }
-        trackAdapter.apply {
+        trackAdapter?.apply {
             trackList.clear()
             trackList.addAll(list)
             notifyDataSetChanged()
@@ -166,12 +159,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun showMessage(error: NetworkError) {
         when (error) {
             NetworkError.SEARCH_ERROR -> {
-            
-                trackAdapter.apply {
+    
+                trackAdapter?.apply {
                     trackList.clear()
                     notifyDataSetChanged()
                 }
-            
+    
                 binding.apply {
                     placeholderImage.visibility = View.VISIBLE
                     placeholderMessage.visibility = View.VISIBLE
@@ -189,12 +182,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         
             NetworkError.CONNECTION_ERROR -> {
                 hideKeyboard()
-            
-                trackAdapter.apply {
+    
+                trackAdapter?.apply {
                     trackList.clear()
                     notifyDataSetChanged()
                 }
-            
+    
                 binding.apply {
                     placeholderImage.visibility = View.VISIBLE
                     placeholderMessage.visibility = View.VISIBLE
@@ -230,7 +223,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
     
     private fun showLoading() {
-        trackAdapter.apply {
+        trackAdapter?.apply {
             trackList.clear()
             notifyDataSetChanged()
         }
@@ -242,6 +235,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             clearHistory.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
         }
+    }
+    
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }
 

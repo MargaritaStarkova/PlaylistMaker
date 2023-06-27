@@ -5,42 +5,36 @@ import com.practicum.playlistmaker.search.data.network.SearchResponse
 import com.practicum.playlistmaker.search.data.storage.models.TrackModelDto
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.ITracksStorage
 import com.practicum.playlistmaker.search.domain.api.ITrackRepository
+import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TrackRepository(
     private val networkClient: INetworkClient,
     private val tracksStorage: ITracksStorage,
 ) : ITrackRepository {
     
-    override fun loadTracks(
-        query: String,
-        onSuccess: (List<TrackModel>) -> Unit,
-        onError: (NetworkError) -> Unit,
-    ) {
+    override fun loadTracks(query: String): Flow<FetchResult> = flow {
     
         val response = networkClient.doRequest(query)
     
         when (response.resultCode) {
             
-            -1 -> onError.invoke(NetworkError.CONNECTION_ERROR)
-            in 400..499 -> {
-                onError.invoke(NetworkError.SEARCH_ERROR)
-            }
-            in 500..599 -> onError.invoke(NetworkError.CONNECTION_ERROR)
-        
+            -1, 500 -> emit(FetchResult.Error(NetworkError.CONNECTION_ERROR))
+            400 -> emit(FetchResult.Error(NetworkError.SEARCH_ERROR))
+            
             else -> {
                 val resultList = (response as SearchResponse).results
-            
-                if (resultList.isNullOrEmpty()) {
-                    onError.invoke(NetworkError.SEARCH_ERROR)
+                if (resultList.isEmpty()) {
+                    emit(FetchResult.Error(NetworkError.SEARCH_ERROR))
                 } else {
                     val trackList = resultList.filter { it.previewUrl != null }
-                    onSuccess.invoke(mapTrackListFromDto(trackList))
+                    emit(FetchResult.Success(mapTrackListFromDto(trackList)))
                 }
             }
         }
-    
     }
 
     override fun readHistory(): List<TrackModel> {

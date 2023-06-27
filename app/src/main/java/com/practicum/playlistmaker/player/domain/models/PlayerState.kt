@@ -4,5 +4,6 @@ enum class PlayerState {
     NOT_PREPARED,
     READY,
     PLAYING,
-    PAUSED
+    PAUSED,
+    NOT_CONNECTED,
 }

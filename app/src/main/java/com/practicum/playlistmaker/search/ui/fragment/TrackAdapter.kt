@@ -14,7 +14,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TrackViewHolder(
         TrackItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
-
+    
     override fun getItemCount() = trackList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {

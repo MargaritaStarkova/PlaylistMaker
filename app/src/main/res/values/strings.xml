@@ -23,7 +23,7 @@
     <string name="year">Год</string>
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
-    <string name="playing_error">Извините, отрывок песни недоступен</string>
+    <string name="playing_error">Нет интернета, не удалось загрузить трек :(</string>
     <string name="your_library_is_empty">Ваша медиатека пуста</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="you_have_not_any_playlist">Вы не создали\nни одного плейлиста</string>

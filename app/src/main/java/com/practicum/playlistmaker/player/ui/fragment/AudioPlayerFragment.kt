@@ -3,20 +3,22 @@ package com.practicum.playlistmaker.player.ui.fragment
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
-import com.practicum.playlistmaker.databinding.AudioPlayerActivityBinding
+import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
+import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
+class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     
-    private val binding by viewBinding<AudioPlayerActivityBinding>()
+    private val binding by viewBinding<FragmentAudioPlayerBinding>()
     private val viewModel by viewModel<AudioPlayerViewModel>()
     
     private lateinit var trackModel: TrackModel
@@ -28,13 +30,22 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
         
         viewModel.apply {
             observePlayStatus().observe(viewLifecycleOwner) { playingStatus ->
-                updatePlayButton(playingStatus.imageResource)
-            }
-            observePlayProgress().observe(viewLifecycleOwner) { currentPosition ->
-                updateTrackDuration(currentPosition)
+                when (playingStatus) {
+                    is PlayStatus.NotConnected -> {
+                        showMessage()
+                    }
+        
+                    is PlayStatus.Playing -> {
+                        startAnimation()
+                        renderPlayer(playingStatus.imageResource, playingStatus.playProgress)
+                    }
+        
+                    is PlayStatus.Paused -> {
+                        renderPlayer(playingStatus.imageResource, playingStatus.playProgress)
+                    }
+                }
             }
         }
-        
         drawTrack(trackModel, AudioPlayerViewModel.START_POSITION)
         initListeners()
     }
@@ -44,6 +55,24 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
         viewModel.onViewPaused()
     }
     
+    private fun showMessage() {
+        Toast
+            .makeText(context, R.string.playing_error, Toast.LENGTH_SHORT)
+            .show()
+    }
+    
+    private fun startAnimation() {
+        binding.playButton.startAnimation(
+            AnimationUtils.loadAnimation(
+                requireContext(), R.anim.scale
+            )
+        )
+    }
+    
+    private fun renderPlayer(imageResource: Int, currentPositionMediaPlayer: Int) {
+        binding.playButton.setImageResource(imageResource)
+        binding.excerptDuration.text = currentPositionMediaPlayer.millisConverter()
+    }
     
     private fun drawTrack(trackModel: TrackModel, startPosition: Int) {
         
@@ -76,21 +105,9 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_activity) {
             }
             
             playButton.setOnClickListener {
-                binding.playButton.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        requireContext(), R.anim.scale
-                    )
-                )
+                startAnimation()
                 viewModel.playButtonClicked(trackModel.previewUrl)
             }
         }
-    }
-    
-    private fun updatePlayButton(imageResource: Int) {
-        binding.playButton.setImageResource(imageResource)
-    }
-    
-    private fun updateTrackDuration(currentPositionMediaPlayer: Int) {
-        binding.excerptDuration.text = currentPositionMediaPlayer.millisConverter()
     }
 }
