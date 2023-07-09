@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
+import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
@@ -62,8 +63,8 @@ class SearchViewModel(
         viewModelScope.launch {
             interactor
                 .getTracksOnQuery(query = query)
-                .collect { pair ->
-                    processResult(pair.first, pair.second)
+                .collect { result ->
+                    processResult(result)
                 }
         }
     }
@@ -90,15 +91,15 @@ class SearchViewModel(
         }
     }
     
-    private fun processResult(data: List<TrackModel>?, error: NetworkError?) {
+    private fun processResult(result: FetchResult) {
         when {
-            error != null -> {
-                contentStateLiveData.postValue(SearchContentState.Error(error))
+            result.error != null -> {
+                contentStateLiveData.postValue(SearchContentState.Error(result.error))
             }
-            
-            data != null -> {
-                contentStateLiveData.postValue(SearchContentState.SearchContent(data))
-                latestStateContent = SearchContentState.SearchContent(data)
+    
+            result.data != null -> {
+                contentStateLiveData.postValue(SearchContentState.SearchContent(result.data))
+                latestStateContent = SearchContentState.SearchContent(result.data)
             }
         }
     }

@@ -1,14 +1,16 @@
 package com.practicum.playlistmaker.search.data.storage.sharedprefs
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.search.data.storage.models.TrackModelDto
 
 class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences) : ITracksStorage {
     
+    private val gson = Gson()
+    
     override fun saveHistory(historyList: List<TrackModelDto>) {
-        val json = Gson().toJson(historyList)
+        val json = gson.toJson(historyList)
         
         sharedPreferences
             .edit()
@@ -16,10 +18,10 @@ class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences)
             .apply()
     }
     
-    override fun readHistory(): Array<TrackModelDto> {
-        
-        val json = sharedPreferences.getString(HISTORY_LIST_KEY, null) ?: return emptyArray()
-        return Gson().fromJson(json, Array<TrackModelDto>::class.java)
+    override fun readHistory(): List<TrackModelDto> {
+        val json = sharedPreferences.getString(HISTORY_LIST_KEY, null) ?: return emptyList()
+        val type = object : TypeToken<List<TrackModelDto>>() {}.type
+        return gson.fromJson(json, type)
     }
     
     companion object {

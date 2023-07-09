@@ -10,9 +10,9 @@ class RetrofitNetworkClient(
     
     override suspend fun doRequest(query: String): Response {
     
-        if (!validator.isConnected()) {
-            return Response().apply { resultCode = -1 }
-        
+        return if (!validator.isConnected()) {
+            Response().apply { resultCode = -1 }
+    
         } else {
             val response = withContext(Dispatchers.IO) {
                 try {
@@ -21,24 +21,8 @@ class RetrofitNetworkClient(
                     null
                 }
             }
-        
-            return if (response?.body() != null) {
-                when (response.code()) {
-                    in 400..499 -> Response().apply { resultCode = 400 }
-                    
-                    in 500..599 -> {
-                        Response().apply { resultCode = 500 }
-                    }
-                    
-                    else -> {
-                        response.body()?.apply { resultCode = 200 }!!
-                    }
-                }
-            } else {
-                Response().apply {
-                    resultCode = 400
-                }
-            }
+            val result = response?.body()
+            result?.apply { resultCode = response.code() } ?: Response().apply { resultCode = 400 }
         }
     }
 }
