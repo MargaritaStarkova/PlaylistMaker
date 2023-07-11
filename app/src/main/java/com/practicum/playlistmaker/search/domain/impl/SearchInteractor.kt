@@ -3,29 +3,15 @@ package com.practicum.playlistmaker.search.domain.impl
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.api.ITrackRepository
 import com.practicum.playlistmaker.search.domain.models.FetchResult
-import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class SearchInteractor(private val repository: ITrackRepository) : ISearchInteractor {
     
     override val historyList = ArrayList<TrackModel>(getTracksFromHistory())
     
-    override fun getTracksOnQuery(query: String): Flow<Pair<List<TrackModel>?, NetworkError?>> {
-        return repository
-            .loadTracks(query = query)
-            .map { fetchResult ->
-                when (fetchResult) {
-                    is FetchResult.Success -> {
-                        Pair(fetchResult.data, null)
-                    }
-                    
-                    is FetchResult.Error -> {
-                        Pair(null, fetchResult.error)
-                    }
-                }
-            }
+    override fun getTracksOnQuery(query: String): Flow<FetchResult> {
+        return repository.loadTracks(query = query)
     }
     
     override fun addTrackToHistoryList(track: TrackModel) {

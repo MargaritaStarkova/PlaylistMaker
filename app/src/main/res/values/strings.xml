@@ -33,5 +33,7 @@
     <string name="label_search">SearchFragment</string>
     <string name="label_settings">SettingsFragment</string>
     <string name="label_player">audio_player_fragment</string>
+    <string name="clear">очистить запрос</string>
+    <string name="still_loading">Трек еще загружается...</string>
 
 </resources>

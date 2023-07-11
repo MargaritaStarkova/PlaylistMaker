@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/button_play"
+        android:src="@drawable/button_play_not_prepared"
         app:circularflow_viewCenter="@id/add_button"
         app:layout_constraintBottom_toBottomOf="@id/excerpt_duration"
         app:layout_constraintEnd_toStartOf="@id/like_button"

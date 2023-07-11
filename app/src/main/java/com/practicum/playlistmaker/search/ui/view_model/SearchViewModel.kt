@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
+import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -21,6 +23,8 @@ class SearchViewModel(
     
     private var latestStateContent = contentStateLiveData.value
     private var latestSearchText: String? = null
+    
+    private var searchJob: Job? = null
     
     private val onSearchDebounce = debounce<String>(delayMillis = SEARCH_DEBOUNCE_DELAY,
         coroutineScope = viewModelScope,
@@ -59,16 +63,18 @@ class SearchViewModel(
         }
         contentStateLiveData.value = SearchContentState.Loading
     
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             interactor
                 .getTracksOnQuery(query = query)
-                .collect { pair ->
-                    processResult(pair.first, pair.second)
+                .collect { result ->
+                    processResult(result)
                 }
         }
     }
     
     fun searchTextClearClicked() {
+        onSearchDebounce("")
+        searchJob?.cancel()
         searchTextClearClickedLiveData.value = true
         contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
         latestStateContent = contentStateLiveData.value
@@ -90,15 +96,15 @@ class SearchViewModel(
         }
     }
     
-    private fun processResult(data: List<TrackModel>?, error: NetworkError?) {
+    private fun processResult(result: FetchResult) {
         when {
-            error != null -> {
-                contentStateLiveData.postValue(SearchContentState.Error(error))
+            result.error != null -> {
+                contentStateLiveData.postValue(SearchContentState.Error(result.error))
             }
-            
-            data != null -> {
-                contentStateLiveData.postValue(SearchContentState.SearchContent(data))
-                latestStateContent = SearchContentState.SearchContent(data)
+    
+            result.data != null -> {
+                contentStateLiveData.postValue(SearchContentState.SearchContent(result.data))
+                latestStateContent = SearchContentState.SearchContent(result.data)
             }
         }
     }
