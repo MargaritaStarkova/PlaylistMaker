@@ -1,9 +1,11 @@
 package com.practicum.playlistmaker.player.ui.fragment
 
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
@@ -21,27 +23,33 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     private val binding by viewBinding<FragmentAudioPlayerBinding>()
     private val viewModel by viewModel<AudioPlayerViewModel>()
     
-    private lateinit var trackModel: TrackModel
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        trackModel = viewModel.getTrack()
+        
+        val transitionDrawable = TransitionDrawable(arrayOf(
+            AppCompatResources.getDrawable(requireContext(), R.drawable.button_play_not_prepared),
+            AppCompatResources.getDrawable(requireContext(), R.drawable.button_play)
+        ))
+    
+        val trackModel = viewModel.getTrack()
         
         viewModel.apply {
             observePlayStatus().observe(viewLifecycleOwner) { playingStatus ->
                 when (playingStatus) {
-                    is PlayStatus.NotConnected -> {
-                        showMessage()
+                    is PlayStatus.NotConnected, is PlayStatus.Loading -> {
+                        showMessage(playingStatus)
                     }
-        
                     is PlayStatus.Playing -> {
                         startAnimation()
                         renderPlayer(playingStatus.imageResource, playingStatus.playProgress)
                     }
-        
                     is PlayStatus.Paused -> {
                         renderPlayer(playingStatus.imageResource, playingStatus.playProgress)
+                    }
+                    is PlayStatus.Ready -> {
+                        binding.playButton.setImageDrawable(transitionDrawable)
+                        transitionDrawable.startTransition(TRANSITION_DURATION)
                     }
                 }
             }
@@ -55,10 +63,16 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
         viewModel.onViewPaused()
     }
     
-    private fun showMessage() {
-        Toast
-            .makeText(context, R.string.playing_error, Toast.LENGTH_SHORT)
-            .show()
+    private fun showMessage(status: PlayStatus) {
+        
+        when(status) {
+            is PlayStatus.NotConnected -> { Toast
+                .makeText(context, getString(R.string.playing_error), Toast.LENGTH_SHORT)
+                .show() }
+            else -> Toast
+                .makeText(context, getString(R.string.still_loading), Toast.LENGTH_SHORT)
+                .show()
+        }
     }
     
     private fun startAnimation() {
@@ -106,8 +120,12 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             
             playButton.setOnClickListener {
                 startAnimation()
-                viewModel.playButtonClicked(trackModel.previewUrl)
+                viewModel.playButtonClicked()
             }
         }
+    }
+    
+    companion object {
+        private const val TRANSITION_DURATION = 1000
     }
 }

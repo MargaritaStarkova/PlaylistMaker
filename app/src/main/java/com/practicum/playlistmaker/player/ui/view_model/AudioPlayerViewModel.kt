@@ -1,9 +1,11 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
@@ -22,7 +24,14 @@ class AudioPlayerViewModel(
     private val playProgress get() = mediaInteractor.getPlayerPosition()
     private val playerState get() = mediaInteractor.getPlayerState()
     
-    private var progressTimer: Job? = null
+    private val trackUrl = getTrack().previewUrl
+    
+    private var progressTimerJob: Job? = null
+    private var preparePlayerJob: Job? = null
+    
+    init {
+        preparingPlayer(trackUrl)
+    }
     
     override fun onCleared() {
         super.onCleared()
@@ -39,33 +48,54 @@ class AudioPlayerViewModel(
         pausePlaying()
     }
     
-    fun playButtonClicked(trackUrl: String) {
+    fun playButtonClicked() {
         when (playerState) {
             PlayerState.PLAYING -> pausePlaying()
-            else -> startPlaying(trackUrl)
+            
+            PlayerState.NOT_PREPARED -> {
+                playStatusLiveData.value =
+                    PlayStatus.Loading()
+            }
+            
+            PlayerState.READY, PlayerState.PAUSED -> startPlaying()
+            
+            PlayerState.NOT_CONNECTED -> preparingPlayer(trackUrl)
         }
     }
     
-    private fun startPlaying(trackUrl: String) {
-    
-        mediaInteractor.startPlaying(trackUrl)
-    
-        if (playerState == PlayerState.NOT_CONNECTED) {
-            playStatusLiveData.value = PlayStatus.NotConnected(playProgress = playProgress)
-        } else {
-            progressTimer = viewModelScope.launch {
-                do {
-                    playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
-                    delay(TIMER_DELAY)
+    private fun preparingPlayer(url: String) {
+        
+        preparePlayerJob = viewModelScope.launch {
+            mediaInteractor
+                .preparePlayer(url)
+                .collect { playerState ->
+                    processPlayStatus(playerState)
                 }
-                while (playerState == PlayerState.PLAYING)
+        }
+    }
+    
+    private fun processPlayStatus(playerState: PlayerState) {
+        when (playerState) {
+            PlayerState.READY -> { playStatusLiveData.value = PlayStatus.Ready() }
+            else -> { playStatusLiveData.value = PlayStatus.NotConnected(playProgress = playProgress) }
+        }
+    }
+    
+    private fun startPlaying() {
+        
+        mediaInteractor.startPlaying()
+        progressTimerJob = viewModelScope.launch {
+            do {
+                playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
+                delay(TIMER_DELAY)
+            } while (playerState == PlayerState.PLAYING)
             
-                if (playerState == PlayerState.READY) {
-                    playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
-                }
+            if (playerState == PlayerState.READY) {
+                pausePlaying()
             }
         }
     }
+
     
     private fun pausePlaying() {
         if (playerState == PlayerState.READY) {
@@ -74,7 +104,7 @@ class AudioPlayerViewModel(
             mediaInteractor.pausePlaying()
             playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
         }
-        progressTimer?.cancel()
+        progressTimerJob?.cancel()
     }
     
     companion object {
