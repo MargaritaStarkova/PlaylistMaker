@@ -33,6 +33,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onResume()
         viewModel.onViewResume()
     }
+
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,6 +59,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 if (isClicked) {
                     clearSearchText()
                     hideKeyboard()
+                    
                 }
             }
         }
