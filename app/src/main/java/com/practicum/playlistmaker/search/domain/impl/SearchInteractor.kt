@@ -16,7 +16,7 @@ class SearchInteractor(private val repository: ITrackRepository) : ISearchIntera
     
     override fun addTrackToHistoryList(track: TrackModel) {
         when {
-            historyList.size < 10 -> {
+            historyList.size < 10 || historyList.contains(track) -> {
                 historyList.remove(track)
                 historyList.add(FIRST_INDEX_HISTORY_LIST, track)
             }

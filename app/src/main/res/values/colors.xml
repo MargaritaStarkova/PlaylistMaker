@@ -25,4 +25,6 @@
     <color name="fab_color_grey_light">#1A1B22</color>
     <color name="fab_color_grey_dark">#FFFFFF</color>
 
+    <color name="like_color">#F56B6C</color>
+
 </resources>

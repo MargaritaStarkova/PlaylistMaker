@@ -11,9 +11,9 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     
-    viewModelOf(::AudioPlayerViewModel).bind()
-    viewModelOf(::SearchViewModel).bind()
-    viewModelOf(::SettingsViewModel).bind()
-    viewModelOf(::FavoriteTracksViewModel).bind()
-    viewModelOf(::PlaylistsViewModel).bind()
+    viewModelOf(::AudioPlayerViewModel)
+    viewModelOf(::SearchViewModel)
+    viewModelOf(::SettingsViewModel)
+    viewModelOf(::FavoriteTracksViewModel)
+    viewModelOf(::PlaylistsViewModel)
 }

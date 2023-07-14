@@ -14,6 +14,7 @@ import com.practicum.playlistmaker.core.root.HostActivity
 import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.player.ui.fragment.AudioPlayerFragment
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
@@ -33,7 +34,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onResume()
         viewModel.onViewResume()
     }
-
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,10 +41,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
-            action = {
-                viewModel.addTrackToHistoryList(it)
+            action = { track ->
+                viewModel.addTrackToHistoryList(track)
                 findNavController().navigate(
                     R.id.action_searchFragment_to_audioPlayerFragment,
+                    AudioPlayerFragment.createArgs(track)
                 )
             })
     

@@ -124,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/button_like"
+        android:src="@drawable/button_unliked"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/play_button"

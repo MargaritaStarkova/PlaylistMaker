@@ -2,10 +2,12 @@ package com.practicum.playlistmaker.core.di
 
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 import com.practicum.playlistmaker.core.application.App
+import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
+import com.practicum.playlistmaker.library.data.db.LocalDatabase
 import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayer
 import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
-import com.practicum.playlistmaker.search.data.converter.TrackModelConverter
 import com.practicum.playlistmaker.search.data.network.INetworkClient
 import com.practicum.playlistmaker.search.data.network.ITunesApi
 import com.practicum.playlistmaker.search.data.network.InternetConnectionValidator
@@ -19,6 +21,7 @@ import com.practicum.playlistmaker.sharing.domain.api.IExternalNavigator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -52,8 +55,15 @@ val dataModule = module {
         androidContext().getSharedPreferences(App.PREFERENCES, AppCompatActivity.MODE_PRIVATE)
     }
     
-    singleOf(::TrackModelConverter)
-    singleOf(::InternetConnectionValidator)
+    single {
+        Room
+            .databaseBuilder(androidContext(), LocalDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+    
+    factoryOf(::TrackModelConverter)
+    factoryOf(::InternetConnectionValidator)
     singleOf(::MediaPlayer)
     singleOf(::RetrofitNetworkClient).bind<INetworkClient>()
     singleOf(::SharedPrefsTracksStorage).bind<ITracksStorage>()

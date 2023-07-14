@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.data.repository
 
-import com.practicum.playlistmaker.search.data.converter.TrackModelConverter
+import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
 import com.practicum.playlistmaker.search.data.network.INetworkClient
 import com.practicum.playlistmaker.search.data.network.SearchResponse
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.ITracksStorage
@@ -29,7 +29,7 @@ class TracksRepository(
                     emit(FetchResult.Error(NetworkError.SEARCH_ERROR))
                 } else {
                     val trackList = resultList.filter { it.previewUrl != null }
-                    emit(FetchResult.Success(converter.mapDtoToModel(trackList)))
+                    emit(FetchResult.Success(trackList.map { converter.map(it) }))
                 }
             }
             
@@ -44,11 +44,11 @@ class TracksRepository(
     }
     
     override fun readHistory(): List<TrackModel> {
-        return converter.mapDtoToModel(tracksStorage.readHistory())
+        return tracksStorage.readHistory().map { converter.map(it) }
     }
     
     override fun saveHistory(trackList: ArrayList<TrackModel>) {
-        tracksStorage.saveHistory(converter.mapModelToDto(trackList))
+        tracksStorage.saveHistory(trackList.map { converter.map(it) })
     }
 }
 

@@ -1,37 +1,33 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.library.domain.api.ILibraryInteractor
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
-import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AudioPlayerViewModel(
     private val mediaInteractor: IMediaInteractor,
-    private val searchInteractor: ISearchInteractor,
+    private val libraryInteractor: ILibraryInteractor,
 ) : ViewModel() {
     
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
+    private val isFavoriteLiveData = MutableLiveData<Boolean>()
     private val playProgress get() = mediaInteractor.getPlayerPosition()
     private val playerState get() = mediaInteractor.getPlayerState()
     
-    private val trackUrl = getTrack().previewUrl
-    
     private var progressTimerJob: Job? = null
     private var preparePlayerJob: Job? = null
-    
-    init {
-        preparingPlayer(trackUrl)
-    }
+    private var isFavorite: Boolean = false
     
     override fun onCleared() {
         super.onCleared()
@@ -39,31 +35,49 @@ class AudioPlayerViewModel(
     }
     
     fun observePlayStatus(): LiveData<PlayStatus> = playStatusLiveData
+    fun observeFavoriteTrack(): LiveData<Boolean> = isFavoriteLiveData
     
-    fun getTrack(): TrackModel {
-        return searchInteractor.historyList.first()
+    fun isFavorite(id: String) {
+        viewModelScope.launch() {
+            withContext(Dispatchers.IO){
+                isFavorite = libraryInteractor.isFavorite(id)
+            }
+            isFavoriteLiveData.value = isFavorite
+        }
     }
     
     fun onViewPaused() {
         pausePlaying()
     }
     
-    fun playButtonClicked() {
+    fun toggleFavorite(track: TrackModel) {
+        isFavorite = !isFavorite
+        isFavoriteLiveData.value = isFavorite
+        viewModelScope.launch(Dispatchers.IO) {
+            if (isFavorite) {
+                libraryInteractor.likeTrack(track = track)
+            }
+            else {
+                libraryInteractor.unLikeTrack(track = track)
+            }
+        }
+    }
+    
+    fun playButtonClicked(url: String) {
         when (playerState) {
             PlayerState.PLAYING -> pausePlaying()
             
             PlayerState.NOT_PREPARED -> {
-                playStatusLiveData.value =
-                    PlayStatus.Loading()
+                playStatusLiveData.value = PlayStatus.Loading()
             }
             
             PlayerState.READY, PlayerState.PAUSED -> startPlaying()
             
-            PlayerState.NOT_CONNECTED -> preparingPlayer(trackUrl)
+            PlayerState.NOT_CONNECTED -> preparingPlayer(url)
         }
     }
     
-    private fun preparingPlayer(url: String) {
+    fun preparingPlayer(url: String) {
         
         preparePlayerJob = viewModelScope.launch {
             mediaInteractor
@@ -95,7 +109,6 @@ class AudioPlayerViewModel(
             }
         }
     }
-
     
     private fun pausePlaying() {
         if (playerState == PlayerState.READY) {
@@ -106,6 +119,8 @@ class AudioPlayerViewModel(
         }
         progressTimerJob?.cancel()
     }
+    
+
     
     companion object {
         const val START_POSITION = 0
