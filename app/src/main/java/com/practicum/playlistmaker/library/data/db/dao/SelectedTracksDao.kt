@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.Flow
 interface SelectedTracksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTrack(track: TrackEntity)
+    suspend fun insertTrack(track: TrackEntity)
     
     @Delete
-    fun deleteTrack(track: TrackEntity)
+    suspend fun deleteTrack(track: TrackEntity)
 
     @Query("SELECT * FROM selected_tracks ORDER BY saveDate DESC;")
     fun getFavoriteTracks(): Flow<List<TrackEntity>>
     
     @Query("SELECT EXISTS(SELECT 1 FROM selected_tracks WHERE id = :id LIMIT 1);")
-    fun isFavorite(id: String): Boolean
+    fun isFavorite(id: String): Flow<Boolean>
 }

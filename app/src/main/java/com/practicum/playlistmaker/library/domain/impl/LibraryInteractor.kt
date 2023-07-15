@@ -4,20 +4,21 @@ import com.practicum.playlistmaker.library.domain.api.ILibraryInteractor
 import com.practicum.playlistmaker.library.domain.api.ILibraryRepository
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class LibraryInteractor(
     private val repository: ILibraryRepository,
 ) : ILibraryInteractor {
     
-    override fun likeTrack(track: TrackModel) {
+    override suspend fun likeTrack(track: TrackModel) {
         repository.saveTrack(track)
     }
     
-    override fun unLikeTrack(track: TrackModel) {
+    override suspend fun unLikeTrack(track: TrackModel) {
         repository.deleteTrack(track)
     }
     
     override fun getSelectedTracks(): Flow<List<TrackModel>> = repository.getSelectedTracks()
     
-    override fun isFavorite(id: String): Boolean = repository.isFavorite(id)
+    override fun isFavorite(id: String): Flow<Boolean> = repository.isFavorite(id)
 }

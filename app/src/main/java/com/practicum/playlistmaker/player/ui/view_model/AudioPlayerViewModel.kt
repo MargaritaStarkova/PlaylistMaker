@@ -12,6 +12,7 @@ import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,9 +41,11 @@ class AudioPlayerViewModel(
     fun isFavorite(id: String) {
         viewModelScope.launch() {
             withContext(Dispatchers.IO){
-                isFavorite = libraryInteractor.isFavorite(id)
+                libraryInteractor.isFavorite(id).collect {
+                    isFavorite = it
+                    isFavoriteLiveData.postValue(isFavorite)
+                }
             }
-            isFavoriteLiveData.value = isFavorite
         }
     }
     
