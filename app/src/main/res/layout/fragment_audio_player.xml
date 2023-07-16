@@ -55,6 +55,7 @@
         android:id="@+id/cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/cover"
         android:src="@drawable/placeholder"
         app:layout_constraintBottom_toBottomOf="@id/image_bottom_guideline"
         app:layout_constraintDimensionRatio="w, 1:1"
@@ -62,7 +63,7 @@
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@id/navigation_toolbar"
 
-        />
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/track_name"
@@ -99,12 +100,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:contentDescription="@string/add_button"
         android:src="@drawable/button_add_lib"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toStartOf="@id/play_button"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toTopOf="@id/play_button" />
+        app:layout_constraintTop_toTopOf="@id/play_button"
+        tools:ignore="ImageContrastCheck" />
 
 
     <ImageButton
@@ -112,23 +115,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:contentDescription="@string/play_button"
         android:src="@drawable/button_play_not_prepared"
         app:circularflow_viewCenter="@id/add_button"
         app:layout_constraintBottom_toBottomOf="@id/excerpt_duration"
         app:layout_constraintEnd_toStartOf="@id/like_button"
         app:layout_constraintStart_toEndOf="@id/add_button"
-        app:layout_constraintTop_toTopOf="@id/artist_name" />
+        app:layout_constraintTop_toTopOf="@id/artist_name"
+        tools:ignore="ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/like_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:contentDescription="@string/like_button"
         android:src="@drawable/button_unliked"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/play_button"
-        app:layout_constraintTop_toTopOf="@id/play_button" />
+        app:layout_constraintTop_toTopOf="@id/play_button"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/excerpt_duration"
@@ -149,6 +156,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/duration"
+        android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/album"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_top_guideline"
@@ -173,6 +181,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/album"
+        android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/year"
         app:layout_constraintEnd_toStartOf="@id/changeable_album"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -203,6 +212,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/year"
+        android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/genre"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/album" />
@@ -225,6 +235,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/genre"
+        android:textColor="#757575"
         app:layout_constraintBottom_toTopOf="@id/country"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/year" />
@@ -250,6 +261,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/country"
+        android:textColor="#757575"
         app:layout_constraintBottom_toBottomOf="@id/text_bottom_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/genre" />

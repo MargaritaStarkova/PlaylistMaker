@@ -44,16 +44,16 @@
             android:layout_height="16dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_16dp"
+            android:contentDescription="@string/search"
             android:src="@drawable/ic_search"
             app:tint="?attr/hint_icon_text_color"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ImageContrastCheck" />
 
         <EditText
             android:id="@+id/input_edit_text"
             style="@style/YSRegular16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
             android:layout_marginStart="@dimen/margin_5dp"
             android:layout_weight="1"
             android:backgroundTint="@android:color/transparent"
@@ -61,10 +61,11 @@
             android:imeOptions="actionDone|flagNoExtractUi"
             android:inputType="textNoSuggestions"
             android:maxLines="1"
+            android:minHeight="48dp"
             android:singleLine="true"
             android:textColor="?attr/expression_text_color"
-            android:textColorHint="?attr/hint_icon_text_color"
-            tools:ignore="Autofill" />
+            android:textColorHint="#616161"
+            tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
 
         <ImageView
             android:id="@+id/clear_icon"
@@ -119,22 +120,22 @@
 
     <Button
         android:id="@+id/clear_history"
-        style="@style/button_update"
+        style="@style/ButtonUpdate"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimen_36dp"
-        android:text="@string/clear_history"
-
         android:layout_marginTop="@dimen/margin_15dp"
+
         android:layout_marginBottom="@dimen/margin_15dp"
+        android:text="@string/clear_history"
 
         android:visibility="visible"
 
-        app:layout_constraintTop_toBottomOf="@id/search_list"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_list"
 
-        />
+        tools:ignore="TouchTargetSizeCheck" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -169,7 +170,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/container"
         tools:src="@drawable/error_internet"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/placeholder_image" />
 
     <TextView
         android:id="@+id/placeholder_message"
@@ -188,7 +189,7 @@
 
     <Button
         android:id="@+id/update_button"
-        style="@style/button_update"
+        style="@style/ButtonUpdate"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimen_36dp"
         android:layout_gravity="center_horizontal"

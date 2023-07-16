@@ -54,7 +54,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/margin_12dp"
-            android:src="@drawable/ic_share" />
+            android:contentDescription="@string/ic_share"
+            android:src="@drawable/ic_share"
+            tools:ignore="ImageContrastCheck" />
 
     </FrameLayout>
 
@@ -79,7 +81,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/margin_12dp"
-            android:src="@drawable/ic_support" />
+            android:contentDescription="@string/ic_support"
+            android:src="@drawable/ic_support"
+            tools:ignore="ImageContrastCheck" />
     </FrameLayout>
 
     <FrameLayout
@@ -104,6 +108,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="18dp"
-            android:src="@drawable/ic_arrow_forward" />
+            android:contentDescription="@string/ic_arrow_forward"
+            android:src="@drawable/ic_arrow_forward"
+            tools:ignore="ImageContrastCheck" />
     </FrameLayout>
 </LinearLayout>

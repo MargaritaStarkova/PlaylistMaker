@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
 import com.practicum.playlistmaker.search.domain.models.FetchResult
-import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
 import kotlinx.coroutines.Job
@@ -19,9 +18,8 @@ class SearchViewModel(
     
     private val contentStateLiveData = MutableLiveData<SearchContentState>()
     private val clearIconStateLiveData = MutableLiveData<String>()
-    private val searchTextClearClickedLiveData = MutableLiveData(false)
+    private val searchTextClearClickedLiveData = SingleLiveEvent<Boolean>()
     
-    private var latestStateContent = contentStateLiveData.value
     private var latestSearchText: String? = null
     
     private var searchJob: Job? = null
@@ -33,27 +31,20 @@ class SearchViewModel(
     
     init {
         contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
-        latestStateContent = contentStateLiveData.value
     }
     
     fun observeContentState(): LiveData<SearchContentState> = contentStateLiveData
     fun observeClearIconState(): LiveData<String> = clearIconStateLiveData
     fun observeSearchTextClearClicked(): LiveData<Boolean> = searchTextClearClickedLiveData
     
-    fun onViewResume() {
-        contentStateLiveData.value = latestStateContent!!
-    }
-    
     fun onHistoryClearedClicked() {
         interactor.historyListCleared()
         contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
-        latestStateContent = contentStateLiveData.value
     }
     
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
         if (hasFocus && text.isEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
-            latestStateContent = contentStateLiveData.value
         }
     }
 
@@ -77,7 +68,6 @@ class SearchViewModel(
         searchJob?.cancel()
         searchTextClearClickedLiveData.value = true
         contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
-        latestStateContent = contentStateLiveData.value
     }
     
     fun onSearchTextChanged(query: String?) {
@@ -86,7 +76,6 @@ class SearchViewModel(
     
         if (query.isNullOrEmpty()) {
             contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
-            latestStateContent = contentStateLiveData.value
         } else {
     
             if (latestSearchText == query) return
@@ -99,12 +88,11 @@ class SearchViewModel(
     private fun processResult(result: FetchResult) {
         when {
             result.error != null -> {
-                contentStateLiveData.postValue(SearchContentState.Error(result.error))
+                contentStateLiveData.value = SearchContentState.Error(result.error)
             }
     
             result.data != null -> {
-                contentStateLiveData.postValue(SearchContentState.SearchContent(result.data))
-                latestStateContent = SearchContentState.SearchContent(result.data)
+                contentStateLiveData.value = SearchContentState.SearchContent(result.data)
             }
         }
     }

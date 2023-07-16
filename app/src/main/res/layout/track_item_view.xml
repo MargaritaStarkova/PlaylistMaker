@@ -13,7 +13,9 @@
         android:layout_width="@dimen/image_size_45dp"
         android:layout_height="@dimen/image_size_45dp"
         android:layout_marginEnd="@dimen/margin_8dp"
-        android:src="@drawable/placeholder" />
+        android:contentDescription="@string/cover"
+        android:src="@drawable/placeholder"
+        tools:ignore="ImageContrastCheck" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -47,6 +49,7 @@
                 android:ellipsize="end"
                 android:maxEms="15"
                 android:maxLines="1"
+                android:textColor="#757575"
                 app:drawableEndCompat="@drawable/ic_ellipse"
                 tools:text="Nirvana" />
 
@@ -55,6 +58,7 @@
                 style="@style/YSRegular11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#757575"
                 tools:text="5:01" />
 
         </LinearLayout>
@@ -65,6 +69,8 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_16dp"
         android:layout_marginEnd="@dimen/margin_4dp"
-        android:src="@drawable/ic_arrow_forward" />
+        android:contentDescription="@string/ic_arrow_forward"
+        android:src="@drawable/ic_arrow_forward"
+        tools:ignore="ImageContrastCheck" />
 
 </LinearLayout>

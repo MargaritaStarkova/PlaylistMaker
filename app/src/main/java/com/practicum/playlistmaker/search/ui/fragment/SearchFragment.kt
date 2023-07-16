@@ -30,11 +30,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     
     private var trackAdapter: TrackAdapter? = null
     
-    override fun onResume() {
-        super.onResume()
-        viewModel.onViewResume()
-    }
-    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
