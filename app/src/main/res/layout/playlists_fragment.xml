@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/new_playlist"
-        style="@style/button_update"
+        style="@style/ButtonUpdate"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimen_36dp"
         android:layout_gravity="center_horizontal"
@@ -32,7 +32,8 @@
         app:layout_constraintBottom_toTopOf="@id/placeholder_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/placeholder_image"/>
 
     <TextView
         android:id="@+id/placeholder_message"

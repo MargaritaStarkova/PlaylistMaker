@@ -26,15 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/margin_16dp">
+        >
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            style="@style/TabLayout_library"
+            style="@style/TabLayoutLibrary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
             app:tabIndicatorFullWidth="true"
-            app:tabTextAppearance="@style/TabLayout_library"
+            app:tabTextAppearance="@style/TabLayoutLibrary"
             >
 
             <com.google.android.material.tabs.TabItem

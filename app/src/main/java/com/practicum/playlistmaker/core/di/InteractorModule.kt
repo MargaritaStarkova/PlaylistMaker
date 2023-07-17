@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.core.di
 
+import com.practicum.playlistmaker.library.domain.api.ILibraryInteractor
+import com.practicum.playlistmaker.library.domain.impl.LibraryInteractor
 import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
 import com.practicum.playlistmaker.player.domain.impl.MediaInteractor
 import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
@@ -18,5 +20,6 @@ val interactorModule = module {
     singleOf(::SearchInteractor).bind<ISearchInteractor>()
     singleOf(::SettingsInteractor).bind<ISettingsInteractor>()
     singleOf(::SharingInteractor).bind<ISharingInteractor>()
+    singleOf(::LibraryInteractor).bind<ILibraryInteractor>()
     
 }

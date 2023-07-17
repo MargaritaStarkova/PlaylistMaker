@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
 class AudioPlayer(
     private val player: MediaPlayer,
@@ -34,7 +35,12 @@ class AudioPlayer(
     
     override fun stopPlayer() {
         player.apply {
-            stop()
+            if (playerState == PlayerState.PLAYING) {
+                pause()
+            }
+            if (playerState == PlayerState.PAUSED) {
+                stop()
+            }
             reset()
             setOnCompletionListener(null)
         }
@@ -42,26 +48,32 @@ class AudioPlayer(
     }
     
     override fun preparePlayer(url: String): Flow<PlayerState> = flow {
-        emit(prepare(url))
+        if (playerState == PlayerState.NOT_PREPARED || playerState == PlayerState.NOT_CONNECTED) {
+            emit(prepare(url))
+        }
     }
     
     private suspend fun prepare(url: String): PlayerState {
+       try {
+           if (!validator.isConnected()) {
+               playerState = PlayerState.NOT_CONNECTED
+           } else {
+               withContext(Dispatchers.IO) {
+                   player.apply {
+                       reset()
+                       setOnCompletionListener {
+                           playerState = PlayerState.READY
+                       }
+                       setDataSource(url)
+                       prepare()
+                   }
+                   playerState = PlayerState.READY
+               }
+           }
+       } catch (e: IOException) {
+           stopPlayer()
+       }
         
-        if (!validator.isConnected()) {
-            playerState = PlayerState.NOT_CONNECTED
-        } else {
-            withContext(Dispatchers.IO) {
-                player.apply {
-                    reset()
-                    setDataSource(url)
-                    prepare()
-                    setOnCompletionListener {
-                        playerState = PlayerState.READY
-                    }
-                }
-                playerState = PlayerState.READY
-            }
-        }
         return playerState
     }
 }
