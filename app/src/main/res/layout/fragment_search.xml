@@ -33,7 +33,7 @@
         android:layout_marginHorizontal="@dimen/margin_16dp"
         android:layout_marginTop="@dimen/margin_10dp"
 
-        android:background="@drawable/shape_on_search_screen"
+        android:background="@drawable/shape_edittext_search"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,21 +51,17 @@
 
         <EditText
             android:id="@+id/input_edit_text"
-            style="@style/YSRegular16"
+            style="@style/EditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_5dp"
             android:layout_weight="1"
             android:backgroundTint="@android:color/transparent"
             android:hint="@string/search"
-            android:imeOptions="actionDone|flagNoExtractUi"
-            android:inputType="textNoSuggestions"
-            android:maxLines="1"
-            android:minHeight="48dp"
-            android:singleLine="true"
+            android:minHeight="@dimen/min_height_edittext"
             android:textColor="?attr/expression_text_color"
-            android:textColorHint="#616161"
-            tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
+            android:textColorHint="?attr/hint_icon_text_color"
+            tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
         <ImageView
             android:id="@+id/clear_icon"
@@ -114,15 +110,15 @@
         app:layout_constraintVertical_bias="0.0"
         app:layout_goneMarginTop="@dimen/margin_24dp"
 
-        tools:listitem="@layout/track_item_view"
+        tools:listitem="@layout/item_view_track"
         tools:itemCount="100" />
 
 
     <Button
         android:id="@+id/clear_history"
-        style="@style/ButtonUpdate"
+        style="@style/SampleButton"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_36dp"
+        android:layout_height="@dimen/min_height_btn_36dp"
         android:layout_marginTop="@dimen/margin_15dp"
 
         android:layout_marginBottom="@dimen/margin_15dp"
@@ -189,16 +185,14 @@
 
     <Button
         android:id="@+id/update_button"
-        style="@style/ButtonUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_36dp"
+        style="@style/SampleButton"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_24dp"
         android:text="@string/update"
         android:visibility="gone"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/placeholder_message" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

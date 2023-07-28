@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.root.HostActivity
 import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.core.utils.viewBinding
-import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
+import com.practicum.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.practicum.playlistmaker.library.ui.models.FavoriteState
 import com.practicum.playlistmaker.library.ui.view_model.FavoriteTracksViewModel
 import com.practicum.playlistmaker.player.ui.fragment.AudioPlayerFragment
@@ -17,11 +17,11 @@ import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.fragment.TrackAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoriteTracksFragment : Fragment(R.layout.favorite_tracks_fragment) {
+class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
     
     private lateinit var onClickDebounce: (TrackModel) -> Unit
     
-    private val binding by viewBinding<FavoriteTracksFragmentBinding>()
+    private val binding by viewBinding<FragmentFavoriteTracksBinding>()
     private val viewModel by viewModel<FavoriteTracksViewModel>()
     
     private var trackAdapter: TrackAdapter? = null

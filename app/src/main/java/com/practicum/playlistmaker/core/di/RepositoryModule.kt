@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.core.di
 
 import com.practicum.playlistmaker.library.data.repository.LibraryRepository
 import com.practicum.playlistmaker.library.domain.api.ILibraryRepository
+import com.practicum.playlistmaker.library.data.repository.PlaylistsRepository
+import com.practicum.playlistmaker.library.domain.api.IPlaylistsRepository
 import com.practicum.playlistmaker.search.data.repository.TracksRepository
 import com.practicum.playlistmaker.search.domain.api.ITrackRepository
 import com.practicum.playlistmaker.settings.data.repository.SettingsRepository
@@ -15,4 +17,5 @@ val repositoryModule = module {
     singleOf(::TracksRepository).bind<ITrackRepository>()
     singleOf(::SettingsRepository).bind<ISettingsReporitory>()
     singleOf(::LibraryRepository).bind<ILibraryRepository>()
+    singleOf(::PlaylistsRepository).bind<IPlaylistsRepository>()
 }

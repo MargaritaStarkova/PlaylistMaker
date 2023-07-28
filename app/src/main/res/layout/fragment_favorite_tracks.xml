@@ -58,6 +58,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
 
-        tools:listitem="@layout/track_item_view"
+        tools:listitem="@layout/item_view_track"
         tools:itemCount="100"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

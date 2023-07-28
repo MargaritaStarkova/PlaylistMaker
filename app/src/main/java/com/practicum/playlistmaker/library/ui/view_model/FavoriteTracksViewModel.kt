@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.domain.api.ILibraryInteractor
 import com.practicum.playlistmaker.library.ui.models.FavoriteState
 import com.practicum.playlistmaker.search.domain.models.TrackModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FavoriteTracksViewModel(
@@ -21,7 +22,7 @@ class FavoriteTracksViewModel(
     fun observeContentState(): LiveData<FavoriteState> = contentStateLiveData
     
     private fun fillData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             interactor
                 .getSelectedTracks()
                 .collect { trackList ->
@@ -34,11 +35,11 @@ class FavoriteTracksViewModel(
         
         when {
             trackList.isEmpty() -> {
-                contentStateLiveData.value = FavoriteState.Empty
+                contentStateLiveData.postValue(FavoriteState.Empty)
             }
             
             else -> {
-                contentStateLiveData.value = FavoriteState.SelectedTracks(trackList)
+                contentStateLiveData.postValue(FavoriteState.SelectedTracks(trackList))
             }
         }
     }

@@ -14,23 +14,23 @@ class LibraryRepository(
 ) : ILibraryRepository {
     override suspend fun saveTrack(track: TrackModel) {
         database
-            .dao()
+            .selectedTracksDao()
             .insertTrack(converter.mapToEntity(track))
     }
     
     override suspend fun deleteTrack(track: TrackModel) {
         database
-            .dao()
+            .selectedTracksDao()
             .deleteTrack(converter.mapToEntity(track))
     }
     
     override fun getSelectedTracks(): Flow<List<TrackModel>> = database
-        .dao()
+        .selectedTracksDao()
         .getFavoriteTracks()
         .map { convertFromTrackEntity(it) }
     
     override fun isFavorite(id: String): Flow<Boolean> = database
-        .dao()
+        .selectedTracksDao()
         .isFavorite(id)
     
     

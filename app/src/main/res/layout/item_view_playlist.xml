@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:elevation="@dimen/margin_8dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/corner_radius_8dp">
+
+    <ImageView
+        android:id="@+id/playlist_cover"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:contentDescription="@string/cover"
+        android:src="@drawable/aa6f6c3dc30d3035cdfbb8f5ff83f863"
+        tools:ignore="ImageContrastCheck" />
+
+
+    <TextView
+        android:id="@+id/playlist_name"
+        style="@style/YSRegular12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_1dp"
+        android:layout_marginTop="164dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="Smells Like Teen Spirit" />
+
+
+    <TextView
+        android:id="@+id/tracks_count"
+        style="@style/YSRegular12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_1dp"
+        android:layout_marginTop="180dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="98 треков" />
+</androidx.cardview.widget.CardView>

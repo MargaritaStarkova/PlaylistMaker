@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AudioPlayerViewModel(
     private val mediaInteractor: IMediaInteractor,
@@ -40,13 +39,15 @@ class AudioPlayerViewModel(
     fun observeFavoriteTrack(): LiveData<Boolean> = isFavoriteLiveData
     
     fun isFavorite(id: String) {
-        viewModelScope.launch() {
-            withContext(Dispatchers.IO){
-                libraryInteractor.isFavorite(id).collect {
+        viewModelScope.launch(Dispatchers.IO) {
+        
+            libraryInteractor
+                .isFavorite(id)
+                .collect {
                     isFavorite = it
                     isFavoriteLiveData.postValue(isFavorite)
                 }
-            }
+        
         }
     }
     

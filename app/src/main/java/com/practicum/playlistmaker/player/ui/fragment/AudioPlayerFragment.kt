@@ -10,11 +10,15 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.PEEK_HEIGHT_AUTO
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
+import com.practicum.playlistmaker.player.ui.bottom_sheet.ExpandableBottomSheetBehavior
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -159,13 +163,18 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             }
     
             playButton.setOnClickListener {
-                startAnimation(binding.playButton)
+                startAnimation(it as ImageButton)
                 viewModel.playButtonClicked(track.previewUrl)
             }
     
             likeButton.setOnClickListener {
                 startAnimation(it as ImageButton)
                 viewModel.toggleFavorite(track)
+            }
+    
+            addButton.setOnClickListener {
+                startAnimation(it as ImageButton)
+                findNavController().navigate(R.id.action_audioPlayerFragment_to_bottomSheet)
             }
         }
     }

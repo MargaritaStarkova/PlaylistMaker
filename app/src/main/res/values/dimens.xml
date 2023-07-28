@@ -6,8 +6,11 @@
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_19sp">19sp</dimen>
+    <dimen name="text_size_22sp">22sp</dimen>
+
     <dimen name="image_size_45dp">45dp</dimen>
     <dimen name="icon_size_20dp">20dp</dimen>
+
     <dimen name="margin_148dp">148dp</dimen>
     <dimen name="margin_113dp">113dp</dimen>
     <dimen name="margin_109dp">109dp</dimen>
@@ -15,9 +18,13 @@
     <dimen name="margin_50dp">50dp</dimen>
     <dimen name="margin_49dp">49dp</dimen>
     <dimen name="margin_42dp">42dp</dimen>
+    <dimen name="margin_32dp">32dp</dimen>
+    <dimen name="margin_30dp">30dp</dimen>
+    <dimen name="margin_28dp">28dp</dimen>
     <dimen name="margin_25dp">25dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_17dp">17dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_15dp">15dp</dimen>
     <dimen name="margin_13dp">13dp</dimen>
@@ -28,10 +35,24 @@
     <dimen name="margin_5dp">5dp</dimen>
     <dimen name="margin_4dp">4dp</dimen>
     <dimen name="margin_1dp">1dp</dimen>
-    <dimen name="dimen_36dp">36dp</dimen>
+
     <dimen name="dimen_14dp">14dp</dimen>
+
     <dimen name="corner_radius_54dp">54dp</dimen>
+    <dimen name="corner_radius_16dp">16dp</dimen>
     <dimen name="corner_radius_8dp">8dp</dimen>
+    <dimen name="corner_radius_4dp">4dp</dimen>
     <dimen name="corner_radius_2dp">2dp</dimen>
-    <dimen name="text_size_22sp">22sp</dimen>
+
+    <dimen name="min_height_material_btn_50dp">50dp</dimen>
+    <dimen name="min_height_btn_36dp">36dp</dimen>
+    <dimen name="min_height_edittext">48dp</dimen>
+
+    <dimen name="rounder_h_4dp">4dp</dimen>
+    <dimen name="rounder_w_50dp">50dp</dimen>
+
+    <dimen name="stroke_width_1dp">1dp</dimen>
+
+
+
 </resources>

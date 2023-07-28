@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.search.ui.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.databinding.TrackItemViewBinding
+import com.practicum.playlistmaker.databinding.ItemViewTrackBinding
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 
 class TrackAdapter(private val clickListener: TrackClickListener) :
@@ -12,7 +12,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
     val trackList = ArrayList<TrackModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TrackViewHolder(
-        TrackItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ItemViewTrackBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
     
     override fun getItemCount() = trackList.size

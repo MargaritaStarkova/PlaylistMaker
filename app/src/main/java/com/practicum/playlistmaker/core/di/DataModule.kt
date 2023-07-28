@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import com.practicum.playlistmaker.core.application.App
+import com.practicum.playlistmaker.library.data.converter.PlaylistModelConverter
 import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
 import com.practicum.playlistmaker.library.data.db.LocalDatabase
 import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayer
@@ -63,6 +64,7 @@ val dataModule = module {
     }
     
     factoryOf(::TrackModelConverter)
+    factoryOf(::PlaylistModelConverter)
     factoryOf(::InternetConnectionValidator)
     singleOf(::MediaPlayer)
     singleOf(::RetrofitNetworkClient).bind<INetworkClient>()

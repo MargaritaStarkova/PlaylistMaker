@@ -89,4 +89,7 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.5.2'
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+
+    //Coroutine permissions: PEKO
+    implementation 'com.markodevcic:peko:3.0.2'
 }

@@ -14,7 +14,7 @@
 
     <attr name="ripple" format="reference"/>
     <attr name="fab_color" format="reference"/>
-    <attr name="media_player_description_text_color" format="reference"/>
+    <attr name="yp_text_grey_color" format="reference"/>
     <attr name="progressbar_color" format="reference"/>
 
 </resources>

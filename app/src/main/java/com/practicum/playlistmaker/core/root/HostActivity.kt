@@ -25,7 +25,7 @@ class HostActivity : AppCompatActivity(R.layout.activity_host) {
         
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.audioPlayerFragment -> {
+                R.id.audioPlayerFragment, R.id.newPlaylistFragment, R.id.bottomSheet -> {
                     bottomNavigationView.visibility = View.GONE
                 }
                 
