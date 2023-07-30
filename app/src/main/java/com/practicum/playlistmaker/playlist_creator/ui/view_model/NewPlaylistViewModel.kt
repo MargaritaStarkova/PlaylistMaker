@@ -65,17 +65,23 @@ class NewPlaylistViewModel(
     }
     
     fun onPlaylistNameChanged(playlistName: String?) {
+    
+        if (playlistName != null) {
+            this.playlistName = playlistName
+        }
+    
         if (!playlistName.isNullOrEmpty()) {
             _screenStateFlow.tryEmit(ScreenState.HasContent())
-            this.playlistName = playlistName
-            
+        
         } else _screenStateFlow.tryEmit(ScreenState.Empty())
     }
     
     fun onPlaylistDescriptionChanged(playlistDescription: String?) {
-        if (!playlistDescription.isNullOrEmpty()) {
+    
+        if (playlistDescription != null) {
             this.playlistDescription = playlistDescription
         }
+    
     }
     
     fun onCreateBtnClicked() {

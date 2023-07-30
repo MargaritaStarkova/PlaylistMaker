@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.ui.child_fragments
+package com.practicum.playlistmaker.library.ui.child_fragments.favorite_tracks
 
 import android.os.Bundle
 import android.view.View

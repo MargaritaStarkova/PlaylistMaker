@@ -27,17 +27,13 @@ class PlaylistsRepository(
     override suspend fun updateTracks(playlist: PlaylistModel) {
         database
             .playlistsDao()
-            .updateTracksId(converter.map(playlist))
+            .updatePlaylist(converter.map(playlist))
     }
     
     override fun getSavedPlaylists() = database
         .playlistsDao()
         .getSavedPlaylists()
         .map { convertFromTrackEntity(it) }
-    
-    override fun getPlaylist(id: Int) = database
-        .playlistsDao()
-        .getPlaylistById(id)
     
     private fun convertFromTrackEntity(playlists: List<PlaylistEntity>): List<PlaylistModel> =
         playlists.map { converter.map(it) }

@@ -14,6 +14,4 @@ interface IPlaylistsRepository {
     
     fun getSavedPlaylists(): Flow<List<PlaylistModel>>
     
-    fun getPlaylist(id: Int): Flow<PlaylistEntity?>
-  
 }

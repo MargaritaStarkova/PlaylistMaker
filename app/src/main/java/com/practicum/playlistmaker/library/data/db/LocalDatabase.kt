@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.library.data.db.entity.TypeConverter
 import com.practicum.playlistmaker.library.data.db.dao.PlaylistDao
 import com.practicum.playlistmaker.library.data.db.entity.PlaylistEntity
 
-@Database(version = 5, entities = [TrackEntity::class, PlaylistEntity::class])
+@Database(version = 6, entities = [TrackEntity::class, PlaylistEntity::class])
 @TypeConverters(TypeConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     

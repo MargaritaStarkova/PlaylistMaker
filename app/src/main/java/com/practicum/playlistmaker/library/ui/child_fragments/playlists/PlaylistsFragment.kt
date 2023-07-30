@@ -3,14 +3,13 @@ package com.practicum.playlistmaker.library.ui.child_fragments.playlists
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.Px
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.practicum.playlistmaker.library.ui.models.ScreenState
+import com.practicum.playlistmaker.library.ui.models.PlaylistsScreenState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 import kotlinx.coroutines.Job
@@ -51,10 +50,10 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
         job?.cancel()
     }
     
-    private fun render(state: ScreenState) {
+    private fun render(state: PlaylistsScreenState) {
         when (state) {
-            is ScreenState.Content -> showContent(state.content)
-            ScreenState.Empty -> showPlaceholder()
+            is PlaylistsScreenState.Content -> showContent(state.content)
+            PlaylistsScreenState.Empty -> showPlaceholder()
         }
     }
     
@@ -89,10 +88,9 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
                 .show()
             
         }
-    
-        val cornerRadius = resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
+        
         binding.playlists.adapter = playlistsAdapter
-        binding.playlists.addItemDecoration(PlaylistsOffsetItemDecoration(leftOffset = cornerRadius, rightOffset = cornerRadius, bottomOffset = cornerRadius))
+        binding.playlists.addItemDecoration(PlaylistsOffsetItemDecoration(requireContext()))
     }
     
     companion object {

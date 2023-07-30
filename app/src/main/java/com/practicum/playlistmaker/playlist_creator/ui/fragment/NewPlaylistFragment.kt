@@ -1,16 +1,16 @@
 package com.practicum.playlistmaker.playlist_creator.ui.fragment
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.content.res.Resources
-import android.content.res.Resources.Theme
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
@@ -42,6 +43,16 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
     private val viewModel by viewModel<NewPlaylistViewModel>()
     
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,7 +105,7 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
                     PermissionResultState.GRANTED -> {
                         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
-                    //
+    
                     PermissionResultState.DENIED_PERMANENTLY -> {
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -127,16 +138,14 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
             }
             
             playlistName.doOnTextChanged { text, _, _, _ ->
-                
-                binding.playlistNameContainer.defaultHintTextColor = ContextCompat.getColorStateList(requireContext(), R.color.new_playlist_edittext_blue)
-                ContextCompat.getColorStateList(requireContext(), R.color.new_playlist_edittext_blue)
-                    ?.let { binding.playlistNameContainer.setBoxStrokeColorStateList(it) }
+    
+                renderBoxStrokeEditTextColor(binding.playlistNameContainer, text)
                 viewModel.onPlaylistNameChanged(text.toString())
                 
             }
             
             playlistDescription.doOnTextChanged { text, _, _, _ ->
-          
+                renderBoxStrokeEditTextColor(binding.playlistDescriptionContainer, text)
                 viewModel.onPlaylistDescriptionChanged(text.toString())
             }
             
@@ -155,6 +164,28 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
         when (state) {
             CreateBtnState.ENABLED -> binding.buttonCreate.isEnabled = true
             CreateBtnState.DISABLED -> binding.buttonCreate.isEnabled = false
+        }
+    }
+    
+    private fun renderBoxStrokeEditTextColor(view: TextInputLayout, text: CharSequence?) {
+        if (!text.isNullOrEmpty()) {
+            view.defaultHintTextColor = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.new_playlist_edittext_blue
+            )
+            ContextCompat
+                .getColorStateList(requireContext(), R.color.new_playlist_edittext_blue)
+                ?.let { view.setBoxStrokeColorStateList(it) }
+        }
+        
+        else {
+            view.defaultHintTextColor = ContextCompat.getColorStateList(
+                requireContext(),
+                R.color.new_playlist_edittext_color
+            )
+            ContextCompat
+                .getColorStateList(requireContext(), R.color.new_playlist_edittext_color)
+                ?.let { view.setBoxStrokeColorStateList(it) }
         }
     }
     

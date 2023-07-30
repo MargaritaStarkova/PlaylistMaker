@@ -1,119 +1,63 @@
 package com.practicum.playlistmaker.library.ui.bottom_sheet
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.R.id.design_bottom_sheet
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.BottomSheetBinding
-import com.practicum.playlistmaker.library.ui.models.ScreenState
-import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
+import com.practicum.playlistmaker.library.ui.models.BottomSheetState
+import com.practicum.playlistmaker.library.ui.view_model.BottomSheetViewModel
+import com.practicum.playlistmaker.player.ui.fragment.AudioPlayerFragment.Companion.KEY_TRACK
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
+import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-private const val TAG = "MyLog"
 
 class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
     
     private val binding by viewBinding<BottomSheetBinding>()
-    private val viewModel by viewModel<PlaylistsViewModel>()
+    private val viewModel by viewModel<BottomSheetViewModel>()
     
     private var job: Job? = null
+    
     private lateinit var playlistsAdapter: BottomSheetAdapter
+    private lateinit var track: TrackModel
     
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart: ")
-        
          setupRatio(requireContext(), dialog as BottomSheetDialog, 100)
-    }
-    
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d(TAG, "onAttach: ")
-    }
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate: ")
-    }
-    
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        Log.d(TAG, "onViewStateRestored: ")
-    }
-    
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume: ")
-    }
-    
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: ")
-    }
-    
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop: ")
-    }
-    
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.d(TAG, "onSaveInstanceState: ")
-    }
-    
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: ")
-    }
-    
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d(TAG, "onCreateView: ")
-        return super.onCreateView(inflater, container, savedInstanceState)
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: ")
-        
+    
+        track = requireArguments()
+            .getString(KEY_TRACK)
+            ?.let { Json.decodeFromString<TrackModel>(it) } ?: TrackModel.emptyTrack
+    
         initAdapter()
-        
-        binding.createPlaylistBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_bottomSheet_to_newPlaylistFragment
-            )
-        }
-        
-        job = lifecycleScope.launch {
-            viewModel.contentFlow.collect { screenState ->
-                render(screenState)
-                
-            }
-        }
+        initListeners()
+        initObserver()
+    
     }
     
     override fun onDestroyView() {
-        Log.d(TAG, "onDestroyView: ")
         super.onDestroyView()
         job?.cancel()
     }
@@ -121,19 +65,62 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
     private fun initAdapter() {
         playlistsAdapter = BottomSheetAdapter { playlist ->
             
-            Toast
-                .makeText(requireContext(), "Clicked", Toast.LENGTH_SHORT)
-                .show()
+            viewModel.onPlaylistClicked(playlist, track)
             
         }
         binding.playlistsRecycler.adapter = playlistsAdapter
     }
     
-    private fun render(state: ScreenState) {
-        when (state) {
-            is ScreenState.Content -> showContent(state.content)
-            ScreenState.Empty -> showContent(emptyList())
+    private fun initListeners() {
+        binding.createPlaylistBtn.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_bottomSheet_to_newPlaylistFragment
+            )
         }
+    }
+    
+    private fun initObserver() {
+        job = lifecycleScope.launch {
+            viewModel.contentFlow.collect { screenState ->
+                render(screenState)
+            }
+        }
+    }
+    
+    private fun render(state: BottomSheetState) {
+        when (state) {
+            is BottomSheetState.AddedAlready -> {
+                val message =
+                    getString(R.string.already_added) + " \"" + state.playlistModel.playlistName + "\" "
+                Toast
+                    .makeText(requireContext(), message, Toast.LENGTH_SHORT)
+                    .show()
+            }
+            
+            is BottomSheetState.AddedNow -> {
+                val message =
+                    getString(R.string.added) + " \"" + state.playlistModel.playlistName + "\" "
+                
+                showMessage(message)
+                dialog?.cancel()
+            }
+            
+            else -> showContent(state.content)
+        }
+    }
+    
+    private fun showMessage(message: String) {
+        Snackbar
+            .make(
+                requireContext(),
+                requireActivity().findViewById(R.id.container_layout),
+                message,
+                Snackbar.LENGTH_SHORT
+            )
+            .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.deep_white))
+            .setDuration(MESSAGE_DURATION)
+            .show()
     }
     
     private fun showContent(content: List<PlaylistModel>) {
@@ -142,10 +129,7 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
             list.clear()
             list.addAll(content)
             notifyDataSetChanged()
-            
         }
-    
-        Log.d("MyLog", playlistsAdapter.list.joinToString())
     }
     
     private fun setupRatio(context: Context, bottomSheetDialog: BottomSheetDialog, percetage: Int) {
@@ -156,13 +140,7 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
         layoutParams.height = getBottomSheetDialogDefaultHeight(context, percetage)
         bottomSheet.layoutParams = layoutParams
         behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        
-        /*       val bottomSheetContainer = binding.bottomSheetLayout
-          
-              val bottomSheetBehavior = BottomSheetBehavior
-                  .from(bottomSheetContainer).apply {
-                      state = BottomSheetBehavior.STATE_COLLAPSED
-                  } */
+    
     }
     
     private fun getBottomSheetDialogDefaultHeight(context: Context, percetage: Int): Int {
@@ -172,7 +150,20 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
     private fun getWindowHeight(context: Context): Int {
         // Calculate window height for fullscreen use
         val displayMetrics = DisplayMetrics()
-        (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        
+        @Suppress("DEPRECATION") requireActivity().windowManager.defaultDisplay.getMetrics(
+            displayMetrics
+        )
+        
         return displayMetrics.heightPixels
+    }
+    
+    companion object {
+        
+        fun createArgs(track: TrackModel): Bundle = bundleOf(
+            KEY_TRACK to Json.encodeToString(track)
+        )
+        
+        private const val MESSAGE_DURATION = 2000
     }
 }

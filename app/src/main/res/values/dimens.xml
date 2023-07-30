@@ -52,7 +52,10 @@
     <dimen name="rounder_w_50dp">50dp</dimen>
 
     <dimen name="stroke_width_1dp">1dp</dimen>
-
+    <dimen name="dimen_16dp">16dp</dimen>
+    <dimen name="dimen_160dp">160dp</dimen>
+    <dimen name="margin_164dp">164dp</dimen>
+    <dimen name="margin_180dp">180dp</dimen>
 
 
 </resources>

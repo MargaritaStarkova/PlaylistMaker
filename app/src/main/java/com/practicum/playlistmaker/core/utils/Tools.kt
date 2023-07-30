@@ -32,8 +32,9 @@ import java.util.Locale
 
     fun Int.countTracksStringFormat(): String {
         return when {
+            this == 11 -> "$this треков"
             this == 1 || this % 10 == 9 -> "$this трек"
-            this % 10 in 6..8 -> "$this трека"
+            this in 2..4 || this % 10 in 6..8 -> "$this трека"
             else -> "$this треков"
         }
     }

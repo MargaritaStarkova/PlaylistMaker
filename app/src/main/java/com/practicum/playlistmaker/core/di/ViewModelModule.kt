@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.core.di
 
+import com.practicum.playlistmaker.library.ui.view_model.BottomSheetViewModel
 import com.practicum.playlistmaker.library.ui.view_model.FavoriteTracksViewModel
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.playlist_creator.ui.view_model.NewPlaylistViewModel
@@ -17,4 +18,5 @@ val viewModelModule = module {
     viewModelOf(::FavoriteTracksViewModel)
     viewModelOf(::PlaylistsViewModel)
     viewModelOf(::NewPlaylistViewModel)
+    viewModelOf(::BottomSheetViewModel)
 }

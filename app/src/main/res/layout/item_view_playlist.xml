@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/playlist_cover"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="@dimen/dimen_160dp"
         android:contentDescription="@string/cover"
         android:src="@drawable/aa6f6c3dc30d3035cdfbb8f5ff83f863"
         tools:ignore="ImageContrastCheck" />
@@ -24,8 +24,9 @@
         style="@style/YSRegular12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_1dp"
-        android:layout_marginTop="164dp"
+        android:layout_marginStart="@dimen/margin_4dp"
+        android:layout_marginEnd="@dimen/margin_4dp"
+        android:layout_marginTop="@dimen/margin_164dp"
         android:ellipsize="end"
         android:maxLines="1"
         tools:text="Smells Like Teen Spirit" />
@@ -36,8 +37,9 @@
         style="@style/YSRegular12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_1dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginStart="@dimen/margin_4dp"
+        android:layout_marginEnd="@dimen/margin_4dp"
+        android:layout_marginTop="@dimen/margin_180dp"
         android:ellipsize="end"
         android:maxLines="1"
         tools:text="98 треков" />

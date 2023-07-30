@@ -7,6 +7,6 @@ data class PlaylistModel(
     val coverImageUrl: String,
     val playlistName: String,
     val playlistDescription:String,
-    val trackList: List<TrackModel>,
-    val tracksCount: Int,
+    var trackList: List<TrackModel>,
+    var tracksCount: Int,
 )

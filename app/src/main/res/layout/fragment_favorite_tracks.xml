@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".library.ui.child_fragments.FavoriteTracksFragment">
-
+    tools:context=".library.ui.child_fragments.favorite_tracks.FavoriteTracksFragment">
 
     <ImageView
         android:id="@+id/placeholder_image"
@@ -52,7 +51,6 @@
 
         app:layout_constrainedHeight="true"
         app:layout_constraintVertical_bias="0.0"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

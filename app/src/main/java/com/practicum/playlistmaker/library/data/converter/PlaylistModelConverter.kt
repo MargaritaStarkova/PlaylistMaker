@@ -15,7 +15,7 @@ class PlaylistModelConverter {
                 playlistName = playlistName,
                 playlistDescription = playlistDescription,
                 imageUrl = coverImageUrl,
-                trackIdList = Json.encodeToString(trackList),
+                trackList = Json.encodeToString(trackList),
                 countTracks = tracksCount,
                 saveDate = Date(),
             )
@@ -29,7 +29,7 @@ class PlaylistModelConverter {
                 playlistName = playlistName,
                 playlistDescription = playlistDescription,
                 coverImageUrl = imageUrl,
-                trackList = Json.decodeFromString(trackIdList),
+                trackList = Json.decodeFromString(trackList),
                 tracksCount = countTracks,
             )
         }

@@ -17,7 +17,7 @@ data class PlaylistEntity(
     val playlistDescription: String,
     @ColumnInfo(name = "cover_path")
     val imageUrl: String,
-    val trackIdList: String,
+    val trackList: String,
     val countTracks: Int,
     val saveDate: Date,
 )
