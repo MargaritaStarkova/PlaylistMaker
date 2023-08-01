@@ -3,15 +3,15 @@ package com.practicum.playlistmaker.library.data.repository
 import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
 import com.practicum.playlistmaker.library.data.db.LocalDatabase
 import com.practicum.playlistmaker.library.data.db.entity.TrackEntity
-import com.practicum.playlistmaker.library.domain.api.ILibraryRepository
+import com.practicum.playlistmaker.library.domain.api.LibraryRepository
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class LibraryRepository(
+class LibraryRepositoryImpl(
     private val database: LocalDatabase,
     private val converter: TrackModelConverter,
-) : ILibraryRepository {
+) : LibraryRepository {
     override suspend fun saveTrack(track: TrackModel) {
         database
             .selectedTracksDao()
@@ -24,16 +24,20 @@ class LibraryRepository(
             .deleteTrack(converter.mapToEntity(track))
     }
     
-    override fun getSelectedTracks(): Flow<List<TrackModel>> = database
-        .selectedTracksDao()
-        .getFavoriteTracks()
-        .map { convertFromTrackEntity(it) }
+    override fun getSelectedTracks(): Flow<List<TrackModel>> {
+        return database
+            .selectedTracksDao()
+            .getFavoriteTracks()
+            .map { convertFromTrackEntity(it) }
+    }
     
-    override fun isFavorite(id: String): Flow<Boolean> = database
-        .selectedTracksDao()
-        .isFavorite(id)
+    override fun isFavorite(id: String): Flow<Boolean> {
+        return database
+            .selectedTracksDao()
+            .isFavorite(id)
+    }
     
-    
-    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<TrackModel> =
-        tracks.map { converter.map(it) }
+    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<TrackModel> {
+        return tracks.map { converter.map(it) }
+    }
 }

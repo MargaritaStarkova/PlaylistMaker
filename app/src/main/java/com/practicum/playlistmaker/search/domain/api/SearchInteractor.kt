@@ -4,7 +4,7 @@ import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.flow.Flow
 
-interface ISearchInteractor {
+interface SearchInteractor {
     val historyList: ArrayList<TrackModel>
     fun getTracksOnQuery(query: String): Flow<FetchResult>
     fun addTrackToHistoryList(track: TrackModel)

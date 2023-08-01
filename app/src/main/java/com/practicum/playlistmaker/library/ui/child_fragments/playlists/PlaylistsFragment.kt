@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
@@ -20,9 +21,7 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     
     private val binding by viewBinding<FragmentPlaylistsBinding>()
     private val viewModel by viewModel<PlaylistsViewModel>()
-    
-    private var job: Job? = null
-    
+
     private lateinit var playlistsAdapter: PlaylistsAdapter
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,10 +29,9 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
         
         initAdapter()
         
-       job = lifecycleScope.launch {
+       viewLifecycleOwner.lifecycle.coroutineScope.launch {
             viewModel.contentFlow.collect { screenState ->
                 render(screenState)
-    
             }
         }
        
@@ -42,17 +40,11 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
                 R.id.action_libraryFragment_to_newPlaylistFragment
             )
         }
-        
-    }
-    
-    override fun onDestroyView() {
-        super.onDestroyView()
-        job?.cancel()
     }
     
     private fun render(state: PlaylistsScreenState) {
         when (state) {
-            is PlaylistsScreenState.Content -> showContent(state.content)
+            is PlaylistsScreenState.Content -> showContent(state.playlists)
             PlaylistsScreenState.Empty -> showPlaceholder()
         }
     }

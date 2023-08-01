@@ -1,5 +1,5 @@
 package com.practicum.playlistmaker.search.data.network
 
-interface INetworkClient {
+interface NetworkClient {
     suspend fun doRequest(query: String) : Response
 }

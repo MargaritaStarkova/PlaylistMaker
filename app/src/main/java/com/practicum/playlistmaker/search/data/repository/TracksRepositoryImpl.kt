@@ -1,21 +1,21 @@
 package com.practicum.playlistmaker.search.data.repository
 
 import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
-import com.practicum.playlistmaker.search.data.network.INetworkClient
+import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.SearchResponse
-import com.practicum.playlistmaker.search.data.storage.sharedprefs.ITracksStorage
-import com.practicum.playlistmaker.search.domain.api.ITrackRepository
+import com.practicum.playlistmaker.search.data.storage.sharedprefs.TracksStorage
+import com.practicum.playlistmaker.search.domain.api.TrackRepository
 import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.NetworkError
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TracksRepository(
-    private val networkClient: INetworkClient,
-    private val tracksStorage: ITracksStorage,
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val tracksStorage: TracksStorage,
     private val converter: TrackModelConverter,
-) : ITrackRepository {
+) : TrackRepository {
     
     override fun loadTracks(query: String): Flow<FetchResult> = flow {
         

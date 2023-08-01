@@ -70,7 +70,7 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
                 val cornerRadius =
                     requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
                 
-                binding.playlistCoverImage.setImage(requireContext(), uri, cornerRadius)
+                binding.playlistCoverImage.setImage(uri, cornerRadius)
                 saveImageToPrivateStorage(uri)
             }
         }

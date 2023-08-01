@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.markodevcic.peko.PermissionRequester
 import com.markodevcic.peko.PermissionResult
-import com.practicum.playlistmaker.playlist_creator.domain.api.ICreatePlaylistUseCase
+import com.practicum.playlistmaker.playlist_creator.domain.api.CreatePlaylistUseCase
 import com.practicum.playlistmaker.playlist_creator.domain.models.PermissionResultState
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 import com.practicum.playlistmaker.playlist_creator.ui.models.ScreenState
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import java.net.URI
 
 class NewPlaylistViewModel(
-    private val useCase: ICreatePlaylistUseCase,
+    private val useCase: CreatePlaylistUseCase,
 ) : ViewModel() {
     
     private val _screenStateFlow: MutableSharedFlow<ScreenState> = MutableSharedFlow(

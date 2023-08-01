@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.sharing.domain.api
 
-interface ISharingInteractor {
+interface SharingInteractor {
     fun shareApp()
     fun openTerms()
     fun openSupport()

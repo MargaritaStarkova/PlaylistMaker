@@ -19,7 +19,6 @@ class TrackViewHolder(
         binding.trackTime.text = model.trackTimeMillis.millisConverter()
     
         binding.cover.setImage(
-            context = itemView.context,
             url = model.artworkUrl100,
             placeholder = R.drawable.placeholder,
             cornerRadius = cornerRadius,

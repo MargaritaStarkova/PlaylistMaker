@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.core.di.dataModule
 import com.practicum.playlistmaker.core.di.interactorModule
 import com.practicum.playlistmaker.core.di.repositoryModule
 import com.practicum.playlistmaker.core.di.viewModelModule
-import com.practicum.playlistmaker.settings.domain.api.ISettingsInteractor
+import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -27,7 +27,7 @@ class App : Application() {
         PermissionRequester.initialize(applicationContext)
     
         darkTheme = getKoin()
-            .get<ISettingsInteractor>()
+            .get<SettingsInteractor>()
             .getThemeSettings().darkTheme
     
         AppCompatDelegate.setDefaultNightMode(

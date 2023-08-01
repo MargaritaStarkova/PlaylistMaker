@@ -2,9 +2,9 @@ package com.practicum.playlistmaker.library.ui.models
 
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 
-sealed class PlaylistsScreenState(val content: List<PlaylistModel>) {
+sealed class PlaylistsScreenState {
     
-    object Empty : PlaylistsScreenState(content = emptyList())
+    object Empty : PlaylistsScreenState()
     
-    class Content(playlists: List<PlaylistModel>) : PlaylistsScreenState(content = playlists)
+    class Content(val playlists: List<PlaylistModel>) : PlaylistsScreenState()
 }

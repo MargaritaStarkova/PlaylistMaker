@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.player.data.audioplayer
 
 import android.media.MediaPlayer
-import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
+import com.practicum.playlistmaker.player.domain.api.AudioPlayer
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.search.data.network.InternetConnectionValidator
 import kotlinx.coroutines.Dispatchers
@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
-class AudioPlayer(
+class AudioPlayerImpl(
     private val player: MediaPlayer,
     private val validator: InternetConnectionValidator,
-) : IAudioPlayer {
+) : AudioPlayer {
     
     override var playerState = PlayerState.NOT_PREPARED
     

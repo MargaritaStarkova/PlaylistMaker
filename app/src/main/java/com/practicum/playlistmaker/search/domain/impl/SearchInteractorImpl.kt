@@ -1,12 +1,12 @@
 package com.practicum.playlistmaker.search.domain.impl
 
-import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
-import com.practicum.playlistmaker.search.domain.api.ITrackRepository
+import com.practicum.playlistmaker.search.domain.api.SearchInteractor
+import com.practicum.playlistmaker.search.domain.api.TrackRepository
 import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.flow.Flow
 
-class SearchInteractor(private val repository: ITrackRepository) : ISearchInteractor {
+class SearchInteractorImpl(private val repository: TrackRepository) : SearchInteractor {
     
     override val historyList = ArrayList<TrackModel>(getTracksFromHistory())
     

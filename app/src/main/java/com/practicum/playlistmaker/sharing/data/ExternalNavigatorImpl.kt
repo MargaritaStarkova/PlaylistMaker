@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.sharing.domain.api.IExternalNavigator
+import com.practicum.playlistmaker.sharing.domain.api.ExternalNavigator
 import com.practicum.playlistmaker.sharing.domain.models.EmailData
 
-class ExternalNavigator(private val context: Context) : IExternalNavigator {
+class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     
     private val chooserTitle = context.getText(R.string.chooser_title)
     private val supportTitle = context.getText(R.string.support_title)

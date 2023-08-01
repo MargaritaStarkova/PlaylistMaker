@@ -19,12 +19,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
     
-    private lateinit var onClickDebounce: (TrackModel) -> Unit
-    
     private val binding by viewBinding<FragmentFavoriteTracksBinding>()
     private val viewModel by viewModel<FavoriteTracksViewModel>()
     
     private var trackAdapter: TrackAdapter? = null
+    private var onClickDebounce: ((TrackModel) -> Unit)? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +50,7 @@ class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
     private fun initAdapter() {
         trackAdapter = TrackAdapter { track ->
             (activity as HostActivity).animateBottomNavigationView()
-            onClickDebounce(track)
+            onClickDebounce?.let { it(track) }
         }
         binding.tracksList.adapter = trackAdapter
     }

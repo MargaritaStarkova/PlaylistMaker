@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.library.ui.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.library.domain.api.IPlaylistsInteractor
+import com.practicum.playlistmaker.library.domain.api.PlaylistsInteractor
 import com.practicum.playlistmaker.library.ui.models.BottomSheetState
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class BottomSheetViewModel(
-    private val interactor: IPlaylistsInteractor,
+    private val interactor: PlaylistsInteractor,
 ) : ViewModel() {
     
     private val _contentFlow: MutableStateFlow<BottomSheetState> =

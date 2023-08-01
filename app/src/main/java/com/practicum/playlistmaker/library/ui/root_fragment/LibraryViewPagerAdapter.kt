@@ -18,5 +18,4 @@ class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifec
             else -> PlaylistsFragment.newInstance()
         }
     }
-    
 }

@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.R.id.design_bottom_sheet
@@ -34,8 +35,6 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
     private val binding by viewBinding<BottomSheetBinding>()
     private val viewModel by viewModel<BottomSheetViewModel>()
     
-    private var job: Job? = null
-    
     private lateinit var playlistsAdapter: BottomSheetAdapter
     private lateinit var track: TrackModel
     
@@ -56,12 +55,7 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
         initObserver()
     
     }
-    
-    override fun onDestroyView() {
-        super.onDestroyView()
-        job?.cancel()
-    }
-    
+
     private fun initAdapter() {
         playlistsAdapter = BottomSheetAdapter { playlist ->
             
@@ -80,7 +74,7 @@ class BottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet) {
     }
     
     private fun initObserver() {
-        job = lifecycleScope.launch {
+        viewLifecycleOwner.lifecycle.coroutineScope.launch {
             viewModel.contentFlow.collect { screenState ->
                 render(screenState)
             }

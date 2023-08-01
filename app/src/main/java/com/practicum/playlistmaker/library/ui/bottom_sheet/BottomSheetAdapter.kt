@@ -11,9 +11,11 @@ class BottomSheetAdapter(private val clickListener: PlaylistClickListener) :
     
     val list = ArrayList<PlaylistModel>()
     
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BottomSheetViewHolder(
-        ItemViewBottomSheetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottomSheetViewHolder {
+        return BottomSheetViewHolder(
+            ItemViewBottomSheetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
+    }
     
     override fun getItemCount() = list.size
     
