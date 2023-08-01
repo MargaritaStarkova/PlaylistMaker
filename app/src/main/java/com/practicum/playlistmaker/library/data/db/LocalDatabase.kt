@@ -6,10 +6,13 @@ import androidx.room.TypeConverters
 import com.practicum.playlistmaker.library.data.db.dao.SelectedTracksDao
 import com.practicum.playlistmaker.library.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.library.data.db.entity.TypeConverter
+import com.practicum.playlistmaker.library.data.db.dao.PlaylistDao
+import com.practicum.playlistmaker.library.data.db.entity.PlaylistEntity
 
-@Database(version = 1, entities = [TrackEntity::class])
+@Database(version = 6, entities = [TrackEntity::class, PlaylistEntity::class])
 @TypeConverters(TypeConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     
-    abstract fun dao(): SelectedTracksDao
+    abstract fun selectedTracksDao(): SelectedTracksDao
+    abstract fun playlistsDao(): PlaylistDao
 }

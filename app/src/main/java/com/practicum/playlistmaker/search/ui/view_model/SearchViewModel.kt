@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.core.utils.debounce
-import com.practicum.playlistmaker.search.domain.api.ISearchInteractor
+import com.practicum.playlistmaker.search.domain.api.SearchInteractor
 import com.practicum.playlistmaker.search.domain.models.FetchResult
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import com.practicum.playlistmaker.search.ui.models.SearchContentState
@@ -13,7 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val interactor: ISearchInteractor,
+    private val interactor: SearchInteractor,
 ) : ViewModel() {
     
     private val contentStateLiveData = MutableLiveData<SearchContentState>()

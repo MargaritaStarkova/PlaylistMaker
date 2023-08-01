@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
+import com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheet
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -134,7 +135,6 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
         binding.apply {
             
             cover.setImage(
-                context = requireContext(),
                 url = trackModel.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"),
                 placeholder = R.drawable.placeholder,
                 cornerRadius = cornerRadius,
@@ -158,14 +158,21 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
                 findNavController().navigateUp()
             }
     
-            playButton.setOnClickListener {
-                startAnimation(binding.playButton)
+            playButton.setOnClickListener { button ->
+                (button as? ImageButton)?.let { startAnimation(it) }
                 viewModel.playButtonClicked(track.previewUrl)
             }
     
-            likeButton.setOnClickListener {
-                startAnimation(it as ImageButton)
+            likeButton.setOnClickListener { button ->
+                (button as? ImageButton)?.let { startAnimation(it) }
                 viewModel.toggleFavorite(track)
+            }
+    
+            addButton.setOnClickListener { button ->
+                (button as? ImageButton)?.let { startAnimation(it) }
+                findNavController().navigate(
+                    R.id.action_audioPlayerFragment_to_bottomSheet, BottomSheet.createArgs(track)
+                )
             }
         }
     }

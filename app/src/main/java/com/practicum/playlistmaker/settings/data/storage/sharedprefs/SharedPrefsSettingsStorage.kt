@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.practicum.playlistmaker.settings.data.storage.models.SettingsDto
 
 class SharedPrefsSettingsStorage(private val sharedPreferences: SharedPreferences) :
-    ISettingsStorage {
+    SettingsStorage {
     
     override fun getSettings(): SettingsDto {
         return SettingsDto(
@@ -14,7 +14,7 @@ class SharedPrefsSettingsStorage(private val sharedPreferences: SharedPreference
     
     override fun saveSettings(settingsDto: SettingsDto) {
         sharedPreferences
-                .edit()
+            .edit()
                 .putBoolean(SWITCH_THEME_KEY, settingsDto.isDarkTheme)
                 .apply()
     }

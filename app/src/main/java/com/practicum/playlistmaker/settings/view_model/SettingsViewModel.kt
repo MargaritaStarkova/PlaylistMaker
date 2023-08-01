@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.playlistmaker.settings.domain.api.ISettingsInteractor
+import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
 import com.practicum.playlistmaker.settings.domain.models.ThemeSettings
-import com.practicum.playlistmaker.sharing.domain.api.ISharingInteractor
+import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
 
 class SettingsViewModel(
-    private val settingsInteractor: ISettingsInteractor,
-    private val sharingInteractor: ISharingInteractor,
+    private val settingsInteractor: SettingsInteractor,
+    private val sharingInteractor: SharingInteractor,
 ) : ViewModel() {
     
     private var darkTheme = false
@@ -29,7 +29,6 @@ class SettingsViewModel(
         settingsInteractor.updateThemeSetting(ThemeSettings(darkTheme = isChecked))
         
         switchTheme(isChecked)
-        Log.d("TEST", "+++ changeTheme = $isChecked +++")
     }
     
     fun onShareAppClicked() {

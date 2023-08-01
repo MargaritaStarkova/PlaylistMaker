@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.search.data.network
 class RetrofitNetworkClient(
     private val iTunesService: ITunesApi,
     private val validator: InternetConnectionValidator,
-) : INetworkClient {
+) : NetworkClient {
     
     override suspend fun doRequest(query: String): Response {
     

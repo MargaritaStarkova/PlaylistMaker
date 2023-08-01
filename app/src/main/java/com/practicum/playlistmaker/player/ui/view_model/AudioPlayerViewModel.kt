@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.library.domain.api.ILibraryInteractor
-import com.practicum.playlistmaker.player.domain.api.IMediaInteractor
+import com.practicum.playlistmaker.library.domain.api.LibraryInteractor
+import com.practicum.playlistmaker.player.domain.api.MediaInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerState
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -13,11 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AudioPlayerViewModel(
-    private val mediaInteractor: IMediaInteractor,
-    private val libraryInteractor: ILibraryInteractor,
+    private val mediaInteractor: MediaInteractor,
+    private val libraryInteractor: LibraryInteractor,
 ) : ViewModel() {
     
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
@@ -40,13 +39,15 @@ class AudioPlayerViewModel(
     fun observeFavoriteTrack(): LiveData<Boolean> = isFavoriteLiveData
     
     fun isFavorite(id: String) {
-        viewModelScope.launch() {
-            withContext(Dispatchers.IO){
-                libraryInteractor.isFavorite(id).collect {
+        viewModelScope.launch(Dispatchers.IO) {
+        
+            libraryInteractor
+                .isFavorite(id)
+                .collect {
                     isFavorite = it
                     isFavoriteLiveData.postValue(isFavorite)
                 }
-            }
+        
         }
     }
     

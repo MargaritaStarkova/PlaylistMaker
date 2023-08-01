@@ -4,20 +4,21 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import com.practicum.playlistmaker.core.application.App
+import com.practicum.playlistmaker.library.data.converter.PlaylistModelConverter
 import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
 import com.practicum.playlistmaker.library.data.db.LocalDatabase
-import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayer
-import com.practicum.playlistmaker.player.domain.api.IAudioPlayer
-import com.practicum.playlistmaker.search.data.network.INetworkClient
+import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayerImpl
+import com.practicum.playlistmaker.player.domain.api.AudioPlayer
+import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.ITunesApi
 import com.practicum.playlistmaker.search.data.network.InternetConnectionValidator
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
-import com.practicum.playlistmaker.search.data.storage.sharedprefs.ITracksStorage
+import com.practicum.playlistmaker.search.data.storage.sharedprefs.TracksStorage
 import com.practicum.playlistmaker.search.data.storage.sharedprefs.SharedPrefsTracksStorage
-import com.practicum.playlistmaker.settings.data.storage.sharedprefs.ISettingsStorage
+import com.practicum.playlistmaker.settings.data.storage.sharedprefs.SettingsStorage
 import com.practicum.playlistmaker.settings.data.storage.sharedprefs.SharedPrefsSettingsStorage
-import com.practicum.playlistmaker.sharing.data.ExternalNavigator
-import com.practicum.playlistmaker.sharing.domain.api.IExternalNavigator
+import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
+import com.practicum.playlistmaker.sharing.domain.api.ExternalNavigator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -63,11 +64,12 @@ val dataModule = module {
     }
     
     factoryOf(::TrackModelConverter)
+    factoryOf(::PlaylistModelConverter)
     factoryOf(::InternetConnectionValidator)
     singleOf(::MediaPlayer)
-    singleOf(::RetrofitNetworkClient).bind<INetworkClient>()
-    singleOf(::SharedPrefsTracksStorage).bind<ITracksStorage>()
-    singleOf(::SharedPrefsSettingsStorage).bind<ISettingsStorage>()
-    singleOf(::AudioPlayer).bind<IAudioPlayer>()
-    singleOf(::ExternalNavigator).bind<IExternalNavigator>()
+    singleOf(::RetrofitNetworkClient).bind<NetworkClient>()
+    singleOf(::SharedPrefsTracksStorage).bind<TracksStorage>()
+    singleOf(::SharedPrefsSettingsStorage).bind<SettingsStorage>()
+    singleOf(::AudioPlayerImpl).bind<AudioPlayer>()
+    singleOf(::ExternalNavigatorImpl).bind<ExternalNavigator>()
 }

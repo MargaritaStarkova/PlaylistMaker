@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
@@ -25,8 +25,10 @@
         <item name="hint_icon_text_color">@color/black</item>
         <item name="ripple">@color/ripple_dark</item>
         <item name="fab_color">@color/fab_color_grey_dark</item>
-        <item name="media_player_description_text_color">@color/deep_gray</item>
+        <item name="yp_text_grey_color">@color/yp_text_gray</item>
         <item name="progressbar_color">@color/blue</item>
+
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
 

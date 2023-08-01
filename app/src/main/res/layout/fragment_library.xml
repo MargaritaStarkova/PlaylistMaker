@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/general_background_color"
@@ -25,8 +26,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -36,8 +36,7 @@
             android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginEnd="@dimen/margin_16dp"
             app:tabIndicatorFullWidth="true"
-            app:tabTextAppearance="@style/TabLayoutLibrary"
-            >
+            app:tabTextAppearance="@style/TabLayoutLibrary">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

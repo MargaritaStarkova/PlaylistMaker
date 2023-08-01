@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/margin_8dp">
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="@dimen/image_size_45dp"
+        android:layout_height="@dimen/image_size_45dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:contentDescription="@string/cover"
+        android:src="@drawable/placeholder"
+        tools:ignore="ImageContrastCheck" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/track_name"
+            style="@style/YSRegular16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_6dp"
+            android:layout_marginBottom="@dimen/margin_1dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Smells Like Teen Spirit" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/artist_name"
+                style="@style/YSRegular11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_5dp"
+                android:drawablePadding="@dimen/margin_5dp"
+                android:ellipsize="end"
+                android:maxEms="15"
+                android:maxLines="1"
+                android:textColor="?attr/general_icon_color"
+                app:drawableEndCompat="@drawable/ic_ellipse"
+                tools:ignore="TextContrastCheck"
+                tools:text="Nirvana" />
+
+            <TextView
+                android:id="@+id/track_time"
+                style="@style/YSRegular11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/general_icon_color"
+                tools:ignore="TextContrastCheck"
+                tools:text="5:01" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:layout_marginEnd="@dimen/margin_4dp"
+        android:contentDescription="@string/ic_arrow_forward"
+        android:src="@drawable/ic_arrow_forward"
+        tools:ignore="ImageContrastCheck" />
+
+</LinearLayout>

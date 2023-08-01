@@ -2,7 +2,10 @@ package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doOnTextChanged
@@ -23,12 +26,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     
-    private lateinit var onClickDebounce: (TrackModel) -> Unit
-    
     private val binding by viewBinding<FragmentSearchBinding>()
     private val viewModel by viewModel<SearchViewModel>()
     
     private var trackAdapter: TrackAdapter? = null
+    private var onClickDebounce: ((TrackModel) -> Unit)? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,7 +96,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun initAdapter() {
         trackAdapter = TrackAdapter { track ->
             (activity as HostActivity).animateBottomNavigationView()
-            onClickDebounce(track)
+            onClickDebounce?.let { it(track) }
         }
         binding.searchList.adapter = trackAdapter
     }

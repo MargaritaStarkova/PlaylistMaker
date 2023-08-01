@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.search.data.storage.models.TrackModelDto
 
-class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences) : ITracksStorage {
+class SharedPrefsTracksStorage(private val sharedPreferences: SharedPreferences) : TracksStorage {
     
     private val gson = Gson()
     
