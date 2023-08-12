@@ -17,6 +17,15 @@ fun ImageView.setImage(url: String, placeholder: Int, cornerRadius: Int) {
         .into(this)
 }
 
+fun ImageView.setImage(url: String, placeholder: Int) {
+    Glide
+        .with(this.context)
+        .load(url)
+        .placeholder(placeholder)
+        .transform(CenterCrop())
+        .into(this)
+}
+
 fun ImageView.setImage(uri: Uri, cornerRadius: Int) {
     Glide
         .with(this.context)
@@ -25,7 +34,7 @@ fun ImageView.setImage(uri: Uri, cornerRadius: Int) {
         .into(this)
 }
 
-    fun Int.millisConverter(): String {
+fun Int.millisConverter(): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
     }
 

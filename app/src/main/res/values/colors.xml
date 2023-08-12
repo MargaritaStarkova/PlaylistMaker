@@ -13,7 +13,7 @@
     <color name="white">#F5F5F5</color>
 
     <color name="yp_text_gray">#AEAFB4</color>
-    <color name="grey">#E6E8EB</color>
+    <color name="light_grey">#E6E8EB</color>
 
     <color name="blue">#3772E7</color>
     <color name="bottom_navigation_ripple_light">#FFFFFF</color>

@@ -13,12 +13,12 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     private val supportTitle = context.getText(R.string.support_title)
     private val supportMessage = context.getText(R.string.support_message)
     
-    override fun shareLink(shareAppLink: String) {
+    override fun share(text: String) {
         val intent = Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT, shareAppLink)
+            putExtra(Intent.EXTRA_TEXT, text)
             type = "text/plain"
         }, chooserTitle)
-        
+    
         context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
     

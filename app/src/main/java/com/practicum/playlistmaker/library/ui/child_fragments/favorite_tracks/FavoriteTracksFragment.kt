@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.core.root.HostActivity
 import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentFavoriteTracksBinding
-import com.practicum.playlistmaker.library.ui.models.FavoriteState
+import com.practicum.playlistmaker.library.ui.models.ScreenState
 import com.practicum.playlistmaker.library.ui.view_model.FavoriteTracksViewModel
 import com.practicum.playlistmaker.player.ui.fragment.AudioPlayerFragment
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -55,13 +55,13 @@ class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
         binding.tracksList.adapter = trackAdapter
     }
     
-    private fun render(state: FavoriteState) {
+    private fun render(state: ScreenState) {
         when (state) {
-            is FavoriteState.SelectedTracks -> {
-                showContent(state.trackList)
+            is ScreenState.Content<*> -> {
+                @Suppress("UNCHECKED_CAST") showContent(state.contentList as List<TrackModel>)
             }
             
-            FavoriteState.Empty -> showMessage()
+            ScreenState.Empty -> showMessage()
         }
     }
     

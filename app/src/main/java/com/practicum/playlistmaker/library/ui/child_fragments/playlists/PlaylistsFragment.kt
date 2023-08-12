@@ -2,18 +2,19 @@ package com.practicum.playlistmaker.library.ui.child_fragments.playlists
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.core.root.HostActivity
+import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.practicum.playlistmaker.library.ui.models.PlaylistsScreenState
+import com.practicum.playlistmaker.library.ui.models.ScreenState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
-import kotlinx.coroutines.Job
+import com.practicum.playlistmaker.playlist_menu.ui.fragment.PlaylistMenuFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -21,20 +22,31 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     
     private val binding by viewBinding<FragmentPlaylistsBinding>()
     private val viewModel by viewModel<PlaylistsViewModel>()
-
-    private lateinit var playlistsAdapter: PlaylistsAdapter
+    
+    private var playlistsAdapter: PlaylistsAdapter? = null
+    private var onClickDebounce: ((PlaylistModel) -> Unit)? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false,
+            action = { playlist ->
+                findNavController().navigate(
+                    R.id.action_libraryFragment_to_playlistMenuFragment,
+                    PlaylistMenuFragment.createArgs(playlist.id)
+                )
+            })
+        
         initAdapter()
         
-       viewLifecycleOwner.lifecycle.coroutineScope.launch {
+        viewLifecycleOwner.lifecycle.coroutineScope.launch {
             viewModel.contentFlow.collect { screenState ->
                 render(screenState)
             }
         }
-       
+        
         binding.newPlaylistBtn.setOnClickListener {
             findNavController().navigate(
                 R.id.action_libraryFragment_to_newPlaylistFragment
@@ -42,10 +54,15 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
         }
     }
     
-    private fun render(state: PlaylistsScreenState) {
+    private fun render(state: ScreenState) {
         when (state) {
-            is PlaylistsScreenState.Content -> showContent(state.playlists)
-            PlaylistsScreenState.Empty -> showPlaceholder()
+            is ScreenState.Content<*> -> {
+                @Suppress("UNCHECKED_CAST") showContent(state.contentList as List<PlaylistModel>)
+            }
+            
+            ScreenState.Empty -> {
+                showPlaceholder()
+            }
         }
     }
     
@@ -58,14 +75,13 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     }
     
     private fun showContent(content: List<PlaylistModel>) {
-        
         binding.apply {
             placeholdersGroup.visibility = View.GONE
             playlists.visibility = View.VISIBLE
         }
-        
-        
-        playlistsAdapter.apply {
+    
+    
+        playlistsAdapter?.apply {
             playlists.clear()
             playlists.addAll(content)
             notifyDataSetChanged()
@@ -74,11 +90,8 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     
     private fun initAdapter() {
         playlistsAdapter = PlaylistsAdapter { playlist ->
-            
-            Toast
-                .makeText(requireContext(), "Clicked", Toast.LENGTH_SHORT)
-                .show()
-            
+            (activity as HostActivity).animateBottomNavigationView()
+            onClickDebounce?.let { it(playlist) }
         }
         
         binding.playlists.adapter = playlistsAdapter
@@ -86,6 +99,7 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     }
     
     companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 300L
         fun newInstance() = PlaylistsFragment()
     }
 }

@@ -25,6 +25,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_libraryFragment_to_playlistMenuFragment"
+            app:destination="@id/playlistMenuFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -49,17 +57,17 @@
         android:label="@string/label_player"
         tools:layout="@layout/fragment_audio_player" >
         <action
-            android:id="@+id/action_audioPlayerFragment_to_bottomSheet"
-            app:destination="@id/bottomSheet" />
+            android:id="@+id/action_audioPlayerFragment_to_bottomSheetPlaylists"
+            app:destination="@id/bottomSheetPlaylists" />
     </fragment>
     <fragment
         android:id="@+id/newPlaylistFragment"
-        android:name="com.practicum.playlistmaker.playlist_creator.ui.fragment.NewPlaylistFragment"
+        android:name="com.practicum.playlistmaker.playlist_creator.ui.fragment.PlaylistCreatorFragment"
         android:label="fragment_new_playlist"
-        tools:layout="@layout/fragment_new_playlist" />
+        tools:layout="@layout/fragment_playlist_creator" />
     <dialog
-        android:id="@+id/bottomSheet"
-        android:name="com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheet"
+        android:id="@+id/bottomSheetPlaylists"
+        android:name="com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheetPlaylists"
         android:label="BottomSheet" >
         <action
             android:id="@+id/action_bottomSheet_to_newPlaylistFragment"
@@ -70,4 +78,39 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </dialog>
+    <fragment
+        android:id="@+id/playlistMenuFragment"
+        android:name="com.practicum.playlistmaker.playlist_menu.ui.fragment.PlaylistMenuFragment"
+        android:label="fragment_playlist_menu"
+        tools:layout="@layout/fragment_playlist_menu" >
+        <action
+            android:id="@+id/action_playlistMenuFragment_to_audioPlayerFragment"
+            app:destination="@id/audioPlayerFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_playlistMenuFragment_to_bottomSheetMenu"
+            app:destination="@id/bottomSheetMenu" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetMenu"
+        android:name="com.practicum.playlistmaker.playlist_menu.ui.bottom_sheet.BottomSheetMenu"
+        android:label="BottomSheetMenu" >
+        <action
+            android:id="@+id/action_bottomSheetMenu_to_playlistRedactorFragment"
+            app:destination="@id/playlistRedactorFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </dialog>
+    <fragment
+        android:id="@+id/playlistRedactorFragment"
+        android:name="com.practicum.playlistmaker.playlist_redactor.ui.fragment.PlaylistRedactorFragment"
+        android:label="fragment_playlist_redactor"
+        tools:layout="@layout/fragment_playlist_redactor" />
 </navigation>

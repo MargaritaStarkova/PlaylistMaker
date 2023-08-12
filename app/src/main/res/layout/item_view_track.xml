@@ -50,7 +50,7 @@
                 android:maxEms="15"
                 android:maxLines="1"
                 android:textColor="?attr/general_icon_color"
-                app:drawableEndCompat="@drawable/ic_ellipse"
+                app:drawableEndCompat="@drawable/ic_dot_grey"
                 tools:ignore="TextContrastCheck"
                 tools:text="Nirvana" />
 

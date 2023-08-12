@@ -5,8 +5,7 @@ import com.practicum.playlistmaker.search.data.storage.models.TrackModelDto
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import java.util.Date
 
-class TrackModelConverter(
-) {
+class TrackModelConverter {
     
     fun map(track: TrackModelDto): TrackModel =
         with(track) {

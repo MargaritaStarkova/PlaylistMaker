@@ -8,6 +8,8 @@ import com.practicum.playlistmaker.playlist_creator.domain.api.CreatePlaylistUse
 import com.practicum.playlistmaker.playlist_creator.domain.impl.CreatePlaylistUseCaseImpl
 import com.practicum.playlistmaker.player.domain.api.MediaInteractor
 import com.practicum.playlistmaker.player.domain.impl.MediaInteractorImpl
+import com.practicum.playlistmaker.playlist_menu.domain.api.PlaylistDurationCalculator
+import com.practicum.playlistmaker.playlist_menu.domain.impl.PlaylistDurationCalculatorImpl
 import com.practicum.playlistmaker.search.domain.api.SearchInteractor
 import com.practicum.playlistmaker.search.domain.impl.SearchInteractorImpl
 import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
@@ -27,4 +29,5 @@ val interactorModule = module {
     singleOf(::LibraryInteractorImpl).bind<LibraryInteractor>()
     singleOf(::PlaylistInteractorImpl).bind<PlaylistsInteractor>()
     singleOf(::CreatePlaylistUseCaseImpl).bind<CreatePlaylistUseCase>()
+    singleOf(::PlaylistDurationCalculatorImpl).bind<PlaylistDurationCalculator>()
 }

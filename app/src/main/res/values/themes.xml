@@ -21,12 +21,13 @@
         <item name="general_background_color">@color/deep_white</item>
         <item name="update_text_color">@color/deep_white</item>
         <item name="general_icon_color">@color/yp_text_gray</item>
-        <item name="background_hint_color">@color/grey</item>
+        <item name="background_hint_color">@color/light_grey</item>
         <item name="hint_icon_text_color">@color/yp_text_gray</item>
         <item name="ripple">@color/ripple_light</item>
         <item name="fab_color">@color/fab_color_grey_light</item>
         <item name="yp_text_grey_color">@color/yp_text_gray</item>
         <item name="progressbar_color">@color/blue</item>
+        <item name="background_playlist_menu_color">@color/light_grey</item>
 
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
 

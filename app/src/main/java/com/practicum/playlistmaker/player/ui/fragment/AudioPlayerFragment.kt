@@ -15,7 +15,7 @@ import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
-import com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheet
+import com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheetPlaylists
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -28,7 +28,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     private val binding by viewBinding<FragmentAudioPlayerBinding>()
     private val viewModel by viewModel<AudioPlayerViewModel>()
     
-    private lateinit var track: TrackModel
+    private var track: TrackModel? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,9 +37,9 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             .getString(KEY_TRACK)
             ?.let { Json.decodeFromString<TrackModel>(it) } ?: TrackModel.emptyTrack
     
-        viewModel.preparingPlayer(track.previewUrl)
-        viewModel.isFavorite(track.trackId)
-        
+        viewModel.preparingPlayer(track!!.previewUrl)
+        viewModel.isFavorite(track!!.trackId)
+    
         viewModel.apply {
             observeFavoriteTrack().observe(viewLifecycleOwner) { isFavorite ->
                 renderLikeButton(isFavorite)
@@ -50,7 +50,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             }
         }
     
-        drawTrack(track)
+        drawTrack(track!!)
         initListeners()
     }
     
@@ -160,19 +160,20 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     
             playButton.setOnClickListener { button ->
                 (button as? ImageButton)?.let { startAnimation(it) }
-                viewModel.playButtonClicked(track.previewUrl)
+                track?.let { viewModel.playButtonClicked(it.previewUrl) }
             }
     
             likeButton.setOnClickListener { button ->
                 (button as? ImageButton)?.let { startAnimation(it) }
-                viewModel.toggleFavorite(track)
+                track?.let { viewModel.toggleFavorite(it) }
             }
     
             addButton.setOnClickListener { button ->
                 (button as? ImageButton)?.let { startAnimation(it) }
-                findNavController().navigate(
-                    R.id.action_audioPlayerFragment_to_bottomSheet, BottomSheet.createArgs(track)
-                )
+                findNavController().navigate(R.id.action_audioPlayerFragment_to_bottomSheetPlaylists,
+                    track?.let {
+                        BottomSheetPlaylists.createArgs(it)
+                    })
             }
         }
     }
