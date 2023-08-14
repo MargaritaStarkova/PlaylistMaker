@@ -6,6 +6,7 @@ data class TrackModelDto(
     val trackName: String?,
     val artistName: String?,
     val trackTimeMillis: Int?,
+    val artworkUrl60: String?,
     val artworkUrl100: String?,
     val collectionName: String?,
     val country: String?,

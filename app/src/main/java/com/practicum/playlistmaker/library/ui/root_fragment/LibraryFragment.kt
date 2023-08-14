@@ -13,7 +13,7 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
 
     private val binding by viewBinding<FragmentLibraryBinding>()
     
-    private lateinit var tabMediator: TabLayoutMediator
+    private var tabMediator: TabLayoutMediator? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,13 +27,13 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
                 else -> tab.text = getString(R.string.playlists)
             }
         }
-        
-        tabMediator.attach()
+    
+        tabMediator?.attach()
     }
     
     override fun onDestroyView() {
         super.onDestroyView()
-        tabMediator.detach()
+        tabMediator?.detach()
     }
 
 }

@@ -9,7 +9,7 @@
     tools:context=".playlist_creator.ui.fragment.PlaylistCreatorFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/navigation_toolbar"
+        android:id="@+id/tbNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,14 +49,14 @@
         app:layout_constraintGuide_percent="0.8" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_button"
+        android:id="@+id/bottom_button_guideline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.96" />
 
     <ImageView
-        android:id="@+id/playlist_cover_image"
+        android:id="@+id/ivPlaylistCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constrainedWidth="true"
@@ -69,7 +69,7 @@
         app:layout_constraintDimensionRatio="р, 1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/navigation_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/tbNavigation" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/playlist_name_container"
@@ -91,7 +91,7 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playlist_name"
+            android:id="@+id/etPlaylistName"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -114,7 +114,7 @@
         app:layout_constraintTop_toBottomOf="@id/playlist_name_container">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playlist_description"
+            android:id="@+id/etPlaylistDescription"
             style="@style/EditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -132,7 +132,7 @@
         android:backgroundTint="@color/new_playlist_button_color"
         android:text="@string/create"
 
-        app:layout_constraintBottom_toBottomOf="@id/bottom_button"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_button_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

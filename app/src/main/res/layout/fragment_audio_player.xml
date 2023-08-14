@@ -9,7 +9,7 @@
     tools:context=".player.ui.fragment.AudioPlayerFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/navigation_toolbar"
+        android:id="@+id/tbNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
         app:layout_constraintGuide_percent="0.976" />
 
     <ImageView
-        android:id="@+id/cover"
+        android:id="@+id/ivCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/cover"
@@ -64,11 +64,11 @@
         app:layout_constraintDimensionRatio="w, 1:1"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/navigation_toolbar"
+        app:layout_constraintTop_toBottomOf="@id/tbNavigation"
         tools:ignore="ImageContrastCheck" />
 
     <TextView
-        android:id="@+id/track_name"
+        android:id="@+id/tvTrackName"
         style="@style/YSMedium22"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
         android:maxLines="1"
         android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/artist_name"
+        app:layout_constraintBottom_toTopOf="@id/tvArtistName"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toTopOf="@id/image_bottom_guideline"
@@ -84,7 +84,7 @@
         tools:text="Yesterday (Remastered 2009)" />
 
     <TextView
-        android:id="@+id/artist_name"
+        android:id="@+id/tvArtistName"
         style="@style/YSMedium14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
         app:layout_constraintBottom_toTopOf="@id/play_button"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/track_name"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackName"
         tools:text="The Beatles" />
 
     <ImageButton
@@ -120,10 +120,10 @@
         android:contentDescription="@string/play_button"
         android:src="@drawable/button_play_not_prepared"
         app:circularflow_viewCenter="@id/add_button"
-        app:layout_constraintBottom_toBottomOf="@id/excerpt_duration"
+        app:layout_constraintBottom_toBottomOf="@id/tvExcerptDuration"
         app:layout_constraintEnd_toStartOf="@id/like_button"
         app:layout_constraintStart_toEndOf="@id/add_button"
-        app:layout_constraintTop_toTopOf="@id/artist_name"
+        app:layout_constraintTop_toTopOf="@id/tvArtistName"
         tools:ignore="ImageContrastCheck" />
 
     <ImageButton
@@ -140,7 +140,7 @@
         tools:ignore="ImageContrastCheck" />
 
     <TextView
-        android:id="@+id/excerpt_duration"
+        android:id="@+id/tvExcerptDuration"
         style="@style/YSMedium14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,48 +151,48 @@
         tools:text="00:00" />
 
     <TextView
-        android:id="@+id/duration"
+        android:id="@+id/tvDuration"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/duration"
         android:textColor="?attr/yp_text_grey_color"
-        app:layout_constraintBottom_toTopOf="@id/album"
+        app:layout_constraintBottom_toTopOf="@id/tvAlbum"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_top_guideline"
         app:layout_constraintVertical_chainStyle="spread"
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/changeable_duration"
+        android:id="@+id/tvChangeableDuration"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_16dp"
         android:textColor="?attr/toolbar_text_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/duration"
+        app:layout_constraintTop_toTopOf="@id/tvDuration"
         app:layout_constraintVertical_chainStyle="spread"
         tools:text="5:35" />
 
     <TextView
-        android:id="@+id/album"
+        android:id="@+id/tvAlbum"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/album"
         android:textColor="?attr/yp_text_grey_color"
-        app:layout_constraintBottom_toTopOf="@id/year"
-        app:layout_constraintEnd_toStartOf="@id/changeable_album"
+        app:layout_constraintBottom_toTopOf="@id/tvYear"
+        app:layout_constraintEnd_toStartOf="@id/tvChangeableAlbum"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/duration"
+        app:layout_constraintTop_toBottomOf="@id/tvDuration"
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/changeable_album"
+        android:id="@+id/tvChangeableAlbum"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -203,50 +203,50 @@
         android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/album"
-        app:layout_constraintTop_toTopOf="@id/album"
+        app:layout_constraintStart_toEndOf="@id/tvAlbum"
+        app:layout_constraintTop_toTopOf="@id/tvAlbum"
         app:layout_constraintVertical_chainStyle="spread"
         tools:text="Yesterday (Remastered 2009)" />
 
     <TextView
-        android:id="@+id/year"
+        android:id="@+id/tvYear"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/year"
         android:textColor="?attr/yp_text_grey_color"
-        app:layout_constraintBottom_toTopOf="@id/genre"
+        app:layout_constraintBottom_toTopOf="@id/tvGenre"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/album"
+        app:layout_constraintTop_toBottomOf="@id/tvAlbum"
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/changeable_year"
+        android:id="@+id/tvChangeableYear"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_16dp"
         android:textColor="?attr/toolbar_text_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/year"
+        app:layout_constraintTop_toTopOf="@id/tvYear"
         tools:text="1965" />
 
     <TextView
-        android:id="@+id/genre"
+        android:id="@+id/tvGenre"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_16dp"
         android:text="@string/genre"
         android:textColor="?attr/yp_text_grey_color"
-        app:layout_constraintBottom_toTopOf="@id/country"
+        app:layout_constraintBottom_toTopOf="@id/tvCountry"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/year"
+        app:layout_constraintTop_toBottomOf="@id/tvYear"
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/changeable_genre"
+        android:id="@+id/tvChangeableGenre"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -256,11 +256,11 @@
         android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/genre"
+        app:layout_constraintTop_toTopOf="@id/tvGenre"
         tools:text="Rock" />
 
     <TextView
-        android:id="@+id/country"
+        android:id="@+id/tvCountry"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -269,11 +269,11 @@
         android:textColor="?attr/yp_text_grey_color"
         app:layout_constraintBottom_toBottomOf="@id/text_bottom_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/genre"
+        app:layout_constraintTop_toBottomOf="@id/tvGenre"
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/changeable_country"
+        android:id="@+id/tvChangeableCountry"
         style="@style/YSRegular13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -283,7 +283,7 @@
         android:textColor="?attr/toolbar_text_color"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/country"
+        app:layout_constraintTop_toTopOf="@id/tvCountry"
         tools:text="Великобритания" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

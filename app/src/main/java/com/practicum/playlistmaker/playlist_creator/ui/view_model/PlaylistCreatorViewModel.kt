@@ -81,7 +81,6 @@ open class PlaylistCreatorViewModel(
         if (playlistDescription != null) {
             this.playlistDescription = playlistDescription
         }
-        
     }
     
     fun onCreateBtnClicked() {

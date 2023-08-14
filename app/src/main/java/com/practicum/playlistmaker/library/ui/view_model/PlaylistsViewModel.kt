@@ -29,7 +29,6 @@ class PlaylistsViewModel(
                     processResult(playlists)
                 }
         }
-        
     }
     
     private fun processResult(playlists: List<PlaylistModel>) {

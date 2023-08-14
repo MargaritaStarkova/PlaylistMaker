@@ -27,8 +27,8 @@ class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+    
+        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
             action = { track ->
@@ -37,22 +37,22 @@ class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
                     AudioPlayerFragment.createArgs(track)
                 )
             })
-        
-        viewModel
-            .observeContentState()
-            .observe(viewLifecycleOwner) { contentState ->
-                render(contentState)
-            }
-        
+    
+        viewModel.contentStateLiveData.observe(viewLifecycleOwner) { contentState ->
+            render(contentState)
+        }
+    
         initAdapter()
     }
     
     private fun initAdapter() {
-        trackAdapter = TrackAdapter { track ->
-            (activity as HostActivity).animateBottomNavigationView()
-            onClickDebounce?.let { it(track) }
-        }
-        binding.tracksList.adapter = trackAdapter
+        trackAdapter = TrackAdapter(
+            clickListener = (TrackAdapter.TrackClickListener { track ->
+                (activity as HostActivity).animateBottomNavigationView()
+                onClickDebounce?.let { it(track) }
+            }),
+        )
+        binding.rvTrackList.adapter = trackAdapter
     }
     
     private fun render(state: ScreenState) {
@@ -66,26 +66,26 @@ class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
     }
     
     private fun showMessage() {
-        binding.apply {
+        with(binding) {
             placeholder.visibility = View.VISIBLE
-            tracksList.visibility = View.GONE
+            rvTrackList.visibility = View.GONE
         }
     }
     
     private fun showContent(list: List<TrackModel>) {
-        binding.apply {
+        with(binding) {
             placeholder.visibility = View.GONE
-            tracksList.visibility = View.VISIBLE
+            rvTrackList.visibility = View.VISIBLE
         }
-        trackAdapter?.apply {
-            trackList.clear()
-            trackList.addAll(list)
-            notifyDataSetChanged()
+        trackAdapter?.let {
+            it.trackList.clear()
+            it.trackList.addAll(list)
+            it.notifyDataSetChanged()
         }
     }
     
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 300L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
     }
 }
 

@@ -25,7 +25,7 @@ class BottomSheetMenu : BottomSheetDialogFragment(R.layout.bottom_sheet_menu) {
     private val binding by viewBinding<BottomSheetMenuBinding>()
     private val viewModel by viewModel<PlaylistMenuViewModel>()
     
-    private lateinit var playlist: PlaylistModel
+    private var playlist: PlaylistModel? = null
     
     override fun onStart() {
         super.onStart()
@@ -35,53 +35,57 @@ class BottomSheetMenu : BottomSheetDialogFragment(R.layout.bottom_sheet_menu) {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+    
         playlist = requireArguments()
             .getString(PLAYLIST_KEY)
             ?.let { Json.decodeFromString<PlaylistModel>(it) } ?: PlaylistModel.emptyPlaylist
-        
-        drawPlaylistItem(playlist)
+    
+        playlist?.let { drawPlaylistItem(it) }
+    
         initListeners()
     }
     
     private fun drawPlaylistItem(playlist: PlaylistModel) {
-        
-        binding.apply {
-            bottomSheetMenuItem.cover.setImage(
+    
+        with(binding) {
+            bottomSheetMenuItem.ivCover.setImage(
                 url = playlist.coverImageUrl,
                 placeholder = R.drawable.placeholder,
             )
-            
-            bottomSheetMenuItem.playlistName.text = playlist.playlistName
-            
-            bottomSheetMenuItem.trakcsCount.text = resources.getQuantityString(
+        
+            bottomSheetMenuItem.tvPlaylistName.text = playlist.playlistName
+        
+            bottomSheetMenuItem.tvTracksCount.text = resources.getQuantityString(
                 R.plurals.tracks, playlist.tracksCount, playlist.tracksCount
             )
         }
     }
     
     private fun initListeners() {
-        binding.apply {
-            
-            share.setOnClickListener { sharePlaylist() }
-            edit.setOnClickListener { openEditor() }
-            delete.setOnClickListener { showDialog() }
+        with(binding) {
+            tvShare.setOnClickListener { sharePlaylist() }
+            tvEdit.setOnClickListener { openEditor() }
+            tvDelete.setOnClickListener { showDialog() }
         }
     }
     
     private fun openEditor() {
         findNavController().navigate(
             R.id.action_bottomSheetMenu_to_playlistRedactorFragment,
-            PlaylistRedactorFragment.createArgs(playlist)
-        )
+            playlist?.let {
+                PlaylistRedactorFragment.createArgs(it)
+            })
     }
     
     private fun sharePlaylist() {
-        if (playlist.trackList.isEmpty()) {
+        if (playlist?.trackList.isNullOrEmpty()) {
             showMessage()
         } else {
             val messageCreator = MessageCreator(requireContext())
-            viewModel.sharePlaylist(messageCreator.create(playlist))
+        
+            playlist?.let {
+                viewModel.sharePlaylist(messageCreator.create(it))
+            }
         }
     }
     
@@ -94,10 +98,10 @@ class BottomSheetMenu : BottomSheetDialogFragment(R.layout.bottom_sheet_menu) {
     
     private fun showDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.delete_playlist) + " ${playlist.playlistName}?")
+            .setTitle(getString(R.string.delete_playlist) + " ${playlist?.playlistName}?")
             .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                viewModel.deletePlaylist(playlist)
+                playlist?.let { viewModel.deletePlaylist(it) }
                 goBack()
                 
             }

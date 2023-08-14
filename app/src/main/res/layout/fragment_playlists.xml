@@ -16,13 +16,13 @@
         android:text="@string/new_playlist"
         android:visibility="visible"
 
-        app:layout_constraintBottom_toTopOf="@id/placeholder_image"
+        app:layout_constraintBottom_toTopOf="@id/ivPlaceholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/placeholder_image"
+        android:id="@+id/ivPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -30,13 +30,13 @@
         android:contentDescription="@string/placeholder_image"
         android:src="@drawable/error_search"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/placeholder_message"
+        app:layout_constraintBottom_toTopOf="@id/tvPlaceholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/placeholder_message"
+        android:id="@+id/tvPlaceholder"
         style="@style/YSMedium19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,17 +47,17 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/placeholder_image" />
+        app:layout_constraintTop_toBottomOf="@id/ivPlaceholder" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/placeholders_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="placeholder_image,placeholder_message" />
+        app:constraint_referenced_ids="ivPlaceholder,tvPlaceholder" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/playlists"
+        android:id="@+id/rvPlaylists"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16dp"

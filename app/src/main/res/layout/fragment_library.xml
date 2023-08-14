@@ -10,7 +10,7 @@
     tools:context=".library.ui.root_fragment.LibraryFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/navigation_toolbar"
+        android:id="@+id/tbNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

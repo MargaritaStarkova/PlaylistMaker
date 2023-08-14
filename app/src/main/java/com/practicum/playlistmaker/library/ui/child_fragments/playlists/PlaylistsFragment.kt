@@ -29,7 +29,7 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
             action = { playlist ->
@@ -67,24 +67,24 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     }
     
     private fun showPlaceholder() {
-        binding.apply {
+        with(binding) {
             placeholdersGroup.visibility = View.VISIBLE
-            playlists.visibility = View.GONE
+            rvPlaylists.visibility = View.GONE
         }
         
     }
     
     private fun showContent(content: List<PlaylistModel>) {
-        binding.apply {
+        with(binding) {
             placeholdersGroup.visibility = View.GONE
-            playlists.visibility = View.VISIBLE
+            rvPlaylists.visibility = View.VISIBLE
         }
     
     
-        playlistsAdapter?.apply {
-            playlists.clear()
-            playlists.addAll(content)
-            notifyDataSetChanged()
+        playlistsAdapter?.let {
+            it.playlists.clear()
+            it.playlists.addAll(content)
+            it.notifyDataSetChanged()
         }
     }
     
@@ -94,12 +94,12 @@ class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
             onClickDebounce?.let { it(playlist) }
         }
         
-        binding.playlists.adapter = playlistsAdapter
-        binding.playlists.addItemDecoration(PlaylistsOffsetItemDecoration(requireContext()))
+        binding.rvPlaylists.adapter = playlistsAdapter
+        binding.rvPlaylists.addItemDecoration(PlaylistsOffsetItemDecoration(requireContext()))
     }
     
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 300L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
         fun newInstance() = PlaylistsFragment()
     }
 }

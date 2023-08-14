@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.playlist_menu.ui.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.domain.api.PlaylistsInteractor
+import com.practicum.playlistmaker.library.ui.models.ScreenState
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 import com.practicum.playlistmaker.playlist_menu.domain.api.PlaylistDurationCalculator
 import com.practicum.playlistmaker.playlist_menu.ui.models.PlaylistMenuState
@@ -59,7 +60,16 @@ class PlaylistMenuViewModel(
     private fun refreshState(playlistModel: PlaylistModel?) {
         if (playlistModel != null) {
             viewModelScope.launch {
-                _contentFlow.emit(PlaylistMenuState.Content(playlistModel))
+                if (playlistModel.trackList.isEmpty()) {
+                    _contentFlow.emit(PlaylistMenuState.Content(
+                        content = playlistModel,
+                        bottomListState = ScreenState.Empty))
+                }
+                else {
+                    _contentFlow.emit(PlaylistMenuState.Content(
+                        content = playlistModel,
+                        bottomListState = ScreenState.Content(playlistModel.trackList)))
+                }
             }
         }
     }

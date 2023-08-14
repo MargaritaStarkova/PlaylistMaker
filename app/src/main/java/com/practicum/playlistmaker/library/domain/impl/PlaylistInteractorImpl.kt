@@ -19,16 +19,18 @@ class PlaylistInteractorImpl(
     }
     
     override suspend fun addTrackToPlaylist(playlist: PlaylistModel, track: TrackModel) {
-        playlist.trackList = listOf(track) + playlist.trackList
-        playlist.tracksCount = playlist.trackList.size
-        repository.updateTracks(playlist)
+        var updatedPlaylist: PlaylistModel =
+            playlist.copy(trackList = listOf(track) + playlist.trackList)
+        updatedPlaylist = updatedPlaylist.copy(tracksCount = updatedPlaylist.trackList.size)
+    
+        repository.updateTracks(updatedPlaylist)
     }
     
     override suspend fun deleteTrack(playlist: PlaylistModel, track: TrackModel): PlaylistModel {
-        playlist.trackList = playlist.trackList - track
-        playlist.tracksCount = playlist.trackList.size
-        repository.updateTracks(playlist)
-        
+        var updatedPlaylist: PlaylistModel = playlist.copy(trackList = playlist.trackList - track)
+        updatedPlaylist = updatedPlaylist.copy(tracksCount = updatedPlaylist.trackList.size)
+        repository.updateTracks(updatedPlaylist)
+    
         return playlist
     }
     

@@ -39,10 +39,10 @@ import java.io.FileOutputStream
 
 open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator) {
     
-    private val binding by viewBinding<FragmentPlaylistCreatorBinding>()
     open val viewModel by viewModel<PlaylistCreatorViewModel>()
     
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private val binding by viewBinding<FragmentPlaylistCreatorBinding>()
+    private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +61,21 @@ open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator
         initPickMediaRegister()
         initObserver()
         initListeners()
+        initBackPressed()
+    }
+    
+    open fun initBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.onBackPressed()
+                }
+            })
+        
+        binding.tbNavigation.setNavigationOnClickListener {
+            viewModel.onBackPressed()
+        }
     }
     
     private fun initPickMediaRegister() {
@@ -70,7 +85,7 @@ open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator
                 val cornerRadius =
                     requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
                 
-                binding.playlistCoverImage.setImage(uri, cornerRadius)
+                binding.ivPlaylistCover.setImage(uri, cornerRadius)
                 saveImageToPrivateStorage(uri)
             }
         }
@@ -106,7 +121,7 @@ open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator
                     }
                     
                     PermissionResultState.GRANTED -> {
-                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        pickMedia?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
     
                     PermissionResultState.DENIED_PERMANENTLY -> {
@@ -121,40 +136,27 @@ open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator
     }
     
     private fun initListeners() {
-        
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    viewModel.onBackPressed()
-                }
-            })
-        
-        binding.apply {
+
+        with(binding) {
             
-            navigationToolbar.setNavigationOnClickListener {
-                viewModel.onBackPressed()
-            }
-            
-            playlistCoverImage.setOnClickListener {
+            ivPlaylistCover.setOnClickListener {
                 viewModel.onPlaylistCoverClicked()
             }
+        
+            etPlaylistName.doOnTextChanged { text, _, _, _ ->
             
-            playlistName.doOnTextChanged { text, _, _, _ ->
-    
                 renderBoxStrokeEditTextColor(binding.playlistNameContainer, text)
                 viewModel.onPlaylistNameChanged(text.toString())
-                
             }
-            
-            playlistDescription.doOnTextChanged { text, _, _, _ ->
+        
+            etPlaylistDescription.doOnTextChanged { text, _, _, _ ->
                 renderBoxStrokeEditTextColor(binding.playlistDescriptionContainer, text)
                 viewModel.onPlaylistDescriptionChanged(text.toString())
             }
             
             buttonCreate.setOnClickListener {
                 viewModel.onCreateBtnClicked()
-                showAndroidXSnackbar(playlistName.text.toString())
+                showAndroidXSnackbar(etPlaylistName.text.toString())
             }
         }
     }
@@ -203,14 +205,14 @@ open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator
     
     private fun saveImageToPrivateStorage(uri: Uri) {
         val filePath = File(
-            requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
             getString(R.string.my_playlists)
         )
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
         val file = File(filePath, uri.lastPathSegment ?: "image")
-        val inputStream = requireActivity().contentResolver.openInputStream(uri)
+        val inputStream = activity?.contentResolver?.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         
         BitmapFactory
@@ -227,13 +229,13 @@ open class PlaylistCreatorFragment : Fragment(R.layout.fragment_playlist_creator
             .make(requireContext(), binding.containerLayout, message, Snackbar.LENGTH_SHORT)
             .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.deep_white))
-            .setDuration(MESSAGE_DURATION)
+            .setDuration(MESSAGE_DURATION_MILLIS)
             .show()
     }
     
     companion object {
         private const val QUALITY_IMAGE = 30
-        private const val MESSAGE_DURATION = 4000
+        private const val MESSAGE_DURATION_MILLIS = 4000
     }
     
 }

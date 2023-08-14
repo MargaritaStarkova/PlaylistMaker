@@ -29,8 +29,8 @@ class BottomSheetPlaylists : BottomSheetDialogFragment(R.layout.bottom_sheet_pla
     private val binding by viewBinding<BottomSheetPlaylistsBinding>()
     private val viewModel by viewModel<BottomSheetViewModel>()
     
-    private lateinit var playlistsAdapter: BottomSheetAdapter
-    private lateinit var track: TrackModel
+    private var playlistsAdapter: BottomSheetAdapter? = null
+    private var track: TrackModel? = null
     
     override fun onStart() {
         super.onStart()
@@ -55,15 +55,14 @@ class BottomSheetPlaylists : BottomSheetDialogFragment(R.layout.bottom_sheet_pla
 
     private fun initAdapter() {
         playlistsAdapter = BottomSheetAdapter { playlist ->
-            
-            viewModel.onPlaylistClicked(playlist, track)
-            
+            track?.let { viewModel.onPlaylistClicked(playlist, it) }
         }
-        binding.playlistsRecycler.adapter = playlistsAdapter
+        
+        binding.rvPlaylists.adapter = playlistsAdapter
     }
     
     private fun initListeners() {
-        binding.createPlaylistBtn.setOnClickListener {
+        binding.bCreatePlaylist.setOnClickListener {
             findNavController().navigate(
                 R.id.action_bottomSheet_to_newPlaylistFragment
             )
@@ -115,11 +114,11 @@ class BottomSheetPlaylists : BottomSheetDialogFragment(R.layout.bottom_sheet_pla
     }
     
     private fun showContent(content: List<PlaylistModel>) {
-        binding.playlistsRecycler.visibility = View.VISIBLE
-        playlistsAdapter.apply {
-            list.clear()
-            list.addAll(content)
-            notifyDataSetChanged()
+        binding.rvPlaylists.visibility = View.VISIBLE
+        playlistsAdapter?.let {
+            it.list.clear()
+            it.list.addAll(content)
+            it.notifyDataSetChanged()
         }
     }
     

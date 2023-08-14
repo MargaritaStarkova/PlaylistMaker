@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.utils.setImage
@@ -22,7 +23,7 @@ class PlaylistRedactorFragment : PlaylistCreatorFragment() {
     override val viewModel by viewModel<PlaylistRedactorViewModel>()
     
     private val binding by viewBinding<FragmentPlaylistCreatorBinding>()
-    private lateinit var playlist: PlaylistModel
+    private var playlist: PlaylistModel? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,8 +32,10 @@ class PlaylistRedactorFragment : PlaylistCreatorFragment() {
             .getString(BottomSheetMenu.PLAYLIST_KEY)
             ?.let { Json.decodeFromString<PlaylistModel>(it) } ?: PlaylistModel.emptyPlaylist
         
-        drawPlaylist(playlist)
-        viewModel.initPlaylist(playlist)
+        playlist?.let {
+            drawPlaylist(it)
+            viewModel.initPlaylist(it)
+        }
     }
     
     override fun showAndroidXSnackbar(playlistName: String) {
@@ -42,8 +45,14 @@ class PlaylistRedactorFragment : PlaylistCreatorFragment() {
             .make(requireContext(), binding.containerLayout, message, Snackbar.LENGTH_SHORT)
             .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.deep_white))
-            .setDuration(MESSAGE_DURATION)
+            .setDuration(MESSAGE_DURATION_MILLIS)
             .show()
+    }
+    
+    override fun initBackPressed() {
+        binding.tbNavigation.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
     }
     
     private fun drawPlaylist(playlist: PlaylistModel) {
@@ -51,16 +60,16 @@ class PlaylistRedactorFragment : PlaylistCreatorFragment() {
         val cornerRadius =
             requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
         
-        binding.apply {
+        with(binding) {
             toolbarTitle.text = getString(R.string.edit_title)
-            playlistCoverImage.setImage(
+            ivPlaylistCover.setImage(
                 url = playlist.coverImageUrl,
                 placeholder = R.drawable.placeholder,
                 cornerRadius = cornerRadius
             )
             
-            playlistName.setText(playlist.playlistName)
-            playlistDescription.setText(playlist.playlistDescription)
+            etPlaylistName.setText(playlist.playlistName)
+            etPlaylistDescription.setText(playlist.playlistDescription)
             
             buttonCreate.text = getString(R.string.save_playlist)
         }
@@ -70,7 +79,7 @@ class PlaylistRedactorFragment : PlaylistCreatorFragment() {
     companion object {
         
         private const val PLAYLIST_KEY = "playlist_key"
-        private const val MESSAGE_DURATION = 4000
+        private const val MESSAGE_DURATION_MILLIS = 2000
         
         fun createArgs(playlist: PlaylistModel): Bundle = bundleOf(
             PLAYLIST_KEY to Json.encodeToString(playlist)

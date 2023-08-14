@@ -12,7 +12,7 @@ class PlaylistRedactorViewModel(useCase: CreatePlaylistUseCase) :
     
     override fun onPlaylistNameChanged(playlistName: String?) {
         if (playlistName != null) {
-            playlist?.playlistName = playlistName
+            playlist = playlist?.copy(playlistName = playlistName)
         }
         super.onPlaylistNameChanged(playlistName)
     }
@@ -20,12 +20,12 @@ class PlaylistRedactorViewModel(useCase: CreatePlaylistUseCase) :
     override fun onPlaylistDescriptionChanged(playlistDescription: String?) {
         
         if (playlistDescription != null) {
-            playlist?.playlistDescription = playlistDescription
+            playlist = playlist?.copy(playlistDescription = playlistDescription)
         }
     }
     
     override fun saveImageUri(uri: URI) {
-        playlist?.coverImageUrl = uri.toString()
+        playlist = playlist?.copy(coverImageUrl = uri.toString())
     }
     
     override fun createPlaylist(): PlaylistModel {

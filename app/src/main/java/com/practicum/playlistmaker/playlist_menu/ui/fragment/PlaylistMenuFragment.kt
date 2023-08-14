@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.core.utils.debounce
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentPlaylistMenuBinding
+import com.practicum.playlistmaker.library.ui.models.ScreenState
 import com.practicum.playlistmaker.player.ui.fragment.AudioPlayerFragment
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 import com.practicum.playlistmaker.playlist_menu.ui.bottom_sheet.BottomSheetMenu
@@ -65,27 +66,27 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
         val playlistDuration: Int = viewModel.getPlaylistDuration()
         val tracksCount: Int = viewModel.getTracksCount()
         
-        binding.playlistDuration.text =
+        binding.tvPlaylistDuration.text =
             resources.getQuantityString(R.plurals.minutes, playlistDuration, playlistDuration)
         
-        binding.playlistTracksCount.text = resources.getQuantityString(
+        binding.tvPlaylistTracksCount.text = resources.getQuantityString(
             R.plurals.tracks, tracksCount, tracksCount
         )
     }
     
     private fun drawPlaylist(playlistModel: PlaylistModel) {
-        binding.apply {
-            
-            playlistCoverImage.setImage(
+        with(binding) {
+        
+            ivPlaylistCover.setImage(
                 url = playlistModel.coverImageUrl,
                 placeholder = R.drawable.placeholder,
             )
-            
-            playlistName.text = playlistModel.playlistName
-            playlistDescription.text = playlistModel.playlistDescription
-            
+        
+            tvPlaylistName.text = playlistModel.playlistName
+            tvPlaylistDescription.text = playlistModel.playlistDescription
+        
             if (playlistModel.playlistDescription.isEmpty()) {
-                playlistDescription.visibility = View.GONE
+                tvPlaylistDescription.visibility = View.GONE
             }
         }
     }
@@ -98,7 +99,7 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
     }
     
     private fun initClickDebounce() {
-        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
             action = { track ->
@@ -107,8 +108,8 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
                     AudioPlayerFragment.createArgs(track)
                 )
             })
-        
-        onLongClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+    
+        onLongClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
             action = { track ->
@@ -122,28 +123,28 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
                 onClickDebounce?.let { it(track) }
             }
             
-        }, object : PlaylistMenuAdapter.LongClickListener {
+        }, object : TrackAdapter.LongClickListener {
             override fun onTrackClick(track: TrackModel) {
                 onLongClickDebounce?.let { it(track) }
             }
         })
         
-        binding.trackList.adapter = trackAdapter
+        binding.rvTrackList.adapter = trackAdapter
     }
     
     private fun initListeners() {
+    
+        with(binding) {
         
-        binding.apply {
-            
-            navigationToolbar.setNavigationOnClickListener {
+            tbNavigation.setNavigationOnClickListener {
                 goBack()
             }
-            
-            icShare.setOnClickListener {
+        
+            ivShare.setOnClickListener {
                 viewModel.shareClicked()
             }
-            
-            icMore.setOnClickListener {
+        
+            ivMore.setOnClickListener {
                 openMenu(viewModel.getPlaylist())
             }
         }
@@ -171,7 +172,7 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
     private fun render(state: PlaylistMenuState) {
         
         when (state) {
-            is PlaylistMenuState.Content -> showContent(state.content)
+            is PlaylistMenuState.Content -> showContent(state.content, state.bottomListState)
             PlaylistMenuState.EmptyShare -> showMessage()
             is PlaylistMenuState.Share -> {
                 val messageCreator = MessageCreator(requireContext())
@@ -182,32 +183,33 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
         }
     }
     
-    private fun showContent(content: PlaylistModel) {
+    private fun showContent(content: PlaylistModel, bottomListState: ScreenState ) {
         drawPlaylist(content)
         refreshPlaylistInfo()
         
-        if (content.trackList.isEmpty()) {
-            showPlaceholder()
-        } else {
-            binding.apply {
-                trackList.visibility = View.VISIBLE
-                placeholderImage.visibility = View.GONE
-                placeholderMessage.visibility = View.GONE
+        when (bottomListState) {
+            is ScreenState.Content<*> -> {
+                with(binding) {
+                    rvTrackList.visibility = View.VISIBLE
+                    ivPlaceholder.visibility = View.GONE
+                    tvPlaceholder.visibility = View.GONE
+                }
+    
+                trackAdapter?.apply {
+                    trackList.clear()
+                    trackList.addAll(content.trackList)
+                    notifyDataSetChanged()
+                }
             }
-            
-            trackAdapter?.apply {
-                trackList.clear()
-                trackList.addAll(content.trackList)
-                notifyDataSetChanged()
-            }
+            ScreenState.Empty -> showPlaceholder()
         }
     }
     
     private fun showPlaceholder() {
-        binding.apply {
-            trackList.visibility = View.GONE
-            placeholderImage.visibility = View.VISIBLE
-            placeholderMessage.visibility = View.VISIBLE
+        with(binding) {
+            rvTrackList.visibility = View.GONE
+            ivPlaceholder.visibility = View.VISIBLE
+            tvPlaceholder.visibility = View.VISIBLE
         }
     }
     
@@ -217,7 +219,7 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
             .make(requireContext(), binding.containerLayout, message, Snackbar.LENGTH_SHORT)
             .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.deep_white))
-            .setDuration(MESSAGE_DURATION)
+            .setDuration(MESSAGE_DURATION_MILLIS)
             .show()
     }
     
@@ -234,12 +236,12 @@ class PlaylistMenuFragment : Fragment(R.layout.fragment_playlist_menu) {
     }
     
     companion object {
-        
+    
         const val KEY_ID = "key_id"
         private const val PERCENT_OCCUPIED_BY_BOTTOM_SHEET = 0.33f
-        private const val CLICK_DEBOUNCE_DELAY = 300L
-        private const val MESSAGE_DURATION = 2000
-        
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
+        private const val MESSAGE_DURATION_MILLIS = 2000
+    
         fun createArgs(id: Int): Bundle = bundleOf(
             KEY_ID to id
         )

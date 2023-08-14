@@ -13,10 +13,10 @@ class PlaylistsViewHolder(
     fun bind(model: PlaylistModel) {
         val cornerRadius = itemView.resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
         
-        binding.playlistName.text = model.playlistName
-        binding.tracksCount.text = itemView.resources.getQuantityString(R.plurals.tracks, model.tracksCount, model.tracksCount)
+        binding.tvPlaylistName.text = model.playlistName
+        binding.tvTracksCount.text = itemView.resources.getQuantityString(R.plurals.tracks, model.tracksCount, model.tracksCount)
         
-        binding.playlistCover.setImage(
+        binding.ivPlaylistCover.setImage(
             url = model.coverImageUrl,
             placeholder = R.drawable.placeholder,
             cornerRadius = cornerRadius,

@@ -19,8 +19,12 @@ class AudioPlayerViewModel(
     private val libraryInteractor: LibraryInteractor,
 ) : ViewModel() {
     
-    private val playStatusLiveData = MutableLiveData<PlayStatus>()
-    private val isFavoriteLiveData = MutableLiveData<Boolean>()
+    private val _playStatusLiveData = MutableLiveData<PlayStatus>()
+    private val _isFavoriteLiveData = MutableLiveData<Boolean>()
+    
+    val playStatusLiveData: LiveData<PlayStatus> = _playStatusLiveData
+    val isFavoriteLiveData: LiveData<Boolean> = _isFavoriteLiveData
+    
     private val playProgress get() = mediaInteractor.getPlayerPosition()
     private val playerState get() = mediaInteractor.getPlayerState()
     
@@ -35,9 +39,6 @@ class AudioPlayerViewModel(
         mediaInteractor.stopPlaying()
     }
     
-    fun observePlayStatus(): LiveData<PlayStatus> = playStatusLiveData
-    fun observeFavoriteTrack(): LiveData<Boolean> = isFavoriteLiveData
-    
     fun isFavorite(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
         
@@ -45,7 +46,7 @@ class AudioPlayerViewModel(
                 .isFavorite(id)
                 .collect {
                     isFavorite = it
-                    isFavoriteLiveData.postValue(isFavorite)
+                    _isFavoriteLiveData.postValue(isFavorite)
                 }
         
         }
@@ -57,7 +58,7 @@ class AudioPlayerViewModel(
     
     fun toggleFavorite(track: TrackModel) {
         isFavorite = !isFavorite
-        isFavoriteLiveData.value = isFavorite
+        _isFavoriteLiveData.value = isFavorite
         viewModelScope.launch(Dispatchers.IO) {
             if (isFavorite) {
                 libraryInteractor.likeTrack(track = track)
@@ -73,7 +74,7 @@ class AudioPlayerViewModel(
             PlayerState.PLAYING -> pausePlaying()
             
             PlayerState.NOT_PREPARED -> {
-                playStatusLiveData.value = PlayStatus.Loading()
+                _playStatusLiveData.value = PlayStatus.Loading()
             }
             
             PlayerState.READY, PlayerState.PAUSED -> startPlaying()
@@ -95,8 +96,8 @@ class AudioPlayerViewModel(
     
     private fun processPlayStatus(playerState: PlayerState) {
         when (playerState) {
-            PlayerState.READY -> { playStatusLiveData.value = PlayStatus.Ready() }
-            else -> { playStatusLiveData.value = PlayStatus.NotConnected(playProgress = playProgress) }
+            PlayerState.READY -> { _playStatusLiveData.value = PlayStatus.Ready() }
+            else -> { _playStatusLiveData.value = PlayStatus.NotConnected(playProgress = playProgress) }
         }
     }
     
@@ -105,8 +106,8 @@ class AudioPlayerViewModel(
         mediaInteractor.startPlaying()
         progressTimerJob = viewModelScope.launch {
             do {
-                playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
-                delay(TIMER_DELAY)
+                _playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
+                delay(TIMER_DELAY_MILLIS)
             } while (playerState == PlayerState.PLAYING)
             
             if (playerState == PlayerState.READY) {
@@ -117,10 +118,10 @@ class AudioPlayerViewModel(
     
     private fun pausePlaying() {
         if (playerState == PlayerState.READY) {
-            playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
+            _playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
         } else {
             mediaInteractor.pausePlaying()
-            playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
+            _playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
         }
         progressTimerJob?.cancel()
     }
@@ -129,6 +130,6 @@ class AudioPlayerViewModel(
     
     companion object {
         const val START_POSITION = 0
-        private const val TIMER_DELAY = 300L
+        private const val TIMER_DELAY_MILLIS = 300L
     }
 }
