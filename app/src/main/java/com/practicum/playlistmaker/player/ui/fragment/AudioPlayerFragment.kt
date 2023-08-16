@@ -15,7 +15,7 @@ import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
-import com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheet
+import com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheetPlaylists
 import com.practicum.playlistmaker.player.ui.models.PlayStatus
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackModel
@@ -28,7 +28,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     private val binding by viewBinding<FragmentAudioPlayerBinding>()
     private val viewModel by viewModel<AudioPlayerViewModel>()
     
-    private lateinit var track: TrackModel
+    private var track: TrackModel? = null
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,21 +37,26 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             .getString(KEY_TRACK)
             ?.let { Json.decodeFromString<TrackModel>(it) } ?: TrackModel.emptyTrack
     
-        viewModel.preparingPlayer(track.previewUrl)
-        viewModel.isFavorite(track.trackId)
-        
-        viewModel.apply {
-            observeFavoriteTrack().observe(viewLifecycleOwner) { isFavorite ->
-                renderLikeButton(isFavorite)
-            }
-            observePlayStatus().observe(viewLifecycleOwner) { playingStatus ->
-                renderPlayingContent(playingStatus)
-            
-            }
+        track?.let {
+            viewModel.preparingPlayer(it.previewUrl)
+            viewModel.isFavorite(it.trackId)
+            drawTrack(it)
         }
     
-        drawTrack(track)
+        initObserver()
         initListeners()
+    }
+    
+    private fun initObserver() {
+        with(viewModel) {
+            isFavoriteStatus.observe(viewLifecycleOwner) { isFavorite ->
+                renderLikeButton(isFavorite)
+            }
+            playStatus.observe(viewLifecycleOwner) { playingStatus ->
+                renderPlayingContent(playingStatus)
+                
+            }
+        }
     }
     
     private fun renderLikeButton(isFavorite: Boolean) {
@@ -87,7 +92,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             
             is PlayStatus.Ready -> {
                 binding.playButton.setImageDrawable(transitionDrawable)
-                transitionDrawable.startTransition(TRANSITION_DURATION)
+                transitionDrawable.startTransition(TRANSITION_DURATION_MILLIS)
             }
         }
     }
@@ -124,62 +129,62 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     
     private fun renderPlayButton(imageResource: Int, currentPositionMediaPlayer: Int) {
         binding.playButton.setImageResource(imageResource)
-        binding.excerptDuration.text = currentPositionMediaPlayer.millisConverter()
+        binding.tvExcerptDuration.text = currentPositionMediaPlayer.millisConverter()
     }
     
     private fun drawTrack(trackModel: TrackModel) {
-        
+    
         val cornerRadius =
             requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
+    
+        with(binding) {
         
-        binding.apply {
-            
-            cover.setImage(
-                url = trackModel.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"),
+            ivCover.setImage(
+                url = trackModel.previewUrl512,
                 placeholder = R.drawable.placeholder,
                 cornerRadius = cornerRadius,
             )
-            excerptDuration.text = AudioPlayerViewModel.START_POSITION.millisConverter()
-            trackName.text = trackModel.trackName
-            artistName.text = trackModel.artistName
-            changeableDuration.text = trackModel.trackTimeMillis.millisConverter()
-            changeableAlbum.text = trackModel.collectionName
-            changeableYear.text = trackModel.releaseDate.substring(0, 4)
-            changeableGenre.text = trackModel.primaryGenreName
-            changeableCountry.text = trackModel.country
-            
+            tvExcerptDuration.text = AudioPlayerViewModel.START_POSITION.millisConverter()
+            tvTrackName.text = trackModel.trackName
+            tvArtistName.text = trackModel.artistName
+            tvChangeableDuration.text = trackModel.trackTimeMillis.millisConverter()
+            tvChangeableAlbum.text = trackModel.collectionName
+            tvChangeableYear.text = trackModel.releaseDate.substring(0, 4)
+            tvChangeableGenre.text = trackModel.primaryGenreName
+            tvChangeableCountry.text = trackModel.country
         }
     }
     
     private fun initListeners() {
-        
-        binding.apply {
-            navigationToolbar.setNavigationOnClickListener {
+    
+        with(binding) {
+            tbNavigation.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
-    
+        
             playButton.setOnClickListener { button ->
                 (button as? ImageButton)?.let { startAnimation(it) }
-                viewModel.playButtonClicked(track.previewUrl)
+                track?.let { viewModel.playButtonClicked(it.previewUrl) }
             }
-    
+        
             likeButton.setOnClickListener { button ->
                 (button as? ImageButton)?.let { startAnimation(it) }
-                viewModel.toggleFavorite(track)
+                track?.let { viewModel.toggleFavorite(it) }
             }
     
             addButton.setOnClickListener { button ->
                 (button as? ImageButton)?.let { startAnimation(it) }
-                findNavController().navigate(
-                    R.id.action_audioPlayerFragment_to_bottomSheet, BottomSheet.createArgs(track)
-                )
+                findNavController().navigate(R.id.action_audioPlayerFragment_to_bottomSheetPlaylists,
+                    track?.let {
+                        BottomSheetPlaylists.createArgs(it)
+                    })
             }
         }
     }
     
     companion object {
         const val KEY_TRACK = "track"
-        private const val TRANSITION_DURATION = 1000
+        private const val TRANSITION_DURATION_MILLIS = 1000
     
         fun createArgs(track: TrackModel): Bundle = bundleOf(
             KEY_TRACK to Json.encodeToString(track)

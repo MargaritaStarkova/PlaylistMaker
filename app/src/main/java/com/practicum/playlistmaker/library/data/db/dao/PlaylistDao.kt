@@ -24,4 +24,6 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlists ORDER BY saveDate DESC;")
     fun getSavedPlaylists(): Flow<List<PlaylistEntity>>
     
+    @Query("SELECT * FROM playlists WHERE id = :id")
+    fun getPlaylistById(id: Int): Flow<PlaylistEntity>
 }

@@ -7,8 +7,8 @@ import com.practicum.playlistmaker.sharing.domain.models.EmailData
 class SharingInteractorImpl(
     private val externalNavigator: ExternalNavigator,
 ) : SharingInteractor {
-    override fun shareApp() {
-        externalNavigator.shareLink(getShareAppLink())
+    override fun share(text: String) {
+        externalNavigator.share(text)
     }
     
     override fun openTerms() {
@@ -17,10 +17,6 @@ class SharingInteractorImpl(
     
     override fun openSupport() {
         externalNavigator.openEmail(getSupportEmailData())
-    }
-    
-    private fun getShareAppLink(): String {
-        return APP_LINK
     }
     
     private fun getSupportEmailData(): EmailData {
@@ -32,7 +28,6 @@ class SharingInteractorImpl(
     }
     
     companion object {
-        private const val APP_LINK = "https://practicum.yandex.ru/android-developer/"
         private const val SUPPORT_EMAIL = "margo.ivi@yandex.ru"
         private const val TERMS_LINK = "https://yandex.ru/legal/practicum_offer/"
     }

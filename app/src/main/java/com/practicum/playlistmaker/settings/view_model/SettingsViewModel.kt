@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.settings.view_model
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,24 +14,24 @@ class SettingsViewModel(
 ) : ViewModel() {
     
     private var darkTheme = false
-    private val themeSwitcherStateLiveData = MutableLiveData(darkTheme)
+    
+    private val _themeSwitcherState = MutableLiveData(darkTheme)
+    val themeSwitcherState: LiveData<Boolean> = _themeSwitcherState
     
     init {
         darkTheme = settingsInteractor.getThemeSettings().darkTheme
-        themeSwitcherStateLiveData.value = darkTheme
+        _themeSwitcherState.value = darkTheme
     }
     
-    fun observeThemeSwitcherState(): LiveData<Boolean> = themeSwitcherStateLiveData
-    
     fun onThemeSwitcherClicked(isChecked: Boolean) {
-        themeSwitcherStateLiveData.value = isChecked
+        _themeSwitcherState.value = isChecked
         settingsInteractor.updateThemeSetting(ThemeSettings(darkTheme = isChecked))
         
         switchTheme(isChecked)
     }
     
     fun onShareAppClicked() {
-        sharingInteractor.shareApp()
+        sharingInteractor.share(getShareAppLink())
     }
     
     fun onWriteSupportClicked() {
@@ -44,9 +43,9 @@ class SettingsViewModel(
     }
     
     private fun switchTheme(darkThemeEnabled: Boolean) {
-        
+    
         darkTheme = darkThemeEnabled
-        
+    
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -54,5 +53,13 @@ class SettingsViewModel(
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+    
+    private fun getShareAppLink(): String {
+        return APP_LINK
+    }
+    
+    companion object {
+        private const val APP_LINK = "https://practicum.yandex.ru/android-developer/"
     }
 }

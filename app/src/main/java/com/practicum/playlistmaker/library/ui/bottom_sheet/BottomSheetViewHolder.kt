@@ -13,10 +13,10 @@ class BottomSheetViewHolder(
     fun bind(model: PlaylistModel) {
         val cornerRadius = itemView.resources.getDimensionPixelSize(R.dimen.corner_radius_2dp)
         
-        binding.playlistName.text = model.playlistName
-        binding.trakcsCount.text = itemView.resources.getQuantityString(R.plurals.tracks, model.tracksCount, model.tracksCount)
+        binding.tvPlaylistName.text = model.playlistName
+        binding.tvTracksCount.text = itemView.resources.getQuantityString(R.plurals.tracks, model.tracksCount, model.tracksCount)
         
-        binding.cover.setImage(
+        binding.ivCover.setImage(
             url = model.coverImageUrl,
             placeholder = R.drawable.placeholder,
             cornerRadius = cornerRadius,

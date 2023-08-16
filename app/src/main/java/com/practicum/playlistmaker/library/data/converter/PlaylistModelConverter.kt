@@ -22,16 +22,18 @@ class PlaylistModelConverter {
         }
     }
     
-    fun map(playlist: PlaylistEntity): PlaylistModel {
-        return with(playlist) {
-            PlaylistModel(
-                id = id,
-                playlistName = playlistName,
-                playlistDescription = playlistDescription,
-                coverImageUrl = imageUrl,
-                trackList = Json.decodeFromString(trackList),
-                tracksCount = countTracks,
-            )
-        }
+    fun map(playlist: PlaylistEntity?): PlaylistModel {
+        return if (playlist != null) {
+            with(playlist) {
+                PlaylistModel(
+                    id = id,
+                    playlistName = playlistName,
+                    playlistDescription = playlistDescription,
+                    coverImageUrl = imageUrl,
+                    trackList = Json.decodeFromString(trackList),
+                    tracksCount = countTracks,
+                )
+            }
+        } else PlaylistModel.emptyPlaylist
     }
 }

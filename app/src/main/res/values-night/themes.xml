@@ -27,6 +27,7 @@
         <item name="fab_color">@color/fab_color_grey_dark</item>
         <item name="yp_text_grey_color">@color/yp_text_gray</item>
         <item name="progressbar_color">@color/blue</item>
+        <item name="background_playlist_menu_color">@color/light_grey</item>
 
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>

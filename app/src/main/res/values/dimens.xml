@@ -7,6 +7,7 @@
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_19sp">19sp</dimen>
     <dimen name="text_size_22sp">22sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
 
     <dimen name="image_size_45dp">45dp</dimen>
     <dimen name="icon_size_20dp">20dp</dimen>
@@ -56,6 +57,9 @@
     <dimen name="dimen_160dp">160dp</dimen>
     <dimen name="margin_164dp">164dp</dimen>
     <dimen name="margin_180dp">180dp</dimen>
+    <dimen name="dimen_24dp">24dp</dimen>
+    <dimen name="max_height_collapsed">266dp</dimen>
+    <dimen name="margin_21dp">21dp</dimen>
 
 
 </resources>

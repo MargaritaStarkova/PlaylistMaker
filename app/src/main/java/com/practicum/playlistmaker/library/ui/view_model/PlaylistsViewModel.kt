@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.library.ui.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.domain.api.PlaylistsInteractor
-import com.practicum.playlistmaker.library.ui.models.PlaylistsScreenState
+import com.practicum.playlistmaker.library.ui.models.ScreenState
 import com.practicum.playlistmaker.playlist_creator.domain.models.PlaylistModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +14,8 @@ class PlaylistsViewModel(
     private val interactor: PlaylistsInteractor,
 ) : ViewModel() {
     
-    private val _contentFlow: MutableStateFlow<PlaylistsScreenState> = MutableStateFlow(PlaylistsScreenState.Empty)
-    val contentFlow: StateFlow<PlaylistsScreenState> = _contentFlow
+    private val _contentFlow: MutableStateFlow<ScreenState> = MutableStateFlow(ScreenState.Empty)
+    val contentFlow: StateFlow<ScreenState> = _contentFlow
     
     init {
         fillData()
@@ -29,14 +29,13 @@ class PlaylistsViewModel(
                     processResult(playlists)
                 }
         }
-        
     }
     
     private fun processResult(playlists: List<PlaylistModel>) {
         if (playlists.isEmpty()) {
-            _contentFlow.value = (PlaylistsScreenState.Empty)
+            _contentFlow.value = (ScreenState.Empty)
         } else {
-            _contentFlow. value = (PlaylistsScreenState.Content(playlists))
+            _contentFlow.value = (ScreenState.Content(playlists))
         }
     }
 }

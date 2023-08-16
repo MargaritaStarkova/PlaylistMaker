@@ -38,7 +38,15 @@ class PlaylistsRepositoryImpl(
             .map { convertFromTrackEntity(it) }
     }
     
+    override fun getPlaylistById(id: Int): Flow<PlaylistModel> {
+        return database
+            .playlistsDao()
+            .getPlaylistById(id)
+            .map { converter.map(it) }
+    }
+    
     private fun convertFromTrackEntity(playlists: List<PlaylistEntity>): List<PlaylistModel> {
-        return playlists.map { converter.map(it) }
+        return if (playlists.isEmpty()) emptyList()
+        else playlists.map { converter.map(it) }
     }
 }

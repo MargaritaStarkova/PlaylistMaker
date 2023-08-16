@@ -2,10 +2,7 @@ package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doOnTextChanged
@@ -35,7 +32,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     
-        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY,
+        onClickDebounce = debounce(delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             useLastParam = false,
             action = { track ->
@@ -46,7 +43,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 )
             })
     
-        viewModel.apply {
+        with(viewModel) {
             observeContentState().observe(viewLifecycleOwner) { searchScreenState ->
                 render(searchScreenState)
             }
@@ -72,33 +69,36 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
     
     private fun initListeners() {
-        
-        binding.apply {
     
-            inputEditText.setOnFocusChangeListener { _, hasFocus ->
-                viewModel.searchFocusChanged(hasFocus, binding.inputEditText.text.toString())
+        with(binding) {
+        
+            etInput.setOnFocusChangeListener { _, hasFocus ->
+                viewModel.searchFocusChanged(hasFocus, binding.etInput.text.toString())
             }
-            inputEditText.doOnTextChanged { text, _, _, _ ->
+            etInput.doOnTextChanged { text, _, _, _ ->
                 viewModel.onSearchTextChanged(text.toString())
             }
-            clearIcon.setOnClickListener {
+            ivClear.setOnClickListener {
                 viewModel.searchTextClearClicked()
             }
-            clearHistory.setOnClickListener {
+            clearHistoryBtn.setOnClickListener {
                 viewModel.onHistoryClearedClicked()
             }
             updateButton.setOnClickListener {
-                viewModel.loadTrackList(binding.inputEditText.text.toString())
+                viewModel.loadTrackList(binding.etInput.text.toString())
             }
         }
     }
     
     private fun initAdapter() {
-        trackAdapter = TrackAdapter { track ->
-            (activity as HostActivity).animateBottomNavigationView()
-            onClickDebounce?.let { it(track) }
-        }
-        binding.searchList.adapter = trackAdapter
+        trackAdapter = TrackAdapter(
+            clickListener = (TrackAdapter.TrackClickListener { track ->
+                (activity as HostActivity).animateBottomNavigationView()
+                onClickDebounce?.let { it(track) }
+            }),
+        )
+        
+        binding.rvTrackList.adapter = trackAdapter
     }
     
     private fun render(state: SearchContentState) {
@@ -117,64 +117,53 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showSearchList(list: List<TrackModel>) {
     
-        binding.apply {
-            placeholderImage.visibility = View.GONE
-            placeholderMessage.visibility = View.GONE
+        with(binding) {
+            ivPlaceholder.visibility = View.GONE
+            tvPlaceholder.visibility = View.GONE
             updateButton.visibility = View.GONE
-            youSearched.visibility = View.GONE
-            clearHistory.visibility = View.GONE
+            tvYouSearched.visibility = View.GONE
+            clearHistoryBtn.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
     
-        trackAdapter?.apply {
-            trackList.clear()
-            trackList.addAll(list)
-            notifyDataSetChanged()
-        }
+        refreshList(list)
     }
 
     private fun showHistoryList(list: List<TrackModel>) {
     
-        binding.apply {
-            placeholderImage.visibility = View.GONE
-            placeholderMessage.visibility = View.GONE
+        with(binding) {
+            ivPlaceholder.visibility = View.GONE
+            tvPlaceholder.visibility = View.GONE
             updateButton.visibility = View.GONE
             progressBar.visibility = View.GONE
         
             if (list.isNotEmpty()) {
-                youSearched.visibility = View.VISIBLE
-                clearHistory.visibility = View.VISIBLE
+                tvYouSearched.visibility = View.VISIBLE
+                clearHistoryBtn.visibility = View.VISIBLE
             } else {
-                youSearched.visibility = View.GONE
-                clearHistory.visibility = View.GONE
+                tvYouSearched.visibility = View.GONE
+                clearHistoryBtn.visibility = View.GONE
             }
         }
-        trackAdapter?.apply {
-            trackList.clear()
-            trackList.addAll(list)
-            notifyDataSetChanged()
-        }
+    
+        refreshList(list)
     }
 
     private fun showMessage(error: NetworkError) {
+        refreshList(emptyList())
+    
         when (error) {
             NetworkError.SEARCH_ERROR -> {
-    
-                trackAdapter?.apply {
-                    trackList.clear()
-                    notifyDataSetChanged()
-                }
-    
-                binding.apply {
-                    placeholderImage.visibility = View.VISIBLE
-                    placeholderMessage.visibility = View.VISIBLE
+                with(binding) {
+                    ivPlaceholder.visibility = View.VISIBLE
+                    tvPlaceholder.visibility = View.VISIBLE
                     updateButton.visibility = View.GONE
-                    youSearched.visibility = View.GONE
-                    clearHistory.visibility = View.GONE
+                    tvYouSearched.visibility = View.GONE
+                    clearHistoryBtn.visibility = View.GONE
                     progressBar.visibility = View.GONE
-    
-                    placeholderMessage.text = getString(R.string.search_error)
-                    placeholderImage.setImageDrawable(
+                
+                    tvPlaceholder.text = getString(R.string.search_error)
+                    ivPlaceholder.setImageDrawable(
                         AppCompatResources.getDrawable(requireContext(), R.drawable.error_search)
                     )
                 }
@@ -183,21 +172,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             NetworkError.CONNECTION_ERROR -> {
                 hideKeyboard()
     
-                trackAdapter?.apply {
-                    trackList.clear()
-                    notifyDataSetChanged()
-                }
-    
-                binding.apply {
-                    placeholderImage.visibility = View.VISIBLE
-                    placeholderMessage.visibility = View.VISIBLE
+                with(binding) {
+                    ivPlaceholder.visibility = View.VISIBLE
+                    tvPlaceholder.visibility = View.VISIBLE
                     updateButton.visibility = View.VISIBLE
-                    youSearched.visibility = View.GONE
-                    clearHistory.visibility = View.GONE
+                    tvYouSearched.visibility = View.GONE
+                    clearHistoryBtn.visibility = View.GONE
                     progressBar.visibility = View.GONE
-                
-                    placeholderMessage.text = getString(R.string.internet_error)
-                    placeholderImage.setImageDrawable(
+    
+                    tvPlaceholder.text = getString(R.string.internet_error)
+                    ivPlaceholder.setImageDrawable(
                         AppCompatResources.getDrawable(
                             requireContext(), R.drawable.error_internet
                         )
@@ -207,13 +191,34 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
     
+    private fun showLoading() {
+        refreshList(emptyList())
+        
+        with(binding) {
+            ivPlaceholder.visibility = View.GONE
+            tvPlaceholder.visibility = View.GONE
+            updateButton.visibility = View.GONE
+            tvYouSearched.visibility = View.GONE
+            clearHistoryBtn.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
+    }
+    
+    private fun refreshList(trackList: List<TrackModel>) {
+        trackAdapter?.let {
+            it.trackList.clear()
+            it.trackList.addAll(trackList)
+            it.notifyDataSetChanged()
+        }
+    }
+    
     private fun clearSearchText() {
-        binding.inputEditText.setText("")
+        binding.etInput.setText("")
     }
     
     private fun clearIconVisibility(query: String?) {
-        if (query.isNullOrEmpty()) binding.clearIcon.visibility = View.GONE
-        else binding.clearIcon.visibility = View.VISIBLE
+        if (query.isNullOrEmpty()) binding.ivClear.visibility = View.GONE
+        else binding.ivClear.visibility = View.VISIBLE
     }
     
     private fun hideKeyboard() {
@@ -222,23 +227,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         inputMethodManager?.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
     }
     
-    private fun showLoading() {
-        trackAdapter?.apply {
-            trackList.clear()
-            notifyDataSetChanged()
-        }
-        binding.apply {
-            placeholderImage.visibility = View.GONE
-            placeholderMessage.visibility = View.GONE
-            updateButton.visibility = View.GONE
-            youSearched.visibility = View.GONE
-            clearHistory.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-        }
-    }
-    
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 300L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
     }
 }
 

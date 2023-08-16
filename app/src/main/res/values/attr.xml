@@ -11,6 +11,7 @@
     <attr name="update_text_color" format="reference"/>
     <attr name="background_hint_color" format="reference"/>
     <attr name="hint_icon_text_color" format="reference"/>
+    <attr name="background_playlist_menu_color" format="reference"/>
 
     <attr name="ripple" format="reference"/>
     <attr name="fab_color" format="reference"/>

@@ -67,6 +67,12 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="YSMedium24">
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textColor">?attr/expression_text_color</item>
+        <item name="android:textSize">@dimen/text_size_24sp</item>
+    </style>
+
     <style name="YSMedium22">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">?attr/toolbar_text_color</item>
@@ -89,6 +95,12 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">?attr/toolbar_text_color</item>
         <item name="android:textSize">@dimen/text_size_14sp</item>
+    </style>
+
+    <style name="YSRegular18">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/expression_text_color</item>
+        <item name="android:textSize">@dimen/text_size_18sp</item>
     </style>
 
     <style name="YSRegular16">
@@ -132,4 +144,5 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
+    <dimen name="text_size_18sp">18sp</dimen>
 </resources>

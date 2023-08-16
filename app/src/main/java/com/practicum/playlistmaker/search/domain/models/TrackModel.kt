@@ -8,6 +8,7 @@ data class TrackModel(
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
+    val artworkUrl60: String,
     val artworkUrl100: String,
     val collectionName: String,
     val country: String,
@@ -15,12 +16,16 @@ data class TrackModel(
     val releaseDate: String,
     val previewUrl: String,
 ) {
+    
+    val previewUrl512: String = artworkUrl100.replaceAfterLast("/", "512x512bb.jpg")
+    
     companion object {
         val emptyTrack = TrackModel(
             trackId = "",
             trackName = "",
             artistName = "",
             trackTimeMillis = 0,
+            artworkUrl60 = "",
             artworkUrl100 = "",
             collectionName = "",
             country = "",

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.domain.api.LibraryInteractor
-import com.practicum.playlistmaker.library.ui.models.FavoriteState
+import com.practicum.playlistmaker.library.ui.models.ScreenState
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,8 +18,8 @@ class FavoriteTracksViewModel(
         fillData()
     }
     
-    private val contentStateLiveData = MutableLiveData<FavoriteState>()
-    fun observeContentState(): LiveData<FavoriteState> = contentStateLiveData
+    private val _contentState = MutableLiveData<ScreenState>()
+    val contentState: LiveData<ScreenState> = _contentState
     
     private fun fillData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,11 +35,11 @@ class FavoriteTracksViewModel(
         
         when {
             trackList.isEmpty() -> {
-                contentStateLiveData.postValue(FavoriteState.Empty)
+                _contentState.postValue(ScreenState.Empty)
             }
             
             else -> {
-                contentStateLiveData.postValue(FavoriteState.SelectedTracks(trackList))
+                _contentState.postValue(ScreenState.Content(trackList))
             }
         }
     }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bottom_sheet_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="@dimen/rounder_w_50dp"
+            android:layout_height="@dimen/rounder_h_4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:background="@drawable/rounder" />
+
+        <include
+            android:id="@+id/bottom_sheet_menu_item"
+            layout="@layout/item_view_bottom_sheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_13dp"
+            android:layout_marginTop="@dimen/margin_12dp" />
+
+        <TextView
+            android:id="@+id/tvShare"
+            style="@style/YSRegular16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/margin_16dp"
+            android:paddingVertical="@dimen/margin_21dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:foreground="?android:selectableItemBackgroundBorderless"
+            android:text="@string/ic_share" />
+
+        <TextView
+            android:id="@+id/tvEdit"
+            style="@style/YSRegular16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/margin_16dp"
+            android:paddingVertical="@dimen/margin_21dp"
+            android:foreground="?android:selectableItemBackgroundBorderless"
+            android:text="@string/edit_Information" />
+
+        <TextView
+            android:id="@+id/tvDelete"
+            style="@style/YSRegular16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/margin_16dp"
+            android:paddingVertical="@dimen/margin_21dp"
+            android:foreground="?android:selectableItemBackgroundBorderless"
+            android:text="@string/delete" />
+    </LinearLayout>
+
