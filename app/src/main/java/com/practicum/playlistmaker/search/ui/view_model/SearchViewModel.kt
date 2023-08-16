@@ -16,9 +16,9 @@ class SearchViewModel(
     private val interactor: SearchInteractor,
 ) : ViewModel() {
     
-    private val contentStateLiveData = MutableLiveData<SearchContentState>()
-    private val clearIconStateLiveData = MutableLiveData<String>()
-    private val searchTextClearClickedLiveData = SingleLiveEvent<Boolean>()
+    private val contentState = MutableLiveData<SearchContentState>()
+    private val clearIconState = MutableLiveData<String>()
+    private val searchTextClearClicked = SingleLiveEvent<Boolean>()
     
     private var latestSearchText: String? = null
     
@@ -30,21 +30,21 @@ class SearchViewModel(
         action = { query -> loadTrackList(query) })
     
     init {
-        contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
+        contentState.value = SearchContentState.HistoryContent(interactor.historyList)
     }
     
-    fun observeContentState(): LiveData<SearchContentState> = contentStateLiveData
-    fun observeClearIconState(): LiveData<String> = clearIconStateLiveData
-    fun observeSearchTextClearClicked(): LiveData<Boolean> = searchTextClearClickedLiveData
+    fun observeContentState(): LiveData<SearchContentState> = contentState
+    fun observeClearIconState(): LiveData<String> = clearIconState
+    fun observeSearchTextClearClicked(): LiveData<Boolean> = searchTextClearClicked
     
     fun onHistoryClearedClicked() {
         interactor.historyListCleared()
-        contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
+        contentState.value = SearchContentState.HistoryContent(interactor.historyList)
     }
     
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
         if (hasFocus && text.isEmpty()) {
-            contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
+            contentState.value = SearchContentState.HistoryContent(interactor.historyList)
         }
     }
 
@@ -52,7 +52,7 @@ class SearchViewModel(
         if (query.isEmpty()) {
             return
         }
-        contentStateLiveData.value = SearchContentState.Loading
+        contentState.value = SearchContentState.Loading
     
         searchJob = viewModelScope.launch {
             interactor
@@ -66,16 +66,16 @@ class SearchViewModel(
     fun searchTextClearClicked() {
         onSearchDebounce("")
         searchJob?.cancel()
-        searchTextClearClickedLiveData.value = true
-        contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
+        searchTextClearClicked.value = true
+        contentState.value = SearchContentState.HistoryContent(interactor.historyList)
     }
     
     fun onSearchTextChanged(query: String?) {
     
-        clearIconStateLiveData.value = query ?: ""
+        clearIconState.value = query ?: ""
     
         if (query.isNullOrEmpty()) {
-            contentStateLiveData.value = SearchContentState.HistoryContent(interactor.historyList)
+            contentState.value = SearchContentState.HistoryContent(interactor.historyList)
         } else {
     
             if (latestSearchText == query) return
@@ -88,11 +88,11 @@ class SearchViewModel(
     private fun processResult(result: FetchResult) {
         when {
             result.error != null -> {
-                contentStateLiveData.value = SearchContentState.Error(result.error)
+                contentState.value = SearchContentState.Error(result.error)
             }
     
             result.data != null -> {
-                contentStateLiveData.value = SearchContentState.SearchContent(result.data)
+                contentState.value = SearchContentState.SearchContent(result.data)
             }
         }
     }

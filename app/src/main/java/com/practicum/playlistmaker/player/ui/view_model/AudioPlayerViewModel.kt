@@ -19,11 +19,11 @@ class AudioPlayerViewModel(
     private val libraryInteractor: LibraryInteractor,
 ) : ViewModel() {
     
-    private val _playStatusLiveData = MutableLiveData<PlayStatus>()
-    private val _isFavoriteLiveData = MutableLiveData<Boolean>()
+    private val _playStatus = MutableLiveData<PlayStatus>()
+    private val _isFavoriteStatus = MutableLiveData<Boolean>()
     
-    val playStatusLiveData: LiveData<PlayStatus> = _playStatusLiveData
-    val isFavoriteLiveData: LiveData<Boolean> = _isFavoriteLiveData
+    val playStatus: LiveData<PlayStatus> = _playStatus
+    val isFavoriteStatus: LiveData<Boolean> = _isFavoriteStatus
     
     private val playProgress get() = mediaInteractor.getPlayerPosition()
     private val playerState get() = mediaInteractor.getPlayerState()
@@ -46,7 +46,7 @@ class AudioPlayerViewModel(
                 .isFavorite(id)
                 .collect {
                     isFavorite = it
-                    _isFavoriteLiveData.postValue(isFavorite)
+                    _isFavoriteStatus.postValue(isFavorite)
                 }
         
         }
@@ -58,7 +58,7 @@ class AudioPlayerViewModel(
     
     fun toggleFavorite(track: TrackModel) {
         isFavorite = !isFavorite
-        _isFavoriteLiveData.value = isFavorite
+        _isFavoriteStatus.value = isFavorite
         viewModelScope.launch(Dispatchers.IO) {
             if (isFavorite) {
                 libraryInteractor.likeTrack(track = track)
@@ -74,7 +74,7 @@ class AudioPlayerViewModel(
             PlayerState.PLAYING -> pausePlaying()
             
             PlayerState.NOT_PREPARED -> {
-                _playStatusLiveData.value = PlayStatus.Loading()
+                _playStatus.value = PlayStatus.Loading()
             }
             
             PlayerState.READY, PlayerState.PAUSED -> startPlaying()
@@ -96,8 +96,8 @@ class AudioPlayerViewModel(
     
     private fun processPlayStatus(playerState: PlayerState) {
         when (playerState) {
-            PlayerState.READY -> { _playStatusLiveData.value = PlayStatus.Ready() }
-            else -> { _playStatusLiveData.value = PlayStatus.NotConnected(playProgress = playProgress) }
+            PlayerState.READY -> { _playStatus.value = PlayStatus.Ready() }
+            else -> { _playStatus.value = PlayStatus.NotConnected(playProgress = playProgress) }
         }
     }
     
@@ -106,7 +106,7 @@ class AudioPlayerViewModel(
         mediaInteractor.startPlaying()
         progressTimerJob = viewModelScope.launch {
             do {
-                _playStatusLiveData.value = PlayStatus.Playing(playProgress = playProgress)
+                _playStatus.value = PlayStatus.Playing(playProgress = playProgress)
                 delay(TIMER_DELAY_MILLIS)
             } while (playerState == PlayerState.PLAYING)
             
@@ -118,10 +118,10 @@ class AudioPlayerViewModel(
     
     private fun pausePlaying() {
         if (playerState == PlayerState.READY) {
-            _playStatusLiveData.value = PlayStatus.Paused(playProgress = START_POSITION)
+            _playStatus.value = PlayStatus.Paused(playProgress = START_POSITION)
         } else {
             mediaInteractor.pausePlaying()
-            _playStatusLiveData.value = PlayStatus.Paused(playProgress = playProgress)
+            _playStatus.value = PlayStatus.Paused(playProgress = playProgress)
         }
         progressTimerJob?.cancel()
     }

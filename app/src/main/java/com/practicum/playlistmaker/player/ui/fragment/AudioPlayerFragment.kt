@@ -49,10 +49,10 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     
     private fun initObserver() {
         with(viewModel) {
-            isFavoriteLiveData.observe(viewLifecycleOwner) { isFavorite ->
+            isFavoriteStatus.observe(viewLifecycleOwner) { isFavorite ->
                 renderLikeButton(isFavorite)
             }
-            playStatusLiveData.observe(viewLifecycleOwner) { playingStatus ->
+            playStatus.observe(viewLifecycleOwner) { playingStatus ->
                 renderPlayingContent(playingStatus)
                 
             }

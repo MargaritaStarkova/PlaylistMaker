@@ -19,7 +19,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         
         viewModel
-            .observeThemeSwitcherState()
+            .themeSwitcherState
             .observe(viewLifecycleOwner) { isChecked ->
                 binding.themeSwitcher.isChecked = isChecked
             }

@@ -18,8 +18,8 @@ class FavoriteTracksViewModel(
         fillData()
     }
     
-    private val _contentStateLiveData = MutableLiveData<ScreenState>()
-    val contentStateLiveData: LiveData<ScreenState> = _contentStateLiveData
+    private val _contentState = MutableLiveData<ScreenState>()
+    val contentState: LiveData<ScreenState> = _contentState
     
     private fun fillData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,11 +35,11 @@ class FavoriteTracksViewModel(
         
         when {
             trackList.isEmpty() -> {
-                _contentStateLiveData.postValue(ScreenState.Empty)
+                _contentState.postValue(ScreenState.Empty)
             }
             
             else -> {
-                _contentStateLiveData.postValue(ScreenState.Content(trackList))
+                _contentState.postValue(ScreenState.Content(trackList))
             }
         }
     }

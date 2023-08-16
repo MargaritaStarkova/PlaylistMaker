@@ -38,7 +38,7 @@ class FavoriteTracksFragment : Fragment(R.layout.fragment_favorite_tracks) {
                 )
             })
     
-        viewModel.contentStateLiveData.observe(viewLifecycleOwner) { contentState ->
+        viewModel.contentState.observe(viewLifecycleOwner) { contentState ->
             render(contentState)
         }
     

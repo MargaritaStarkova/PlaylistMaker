@@ -14,17 +14,17 @@ class SettingsViewModel(
 ) : ViewModel() {
     
     private var darkTheme = false
-    private val themeSwitcherStateLiveData = MutableLiveData(darkTheme)
+    
+    private val _themeSwitcherState = MutableLiveData(darkTheme)
+    val themeSwitcherState: LiveData<Boolean> = _themeSwitcherState
     
     init {
         darkTheme = settingsInteractor.getThemeSettings().darkTheme
-        themeSwitcherStateLiveData.value = darkTheme
+        _themeSwitcherState.value = darkTheme
     }
     
-    fun observeThemeSwitcherState(): LiveData<Boolean> = themeSwitcherStateLiveData
-    
     fun onThemeSwitcherClicked(isChecked: Boolean) {
-        themeSwitcherStateLiveData.value = isChecked
+        _themeSwitcherState.value = isChecked
         settingsInteractor.updateThemeSetting(ThemeSettings(darkTheme = isChecked))
         
         switchTheme(isChecked)
