@@ -38,6 +38,7 @@
     <dimen name="margin_1dp">1dp</dimen>
 
     <dimen name="dimen_14dp">14dp</dimen>
+    <dimen name="dimen_84dp">84dp</dimen>
 
     <dimen name="corner_radius_54dp">54dp</dimen>
     <dimen name="corner_radius_16dp">16dp</dimen>
