@@ -66,7 +66,11 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             tvArtistName.text = trackModel.artistName
             tvChangeableDuration.text = trackModel.trackTimeMillis.millisConverter()
             tvChangeableAlbum.text = trackModel.collectionName
-            tvChangeableYear.text = trackModel.releaseDate.substring(0, 4)
+            tvChangeableYear.text = try {
+                trackModel.releaseDate.substring(0, 4)
+            } catch (e: StringIndexOutOfBoundsException) {
+                ""
+            }
             tvChangeableGenre.text = trackModel.primaryGenreName
             tvChangeableCountry.text = trackModel.country
         }
@@ -134,7 +138,6 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
 
             is PlayStatus.Ready -> {
                 binding.playButton.refreshImage(status)
-                binding.playButton.refreshImage(PlayStatus.Paused(0))
             }
         }
     }

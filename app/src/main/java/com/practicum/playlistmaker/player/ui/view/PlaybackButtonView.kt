@@ -28,6 +28,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     private var playImageBitmap: Bitmap? = null
     private var pauseImageBitmap: Bitmap? = null
     private var imageRect: RectF = RectF(0f, 0f, 0f, 0f)
+    private var animator: ValueAnimator? = ValueAnimator.ofInt(MIN_ALPHA, MAX_ALPHA)
 
     init {
         context.theme.obtainStyledAttributes(
@@ -52,7 +53,7 @@ class PlaybackButtonView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        imageRect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
+        imageRect.set(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -79,6 +80,13 @@ class PlaybackButtonView @JvmOverloads constructor(
         return super.onTouchEvent(event)
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.removeAllListeners()
+        animator?.cancel()
+        animator = null
+    }
+
     fun refreshImage(status: PlayStatus) {
         when (status) {
             is PlayStatus.Playing -> currentImageBitmap = pauseImageBitmap
@@ -90,13 +98,12 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     private fun animateImageVisibility() {
-        val animator = ValueAnimator.ofInt(MIN_ALPHA, MAX_ALPHA)
-        animator.duration = DURATION_ANIMATION_MILLIS
-        animator.addUpdateListener { animation ->
+        animator?.duration = DURATION_ANIMATION_MILLIS
+        animator?.addUpdateListener { animation ->
             imageAlpha = animation.animatedValue as Int
             invalidate()
         }
-        animator.start()
+        animator?.start()
     }
 
     companion object {
