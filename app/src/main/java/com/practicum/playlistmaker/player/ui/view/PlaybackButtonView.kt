@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui.view
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -13,7 +12,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.core.graphics.drawable.toBitmap
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.player.ui.models.PlayStatus
 
 class PlaybackButtonView @JvmOverloads constructor(
     context: Context,
@@ -22,15 +20,14 @@ class PlaybackButtonView @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0,
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private var imageAlpha: Int = MIN_ALPHA
     private val paint = Paint()
     private var currentImageBitmap: Bitmap? = null
     private var playImageBitmap: Bitmap? = null
     private var pauseImageBitmap: Bitmap? = null
     private var imageRect: RectF = RectF(0f, 0f, 0f, 0f)
-    private var animator: ValueAnimator? = ValueAnimator.ofInt(MIN_ALPHA, MAX_ALPHA)
 
     init {
+        isEnabled = false
         context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.PlaybackButtonView,
@@ -57,7 +54,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        paint.alpha = imageAlpha
+        paint.alpha = if (!isEnabled) MIN_ALPHA else MAX_ALPHA
         currentImageBitmap?.let { canvas.drawBitmap(it, null, imageRect, paint) }
     }
 
@@ -74,41 +71,30 @@ class PlaybackButtonView @JvmOverloads constructor(
 
             MotionEvent.ACTION_UP -> {
                 performClick()
+                if (!isEnabled) return false
+                changeImage()
                 return true
             }
         }
         return super.onTouchEvent(event)
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        animator?.removeAllListeners()
-        animator?.cancel()
-        animator = null
-    }
-
-    fun refreshImage(status: PlayStatus) {
-        when (status) {
-            is PlayStatus.Playing -> currentImageBitmap = pauseImageBitmap
-            is PlayStatus.Ready -> animateImageVisibility()
-            else -> currentImageBitmap = playImageBitmap
-        }
-
+    fun setInitStatus() {
+        isEnabled = true
+        currentImageBitmap = playImageBitmap
         invalidate()
     }
 
-    private fun animateImageVisibility() {
-        animator?.duration = DURATION_ANIMATION_MILLIS
-        animator?.addUpdateListener { animation ->
-            imageAlpha = animation.animatedValue as Int
-            invalidate()
+    private fun changeImage() {
+        currentImageBitmap = when (currentImageBitmap) {
+            playImageBitmap -> pauseImageBitmap
+            else -> playImageBitmap
         }
-        animator?.start()
+        invalidate()
     }
 
     companion object {
         private const val MIN_ALPHA = 120
         private const val MAX_ALPHA = 255
-        private const val DURATION_ANIMATION_MILLIS = 500L
     }
 }

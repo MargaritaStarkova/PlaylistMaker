@@ -55,7 +55,6 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
             requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_8dp)
 
         with(binding) {
-
             ivCover.setImage(
                 url = trackModel.previewUrl512,
                 placeholder = R.drawable.placeholder,
@@ -88,24 +87,23 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
     }
 
     private fun initListeners() {
-
         with(binding) {
             tbNavigation.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
 
             playButton.setOnClickListener { button ->
-                (button as? ImageButton)?.let { startAnimation(it) }
+                button?.let { startAnimation(it) }
                 track?.let { viewModel.playButtonClicked(it.previewUrl) }
             }
 
             likeButton.setOnClickListener { button ->
-                (button as? ImageButton)?.let { startAnimation(it) }
+                button?.let { startAnimation(it) }
                 track?.let { viewModel.toggleFavorite(it) }
             }
 
             addButton.setOnClickListener { button ->
-                (button as? ImageButton)?.let { startAnimation(it) }
+                button?.let { startAnimation(it) }
                 findNavController().navigate(R.id.action_audioPlayerFragment_to_bottomSheetPlaylists,
                     track?.let {
                         BottomSheetPlaylists.createArgs(it)
@@ -129,21 +127,21 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
 
             is PlayStatus.Playing -> {
                 startAnimation(binding.playButton)
-                renderPlayButton(status, status.playProgress)
+                renderPlayPosition(status.playProgress)
             }
 
             is PlayStatus.Paused -> {
-                renderPlayButton(status, status.playProgress)
+                renderPlayPosition(status.playProgress)
             }
 
             is PlayStatus.Ready -> {
-                binding.playButton.refreshImage(status)
+                renderPlayPosition(status.playProgress)
+                binding.playButton.setInitStatus()
             }
         }
     }
 
     private fun showMessage(status: PlayStatus) {
-
         when (status) {
             is PlayStatus.NotConnected -> {
                 Toast
@@ -167,8 +165,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
         )
     }
 
-    private fun renderPlayButton(status: PlayStatus, currentPositionMediaPlayer: Int) {
-        binding.playButton.refreshImage(status)
+    private fun renderPlayPosition(currentPositionMediaPlayer: Int) {
         binding.tvExcerptDuration.text = currentPositionMediaPlayer.millisConverter()
     }
 
