@@ -10,8 +10,6 @@ class InternetConnectionValidator(private val context: Context) {
         val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
-
-        //тестовый коммит
         
         val capabilities =
             connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)

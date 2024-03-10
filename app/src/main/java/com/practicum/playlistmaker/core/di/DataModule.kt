@@ -19,6 +19,7 @@ import com.practicum.playlistmaker.settings.data.storage.sharedprefs.SettingsSto
 import com.practicum.playlistmaker.settings.data.storage.sharedprefs.SharedPrefsSettingsStorage
 import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
 import com.practicum.playlistmaker.sharing.domain.api.ExternalNavigator
+import com.practicum.playlistmaker.core.root.InternetConnectionBroadcastReceiver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -66,6 +67,7 @@ val dataModule = module {
     factoryOf(::TrackModelConverter)
     factoryOf(::PlaylistModelConverter)
     factoryOf(::InternetConnectionValidator)
+    factoryOf(::InternetConnectionBroadcastReceiver)
     singleOf(::MediaPlayer)
     singleOf(::RetrofitNetworkClient).bind<NetworkClient>()
     singleOf(::SharedPrefsTracksStorage).bind<TracksStorage>()
