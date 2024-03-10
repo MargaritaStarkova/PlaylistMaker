@@ -1,14 +1,18 @@
 package com.practicum.playlistmaker.player.ui.fragment
 
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.core.root.InternetConnectionBroadcastReceiver
 import com.practicum.playlistmaker.core.utils.millisConverter
 import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
@@ -20,11 +24,14 @@ import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
+class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinComponent {
 
     private val binding by viewBinding<FragmentAudioPlayerBinding>()
     private val viewModel by viewModel<AudioPlayerViewModel>()
+    private val broadcastReceiver: InternetConnectionBroadcastReceiver by inject()
     private var track: TrackModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,8 +51,20 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player) {
         initListeners()
     }
 
+    @Suppress("DEPRECATION")
+    override fun onResume() {
+        super.onResume()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            broadcastReceiver,
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
     override fun onPause() {
         super.onPause()
+        requireContext().unregisterReceiver(broadcastReceiver)
         viewModel.onViewPaused()
     }
 
