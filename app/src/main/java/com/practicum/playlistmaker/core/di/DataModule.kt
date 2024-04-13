@@ -68,7 +68,6 @@ val dataModule = module {
     factoryOf(::PlaylistModelConverter)
     factoryOf(::InternetConnectionValidator)
     factoryOf(::InternetConnectionBroadcastReceiver)
-    singleOf(::MediaPlayer)
     singleOf(::RetrofitNetworkClient).bind<NetworkClient>()
     singleOf(::SharedPrefsTracksStorage).bind<TracksStorage>()
     singleOf(::SharedPrefsSettingsStorage).bind<SettingsStorage>()

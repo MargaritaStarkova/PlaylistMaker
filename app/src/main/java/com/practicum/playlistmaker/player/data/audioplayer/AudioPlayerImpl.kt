@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class AudioPlayerImpl(
-    private val player: MediaPlayer,
+    private val player: MediaPlayer = MediaPlayer(),
     private val validator: InternetConnectionValidator,
 ) : AudioPlayer {
     
