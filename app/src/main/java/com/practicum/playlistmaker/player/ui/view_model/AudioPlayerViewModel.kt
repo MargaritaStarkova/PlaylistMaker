@@ -77,7 +77,7 @@ class AudioPlayerViewModel(
     fun initPlayerControl(playerControl: PlayerControl) {
         this.playerControl = playerControl
 
-        playerControl.playerState
+        playerControl.observePlayerState()
             .onEach {
                 playerState = it
                 if (it is PlayerState.Prepared) playerControl.hideNotification()
