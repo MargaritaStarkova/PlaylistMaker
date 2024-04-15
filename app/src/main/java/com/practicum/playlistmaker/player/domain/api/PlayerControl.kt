@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface PlayerControl {
 
-    val playerState: StateFlow<PlayerState>
+    fun observePlayerState(): StateFlow<PlayerState>
     fun startPlayer()
     fun pausePlayer()
     fun showNotification()

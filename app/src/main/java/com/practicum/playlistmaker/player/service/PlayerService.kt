@@ -34,7 +34,14 @@ class PlayerService : Service(), PlayerControl {
     private var description = EMPTY
 
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Default())
-    override val playerState = _playerState.asStateFlow()
+
+    private var playerState: PlayerState
+        get() = _playerState.value
+        set(value) {
+            _playerState.value = value
+        }
+
+    override fun observePlayerState() = _playerState.asStateFlow()
 
     override fun onBind(intent: Intent?): IBinder {
         songUrl = intent?.getStringExtra(KEY_URL) ?: EMPTY
@@ -57,8 +64,7 @@ class PlayerService : Service(), PlayerControl {
     override fun pausePlayer() {
         player.pause()
         timerJob?.cancel()
-        _playerState.value =
-            PlayerState.Paused(player.currentPosition)
+        playerState = PlayerState.Paused(player.currentPosition)
     }
 
     override fun showNotification() {
@@ -72,7 +78,7 @@ class PlayerService : Service(), PlayerControl {
 
     override fun hideNotification() {
         ServiceCompat.stopForeground(
-            this,  ServiceCompat.STOP_FOREGROUND_REMOVE
+            this, ServiceCompat.STOP_FOREGROUND_REMOVE
         )
     }
 
@@ -80,8 +86,7 @@ class PlayerService : Service(), PlayerControl {
         timerJob = CoroutineScope(Dispatchers.Default).launch {
             while (player.isPlaying) {
                 delay(DELAY_MILLIS)
-                _playerState.value =
-                    PlayerState.Playing(player.currentPosition)
+                playerState = PlayerState.Playing(player.currentPosition)
             }
         }
     }
@@ -92,18 +97,18 @@ class PlayerService : Service(), PlayerControl {
         player.setDataSource(songUrl)
         player.prepareAsync()
         player.setOnPreparedListener {
-            _playerState.value = PlayerState.Prepared()
+            playerState = PlayerState.Prepared()
         }
         player.setOnCompletionListener {
             timerJob?.cancel()
-            _playerState.value = PlayerState.Prepared()
+            playerState = PlayerState.Prepared()
         }
     }
 
     private fun releasePlayer() {
         player.stop()
         timerJob?.cancel()
-        _playerState.value = PlayerState.Default()
+        playerState = PlayerState.Default()
         player.setOnPreparedListener(null)
         player.setOnCompletionListener(null)
         player.release()
