@@ -28,7 +28,7 @@ class AudioPlayerViewModel(
 ) : ViewModel() {
 
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Default())
-    private val _permissionState = Channel<PermissionResultState>()
+    private val permissionState = Channel<PermissionResultState>()
     private val _isFavoriteStatus = MutableLiveData<Boolean>()
     private val register = PermissionRequester.instance()
     private var playerState: PlayerState
@@ -49,7 +49,7 @@ class AudioPlayerViewModel(
     }
 
     fun observePlayerState() = _playerState.asStateFlow()
-    fun observePermissionState() = _permissionState.receiveAsFlow()
+    fun observePermissionState() = permissionState.receiveAsFlow()
 
     fun isFavorite(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -120,14 +120,14 @@ class AudioPlayerViewModel(
                 when (result) {
                     is PermissionResult.Granted -> {
                         playerControl?.showNotification()
-                        _permissionState.send(PermissionResultState.GRANTED)
+                        permissionState.send(PermissionResultState.GRANTED)
                     }
 
-                    is PermissionResult.Denied.NeedsRationale -> _permissionState.send(PermissionResultState.NEEDS_RATIONALE)
+                    is PermissionResult.Denied.NeedsRationale -> permissionState.send(PermissionResultState.NEEDS_RATIONALE)
 
                     is PermissionResult.Denied.DeniedPermanently -> {
                         playerControl?.pausePlayer()
-                        _permissionState.send(PermissionResultState.DENIED_PERMANENTLY)
+                        permissionState.send(PermissionResultState.DENIED_PERMANENTLY)
                     }
                     PermissionResult.Cancelled -> return@onEach
                 }
