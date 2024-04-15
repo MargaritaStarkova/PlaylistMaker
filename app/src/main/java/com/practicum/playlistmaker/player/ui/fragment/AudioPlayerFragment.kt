@@ -1,15 +1,25 @@
 package com.practicum.playlistmaker.player.ui.fragment
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.provider.Settings
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageButton
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.core.root.InternetConnectionBroadcastReceiver
@@ -18,9 +28,13 @@ import com.practicum.playlistmaker.core.utils.setImage
 import com.practicum.playlistmaker.core.utils.viewBinding
 import com.practicum.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.practicum.playlistmaker.library.ui.bottom_sheet.BottomSheetPlaylists
-import com.practicum.playlistmaker.player.ui.models.PlayStatus
+import com.practicum.playlistmaker.player.domain.models.PlayerState
+import com.practicum.playlistmaker.player.service.PlayerService
 import com.practicum.playlistmaker.player.ui.view_model.AudioPlayerViewModel
+import com.practicum.playlistmaker.playlist_creator.domain.models.PermissionResultState
 import com.practicum.playlistmaker.search.domain.models.TrackModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,6 +48,17 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
     private val broadcastReceiver: InternetConnectionBroadcastReceiver by inject()
     private var track: TrackModel? = null
 
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as PlayerService.AudioServiceBinder
+            viewModel.initPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removePlayerControl()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,13 +67,13 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
             ?.let { Json.decodeFromString<TrackModel>(it) } ?: TrackModel.emptyTrack
 
         track?.let {
-            viewModel.preparingPlayer(it.previewUrl)
             viewModel.isFavorite(it.trackId)
             drawTrack(it)
         }
 
         initObserver()
         initListeners()
+        bindMusicService()
     }
 
     @Suppress("DEPRECATION")
@@ -60,12 +85,19 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
             IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+
+        viewModel.onViewResumed()
     }
 
     override fun onPause() {
         super.onPause()
         requireContext().unregisterReceiver(broadcastReceiver)
         viewModel.onViewPaused()
+    }
+
+    override fun onDestroyView() {
+        unbindMusicService()
+        super.onDestroyView()
     }
 
     private fun drawTrack(trackModel: TrackModel) {
@@ -75,11 +107,11 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
 
         with(binding) {
             ivCover.setImage(
-                url = trackModel.previewUrl512,
+                url = trackModel.artworkUrl512,
                 placeholder = R.drawable.placeholder,
                 cornerRadius = cornerRadius,
             )
-            tvExcerptDuration.text = AudioPlayerViewModel.START_POSITION.millisConverter()
+            tvExcerptDuration.text = PlayerState.START_POSITION.millisConverter()
             tvTrackName.text = trackModel.trackName
             tvArtistName.text = trackModel.artistName
             tvChangeableDuration.text = trackModel.trackTimeMillis.millisConverter()
@@ -99,8 +131,17 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
             isFavoriteStatus.observe(viewLifecycleOwner) { isFavorite ->
                 renderLikeButton(isFavorite)
             }
-            playStatus.observe(viewLifecycleOwner) { playingStatus ->
-                renderPlayingContent(playingStatus)
+
+            observePlayerState()
+                .onEach(::renderPlayingContent)
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                observePermissionState()
+                    .onEach(::renderPermissions)
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
             }
         }
     }
@@ -112,22 +153,35 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
             }
 
             playButton.setOnClickListener { button ->
-                button?.let { startAnimation(it) }
-                track?.let { viewModel.playButtonClicked(it.previewUrl) }
+                button?.let(::startAnimation)
+                viewModel.onPlayerButtonClicked()
             }
 
             likeButton.setOnClickListener { button ->
-                button?.let { startAnimation(it) }
-                track?.let { viewModel.toggleFavorite(it) }
+                button?.let(::startAnimation)
+                track?.let(viewModel::toggleFavorite)
             }
 
             addButton.setOnClickListener { button ->
-                button?.let { startAnimation(it) }
-                findNavController().navigate(R.id.action_audioPlayerFragment_to_bottomSheetPlaylists,
-                    track?.let {
-                        BottomSheetPlaylists.createArgs(it)
-                    })
+                button?.let(::startAnimation)
+                findNavController().navigate(
+                    R.id.action_audioPlayerFragment_to_bottomSheetPlaylists,
+                    track?.let(BottomSheetPlaylists::createArgs)
+                )
             }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun renderPermissions(state: PermissionResultState) {
+        when (state) {
+            PermissionResultState.NEEDS_RATIONALE -> showPermissionMessage()
+            PermissionResultState.DENIED_PERMANENTLY -> {
+                showPermissionMessage()
+                binding.playButton.setInitStatus()
+                openSettings()
+            }
+            PermissionResultState.GRANTED -> Unit
         }
     }
 
@@ -138,41 +192,14 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
         binding.likeButton.setImageResource(imageResource)
     }
 
-    private fun renderPlayingContent(status: PlayStatus) {
-        when (status) {
-            is PlayStatus.NotConnected, is PlayStatus.Loading -> {
-                showMessage(status)
-            }
+    private fun renderPlayingContent(state: PlayerState) {
+        binding.playButton.isEnabled = state.buttonState
+        binding.tvExcerptDuration.text = state.progress.millisConverter()
 
-            is PlayStatus.Playing -> {
-                startAnimation(binding.playButton)
-                renderPlayPosition(status.playProgress)
-            }
-
-            is PlayStatus.Paused -> {
-                renderPlayPosition(status.playProgress)
-            }
-
-            is PlayStatus.Ready -> {
-                renderPlayPosition(status.playProgress)
-                binding.playButton.setInitStatus()
-            }
-        }
-    }
-
-    private fun showMessage(status: PlayStatus) {
-        when (status) {
-            is PlayStatus.NotConnected -> {
-                Toast
-                    .makeText(
-                        requireContext(), getString(R.string.playing_error), Toast.LENGTH_SHORT
-                    )
-                    .show()
-            }
-
-            else -> Toast
-                .makeText(requireContext(), getString(R.string.still_loading), Toast.LENGTH_SHORT)
-                .show()
+        when (state) {
+            is PlayerState.Playing -> startAnimation(binding.playButton)
+            is PlayerState.Prepared -> binding.playButton.setInitStatus()
+            else -> Unit
         }
     }
 
@@ -184,12 +211,44 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), KoinCompon
         )
     }
 
-    private fun renderPlayPosition(currentPositionMediaPlayer: Int) {
-        binding.tvExcerptDuration.text = currentPositionMediaPlayer.millisConverter()
+    private fun showPermissionMessage() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.permission_player_message),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.data = Uri.fromParts("package", requireContext().packageName, null)
+        requireContext().startActivity(intent)
+    }
+
+    private fun bindMusicService() {
+        val description = StringBuilder()
+        description.append(track?.artistName)
+        description.append(" - ")
+        description.append(track?.trackName)
+
+        val intent = Intent(requireContext(), PlayerService::class.java).apply {
+            putExtra(KEY_URL, track?.previewUrl)
+            putExtra(KEY_DESCRIPTION, description.toString())
+        }
+
+        requireActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireActivity().unbindService(serviceConnection)
     }
 
     companion object {
         const val KEY_TRACK = "track"
+        const val KEY_URL = "song_url"
+        const val KEY_DESCRIPTION = "song_description"
 
         fun createArgs(track: TrackModel): Bundle = bundleOf(
             KEY_TRACK to Json.encodeToString(track)

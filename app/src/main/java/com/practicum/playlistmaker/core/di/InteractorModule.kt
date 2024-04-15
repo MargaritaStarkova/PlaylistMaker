@@ -6,8 +6,6 @@ import com.practicum.playlistmaker.library.domain.impl.LibraryInteractorImpl
 import com.practicum.playlistmaker.library.domain.impl.PlaylistInteractorImpl
 import com.practicum.playlistmaker.playlist_creator.domain.api.CreatePlaylistUseCase
 import com.practicum.playlistmaker.playlist_creator.domain.impl.CreatePlaylistUseCaseImpl
-import com.practicum.playlistmaker.player.domain.api.MediaInteractor
-import com.practicum.playlistmaker.player.domain.impl.MediaInteractorImpl
 import com.practicum.playlistmaker.playlist_menu.domain.api.PlaylistDurationCalculator
 import com.practicum.playlistmaker.playlist_menu.domain.impl.PlaylistDurationCalculatorImpl
 import com.practicum.playlistmaker.search.domain.api.SearchInteractor
@@ -22,7 +20,6 @@ import org.koin.dsl.module
 
 val interactorModule = module {
     
-    singleOf(::MediaInteractorImpl).bind<MediaInteractor>()
     singleOf(::SearchInteractorImpl).bind<SearchInteractor>()
     singleOf(::SettingsInteractorImpl).bind<SettingsInteractor>()
     singleOf(::SharingInteractorImpl).bind<SharingInteractor>()

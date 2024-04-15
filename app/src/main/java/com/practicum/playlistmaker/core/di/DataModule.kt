@@ -7,8 +7,6 @@ import com.practicum.playlistmaker.core.application.App
 import com.practicum.playlistmaker.library.data.converter.PlaylistModelConverter
 import com.practicum.playlistmaker.library.data.converter.TrackModelConverter
 import com.practicum.playlistmaker.library.data.db.LocalDatabase
-import com.practicum.playlistmaker.player.data.audioplayer.AudioPlayerImpl
-import com.practicum.playlistmaker.player.domain.api.AudioPlayer
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.ITunesApi
 import com.practicum.playlistmaker.search.data.network.InternetConnectionValidator
@@ -63,7 +61,8 @@ val dataModule = module {
             .fallbackToDestructiveMigration()
             .build()
     }
-    
+
+    factory { MediaPlayer() }
     factoryOf(::TrackModelConverter)
     factoryOf(::PlaylistModelConverter)
     factoryOf(::InternetConnectionValidator)
@@ -71,6 +70,5 @@ val dataModule = module {
     singleOf(::RetrofitNetworkClient).bind<NetworkClient>()
     singleOf(::SharedPrefsTracksStorage).bind<TracksStorage>()
     singleOf(::SharedPrefsSettingsStorage).bind<SettingsStorage>()
-    singleOf(::AudioPlayerImpl).bind<AudioPlayer>()
     singleOf(::ExternalNavigatorImpl).bind<ExternalNavigator>()
 }
