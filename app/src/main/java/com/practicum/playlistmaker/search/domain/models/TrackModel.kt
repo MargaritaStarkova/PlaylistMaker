@@ -17,7 +17,7 @@ data class TrackModel(
     val previewUrl: String,
 ) {
     
-    val previewUrl512: String = artworkUrl100.replaceAfterLast("/", "512x512bb.jpg")
+    val artworkUrl512: String = artworkUrl100.replaceAfterLast("/", "512x512bb.jpg")
     
     companion object {
         val emptyTrack = TrackModel(

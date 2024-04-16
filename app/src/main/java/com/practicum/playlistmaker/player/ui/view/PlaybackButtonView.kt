@@ -80,7 +80,6 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     fun setInitStatus() {
-        isEnabled = true
         currentImageBitmap = playImageBitmap
         invalidate()
     }

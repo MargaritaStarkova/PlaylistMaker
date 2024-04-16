@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Playlist maker</string>
+    <string name="channel_name" translatable="false">Audio player service</string>
+    <string name="channel_description" translatable="false">Service for playing music</string>
     <string name="search">Search</string>
     <string name="library">Media library</string>
     <string name="settings">Settings</string>
@@ -48,6 +50,7 @@
     <string name="playlist_description">Description</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="rationale_permission_message">Permission required to view gallery</string>
+    <string name="permission_player_message">Permission required to play music in background</string>
     <string name="my_playlists">my_playlists</string>
     <string name="title_playlist_dialog">Finish creating a playlist?</string>
     <string name="message_playlist_dialog">All unsaved data will be lost</string>

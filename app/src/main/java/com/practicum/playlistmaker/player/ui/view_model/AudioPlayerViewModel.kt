@@ -1,43 +1,55 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.markodevcic.peko.PermissionRequester
+import com.markodevcic.peko.PermissionResult
 import com.practicum.playlistmaker.library.domain.api.LibraryInteractor
-import com.practicum.playlistmaker.player.domain.api.MediaInteractor
+import com.practicum.playlistmaker.player.domain.api.PlayerControl
 import com.practicum.playlistmaker.player.domain.models.PlayerState
-import com.practicum.playlistmaker.player.ui.models.PlayStatus
+import com.practicum.playlistmaker.playlist_creator.domain.models.PermissionResultState
 import com.practicum.playlistmaker.search.domain.models.TrackModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
-    private val mediaInteractor: MediaInteractor,
     private val libraryInteractor: LibraryInteractor,
 ) : ViewModel() {
 
-    private val _playStatus = MutableLiveData<PlayStatus>()
+    private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Default())
+    private val permissionState = Channel<PermissionResultState>()
     private val _isFavoriteStatus = MutableLiveData<Boolean>()
+    private val register = PermissionRequester.instance()
+    private var playerState: PlayerState
+        get() = _playerState.value
+        set(value) {
+            _playerState.value = value
+        }
 
-    val playStatus: LiveData<PlayStatus> = _playStatus
     val isFavoriteStatus: LiveData<Boolean> = _isFavoriteStatus
 
-    private val playProgress get() = mediaInteractor.getPlayerPosition()
-    private val playerState get() = mediaInteractor.getPlayerState()
-
-    private var progressTimerJob: Job? = null
-    private var preparePlayerJob: Job? = null
+    private var playerControl: PlayerControl? = null
     private var isFavorite: Boolean = false
 
     override fun onCleared() {
+        playerControl?.pausePlayer()
+        playerControl = null
         super.onCleared()
-        progressTimerJob?.cancel()
-        preparePlayerJob?.cancel()
-        mediaInteractor.stopPlaying()
     }
+
+    fun observePlayerState() = _playerState.asStateFlow()
+    fun observePermissionState() = permissionState.receiveAsFlow()
 
     fun isFavorite(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -48,10 +60,6 @@ class AudioPlayerViewModel(
                     _isFavoriteStatus.postValue(isFavorite)
                 }
         }
-    }
-
-    fun onViewPaused() {
-        pausePlaying()
     }
 
     fun toggleFavorite(track: TrackModel) {
@@ -66,66 +74,64 @@ class AudioPlayerViewModel(
         }
     }
 
-    fun playButtonClicked(url: String) {
-        when (playerState) {
-            PlayerState.PLAYING -> pausePlaying()
-            PlayerState.NOT_PREPARED -> {
-                _playStatus.value = PlayStatus.Loading()
-            }
+    fun initPlayerControl(playerControl: PlayerControl) {
+        this.playerControl = playerControl
 
-            PlayerState.READY, PlayerState.PAUSED -> startPlaying()
-            PlayerState.NOT_CONNECTED -> preparingPlayer(url)
-        }
+        playerControl.observePlayerState()
+            .onEach {
+                playerState = it
+                if (it is PlayerState.Prepared) playerControl.hideNotification()
+            }
+            .launchIn(viewModelScope)
     }
 
-    fun preparingPlayer(url: String) {
-        preparePlayerJob = viewModelScope.launch {
-            mediaInteractor
-                .preparePlayer(url)
-                .collect { playerState ->
-                    processPlayStatus(playerState)
-                }
-        }
+    fun removePlayerControl() {
+        playerControl = null
     }
 
-    private fun processPlayStatus(playerState: PlayerState) {
-        when (playerState) {
-            PlayerState.READY -> {
-                _playStatus.value = PlayStatus.Ready()
-            }
+    fun onPlayerButtonClicked() {
+        if (playerState is PlayerState.Default) return
 
-            else -> {
-                _playStatus.value = PlayStatus.NotConnected(playProgress = playProgress)
-            }
-        }
-    }
-
-    private fun startPlaying() {
-        mediaInteractor.startPlaying()
-        progressTimerJob = viewModelScope.launch {
-            do {
-                _playStatus.value = PlayStatus.Playing(playProgress = playProgress)
-                delay(TIMER_DELAY_MILLIS)
-            } while (playerState == PlayerState.PLAYING)
-
-            if (playerState == PlayerState.READY) {
-                pausePlaying()
-            }
-        }
-    }
-
-    private fun pausePlaying() {
-        if (playerState == PlayerState.READY) {
-            _playStatus.value = PlayStatus.Ready()
+        if (playerState is PlayerState.Playing) {
+            playerControl?.pausePlayer()
         } else {
-            mediaInteractor.pausePlaying()
-            _playStatus.value = PlayStatus.Paused(playProgress = playProgress)
+            playerControl?.startPlayer()
         }
-        progressTimerJob?.cancel()
     }
 
-    companion object {
-        const val START_POSITION = 0
-        private const val TIMER_DELAY_MILLIS = 300L
+    fun onViewPaused() {
+        if (playerState is PlayerState.Playing) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermission()
+            } else {
+                playerControl?.showNotification()
+            }
+        }
+    }
+
+    fun onViewResumed() {
+        playerControl?.hideNotification()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun requestPermission() {
+        register.request(Manifest.permission.POST_NOTIFICATIONS)
+            .onEach { result ->
+                when (result) {
+                    is PermissionResult.Granted -> {
+                        playerControl?.showNotification()
+                        permissionState.send(PermissionResultState.GRANTED)
+                    }
+
+                    is PermissionResult.Denied.NeedsRationale -> permissionState.send(PermissionResultState.NEEDS_RATIONALE)
+
+                    is PermissionResult.Denied.DeniedPermanently -> {
+                        playerControl?.pausePlayer()
+                        permissionState.send(PermissionResultState.DENIED_PERMANENTLY)
+                    }
+                    PermissionResult.Cancelled -> return@onEach
+                }
+            }
+            .launchIn(viewModelScope)
     }
 }
